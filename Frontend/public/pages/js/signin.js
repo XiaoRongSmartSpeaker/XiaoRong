@@ -40,7 +40,7 @@ function attachSignin(element) {
         post_id(profile.getId());
 
         // Redirect to setting.html
-        // Change the domain name after finishing  
+          
         window.location.href = "setting.html";
         
       }, function(error) {
