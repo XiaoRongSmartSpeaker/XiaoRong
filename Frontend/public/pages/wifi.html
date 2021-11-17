@@ -9,7 +9,7 @@
 </head>
 <body>
     <!-- INPUT MODAL -->
-    <div class="hidden fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div class=" fixed z-10 inset-0 overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
         <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
             <!--
                 Background overlay, show/hide based on modal state.
@@ -39,14 +39,21 @@
             <div class="inline-block align-middle bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all my-8  max-w-lg w-full sm:my-8  sm:max-w-lg sm:w-full">
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 ">
                     <div>
-                        <div class="p-2 text-xl ">
+                        
+                        <div class="p-2 text-xl">
                             輸入密碼
                         </div>
+                            
                         <div class="p-2 mt-3 text-left ">
-                            <h3 class=" text-md leading-6  text-normal_theme" id="modal-title">
-                                密碼
-                            </h3>
-                            <input class="  border-b border-normal_theme  w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none " id="password" type="password" >
+                            <div class="flex items-center justify-between">
+                                <h3 class=" text-md leading-6  text-normal_theme" id="modal-title">
+                                    密碼
+                                </h3>
+                                <div class="">
+                                    <div class="animate-spin rounded-full h-4 w-4 border-b-2 border-theme"></div>
+                                </div>
+                            </div>
+                            <input class=" border-b border-normal_theme  w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none " id="password" type="password" >
                         </div>
                     </div>
                 </div>
@@ -86,6 +93,9 @@
                         <path d="M15.9025 9.4101C16.0046 9.65125 16.008 9.92282 15.912 10.1665C15.8161 10.4101 15.6283 10.6064 15.3892 10.7131C15.1501 10.8198 14.8786 10.8285 14.6332 10.7372C14.3877 10.646 14.1879 10.4621 14.0765 10.2251L12.5685 6.8451C12.512 6.72476 12.48 6.59437 12.4745 6.46153C12.469 6.32869 12.49 6.19609 12.5363 6.07147C12.5826 5.94685 12.6533 5.83272 12.7443 5.73576C12.8353 5.63879 12.9447 5.56094 13.0661 5.50675C13.1875 5.45256 13.3185 5.42313 13.4514 5.42017C13.5843 5.41721 13.7165 5.44079 13.8402 5.48952C13.9639 5.53825 14.0766 5.61116 14.1718 5.70398C14.267 5.7968 14.3427 5.90767 14.3945 6.0301L15.9025 9.4101Z" fill="#415765"/>
                     </svg>
                 </button>
+                <div class="">
+                    <div class="animate-spin rounded-full h-5 w-5 border-b-2 border-theme"></div>
+                </div>
             </div>
                     
                         
