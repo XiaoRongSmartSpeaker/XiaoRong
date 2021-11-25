@@ -1,4 +1,3 @@
-//console.log("hey");
 function post_id(google_id)
 {
   fetch('API', {

@@ -19,13 +19,37 @@
             <form class="bg-white  rounded px-8 pt-6 ">
                 <div class="mb-6">
                     <label class="block text-xs text-light_theme mb-3">
-                        語言與地區
+                        語言
                     </label>
                     <div class="relative">
-                        <select id="location" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
+                        <select id="language" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
                             <option>中文</option>
                             <option>English</option>
                             <option>한국인</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs text-light_theme mb-3">
+                        地區
+                    </label>
+                    <div class="relative">
+                        <select id="location" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
+                            <option>台灣</option>
+                            <option>日本</option>
+                            <option>韓國</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs text-light_theme mb-3">
+                        時區
+                    </label>
+                    <div class="relative">
+                        <select id="time" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
+                            <option>GMT +8</option>
+                            <option>GMT +9</option>
+                            <option>GMT +10</option>
                         </select>
                     </div>
                 </div>
@@ -42,11 +66,11 @@
         </div>
         <!--Button-->
         <div>
-            <a href="done.html">
-                <button class="relative bottom-16 bg-theme w-64  h-10 text-white py-2 px-4 rounded-md " >
-                    下一步
-                </button>
-            </a>
+            
+            <button class="relative bottom-16 bg-theme w-64  h-10 text-white py-2 px-4 rounded-md " >
+                下一步
+            </button>
+            
         </div>
     </div>
 </body>
