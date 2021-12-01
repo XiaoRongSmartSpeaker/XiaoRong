@@ -4,7 +4,8 @@ function post_id(google_id)
     method: 'POST',
     body: JSON.stringify({
       user_id: google_id,
-    })
+    }),
+    headers: {'Content-Type': 'application/json'}
   })
   .then(response => response.json())
   .then(data => {

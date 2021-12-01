@@ -7,7 +7,8 @@ function post_info(location, language, time, speaker_name)
       language: language,
       time: time,
       speaker_name: speaker_name,
-    })
+    }),
+    headers: {'Content-Type': 'application/json'}
   })
   .then(response => response.json())
   .then(data => {
