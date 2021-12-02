@@ -1,11 +1,4 @@
-
-function sleep(milliseconds) {
-    const date = Date.now();
-    let currentDate = null;
-    do {
-      currentDate = Date.now();
-    } while (currentDate - date < milliseconds);
-}
+var wifi_name;
 
 function Show_spinner()
 {
@@ -43,7 +36,7 @@ function wifis_onclick()
         wifi.addEventListener('click', function() {
             
             //Add wifi name 
-            var wifi_name = wifi.querySelector("#wifi_name").innerHTML;
+            wifi_name = wifi.querySelector("#wifi_name").innerHTML;
             console.log(wifi_name);
 
             document.querySelector('#modal_wifi_name').innerHTML = `輸入${wifi_name}的密碼`;
@@ -61,17 +54,7 @@ function wifis_onclick()
                 
             });
 
-            //Connect button onclick
-            document.querySelector('#connect_button').addEventListener('click', () => {
-                // Get the password
-                const pw = document.querySelector("#password").value;
-                wifi_name = wifi.querySelector("#wifi_name").innerHTML;
-                
-                input_password(wifi_name, pw);  
-                
-
-                
-            });
+            
             
         });
         
@@ -81,8 +64,8 @@ function wifis_onclick()
 function fetch_show_wifi()
 {
     Show_spinner();
-    sleep(1000);
-
+    
+    
     fetch('http://localhost:3000/wifis')
     .then(response => response.json())
     .then(networks => {
@@ -115,28 +98,27 @@ function fetch_show_wifi()
 function input_password(wifi_name, pw)
 {
     
-    
     console.log(wifi_name + pw);
 
     // Show loading spinner
     document.querySelector('#connect_spinner').style.display = "block";
 
-    //Post to api
+    //Post pw to api
     fetch('http://localhost:3000/setting_wifi', {
         method: 'PUT',
         body: JSON.stringify({
-          name: wifi_name,
+          SSID: wifi_name,
           password: pw,
-          connect:null,
+         
         }),
         headers: {'Content-Type': 'application/json'}
       })
     .then(response => response.json())
-    .then(data => {
-        console.log(data);
+    .then(connect => {
+        console.log(connect);
 
         //if success, then redirect to google signin page
-        if(data == "success")
+        if(connect == "success")
         {
             window.location.href = "signin.html";
         }
@@ -152,9 +134,11 @@ function input_password(wifi_name, pw)
     .catch((error) => {
         console.error('Error:', error);
     });
-
     
 
+    
+    
+    
     
 
 }
@@ -177,3 +161,15 @@ document.addEventListener('DOMContentLoaded', function(){
     
     });
 })
+
+//Connect button onclick
+document.querySelector('#connect_button').addEventListener('click', () => {
+                
+    // Get the password
+    const pw = document.querySelector("#password").value;
+    
+    input_password(wifi_name, pw);  
+    
+
+    
+});
