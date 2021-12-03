@@ -1,0 +1,93 @@
+幫我打給小絨
+('call', 'call', (1, ['xiao', 'rong']))
+ 
+打給0800-000-123
+('call', 'call', (0, '0800-000-123'))
+ 
+幫我打給
+('FAILED', 'FAILED', ())
+ 
+查看下一個行程
+('calender', 'next_calender', None)
+ 
+查看行事曆十二月三日
+('calender', 'read_calender', ('12-03',))
+ 
+新增行事曆12月3號12點到13點家庭聚餐
+('calender', 'add_calender', ('2021-12-03 12:00', '2021-12-03 13:00', '家庭聚餐'))
+ 
+新增行事曆每週二兩點兩分家庭聚餐
+('calender', 'add_calender_week', (2, '2021-12-03 02:02', None, '家庭聚餐'))
+ 
+新增行事曆每天18點健身
+('calender', 'add_calender_day', ('2021-12-03 18:00', None, '健身'))
+ 
+查看下一個行程
+('calender', 'next_calender', None)
+ 
+天氣查詢
+('weather', 'weather_forecast', ('2021-12-03 21:37', 'HERE'))
+ 
+天氣查詢12月3日
+('weather', 'weather_forecast', ('2021-12-03 21:37', 'HERE'))
+ 
+天氣查詢台北
+('weather', 'weather_forecast', ('2021-12-03 21:37', '台北'))
+ 
+天氣查詢12月五日八點十三的台北
+('weather', 'weather_forecast', ('2021-12-05 08:13', '台北'))
+ 
+開啟藍芽
+('bluetooth', 'open_bluetooth', ())
+ 
+關閉藍芽
+('bluetooth', 'close_bluetooth', ())
+ 
+播放鄧紫棋的光年之外
+('music', 'play_music', ('鄧紫棋的光年之外',))
+ 
+暫停播放
+('music', 'pause_music', ())
+ 
+停止音樂
+('music', 'stop_music', ())
+ 
+現在在播的是什麼
+('music', 'now_playing', ())
+ 
+幫我一直播放
+('music', 'repeat_playing', ())
+ 
+系統音量調大聲
+('volume', 'louder_system_volume', (None,))
+ 
+系統音量調小聲10趴
+('volume', 'quiter_system_volume', (10,))
+ 
+系統音量調成兩百
+('volume', 'set_system_volume', (100,))
+ 
+音樂音量調大聲負10
+('volume', 'louder_music_volume', (-10,))
+ 
+音樂音量調小聲18
+('volume', 'quiter_music_volume', (18,))
+ 
+音樂音量調成500
+('volume', 'set_music_volume', (100,))
+ 
+音量調大聲-18
+('volume', 'louder_volume', (-18,))
+ 
+音量調小聲0
+('volume', 'quiter_volume', (0,))
+ 
+音量調成
+('volume', 'set_volume', (None,))
+ 
+啟動即時翻譯
+('translate', 'translate', (None, None))
+ 
+啟動即時翻譯中文翻法文
+('translate', 'translate', ('zh-TW', 'fr'))
+ 
