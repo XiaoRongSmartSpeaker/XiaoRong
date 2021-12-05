@@ -12,11 +12,12 @@ try:
   from gi.repository import GLib
 except ImportError:
   import Glib as GLib
-import bluezutils
 
 BUS_NAME = 'org.bluez'
 AGENT_INTERFACE = 'org.bluez.Agent1'
 AGENT_PATH = "/test/agent"
+ADAPTER_INTERFACE = 'org.bluez.Adapter1'
+ADAPTER_ROOT = '/org/bluez/hci'
 
 ADAPTER_INTERFACE = 'org.bluez.Adapter1'
 relevant_ifaces = [ "org.bluez.Adapter1", "org.bluez.Device1" ]
@@ -148,7 +149,22 @@ class Agent(dbus.service.Object):
 					in_signature="", out_signature="")
 	def Cancel(self):
 		print("Cancel")
-		
+
+class Adapter:
+	def __init__(self, idx=0):
+		bus = dbus.SystemBus()
+		self.path = f'{ADAPTER_ROOT}{idx}'
+		self.adapter_object = bus.get_object(BUS_NAME, self.path)
+		self.adapter_props = dbus.Interface(self.adapter_object,
+											dbus.PROPERTIES_IFACE)
+		self.adapter_props.Set(ADAPTER_INTERFACE,
+							   'DiscoverableTimeout', dbus.UInt32(60))
+		self.adapter_props.Set(ADAPTER_INTERFACE,
+							   'Discoverable', True)
+		self.adapter_props.Set(ADAPTER_INTERFACE,
+							   'PairableTimeout', dbus.UInt32(60))
+		self.adapter_props.Set(ADAPTER_INTERFACE,
+							   'Pairable', True)
 
 if __name__ == '__main__':
 	dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -164,8 +180,9 @@ if __name__ == '__main__':
 
 	obj = bus.get_object(BUS_NAME, "/org/bluez");
 	manager = dbus.Interface(obj, "org.bluez.AgentManager1")
-	
 	manager.RegisterAgent(path, capability)
+
+	adapter = Adapter()
 
 	# Start to get devices info
 	# we need a dbus object manager
