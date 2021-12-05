@@ -10,24 +10,36 @@ class Job(threading.Thread):
                                     target = func_name,
                                     args = args,
                                     daemon = True)
-        self.__flag = threading.Event()
         self.__running = threading.Event()
-        self.__flag.set()
-        self.__running.set()
+        self.__unlock = threading.Event()
+        self.__pause = threading.Event()
+        self.__running.clear()
+        self.__unlock.set()
+        self.__pause.clear()
     
     def run(self):
-        if self.__running.is_set():
+        if self.__unlock.is_set():
+            self.__running.set()
+            super(Job, self).run()
+        else:
+            self.__unlock.wait()
+            self.__running.set()
             super(Job, self).run()
 
-    def pause(self):
-        self.__running.clear()
+    def is_run(self):
+        return True if self.__running.is_set() else False
 
-    def stop(self):
-        self.__flag.clear()
-        self.__running.clear()
-    
+    def pause(self):
+        self.__pause.set()
+
     def resume(self):
-        self.__running.set()
+        self.__pause.clear()
+
+    def lock(self):
+        self.__unlock.clear()
+    
+    def unlock(self):
+        self.__unlock.set()
 
     # def send(self, class_name, func_name, args):
 
