@@ -106,6 +106,9 @@ class question_answering():
                     output[-1]['ecom']+=it.text+' '
                 if 'class' in it.attrs and it.attrs['class'][0]=='jBBUv':
                     output[-1]['ecom']+=it.attrs['aria-label']+' '
+
+            if output[-1]['ecom'] == '':
+                output[-1]['ecom'] = None
         else:
             output.append({'ecom':None})
 
