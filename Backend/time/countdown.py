@@ -12,7 +12,7 @@ class countdown():
 		self.totalSeconds = 0                               
 		return
 
-	def set_countdown(self, h: int, m: int, s: int):
+	def set_countdown(self, h: int, m: int, s: int) -> bool:
 		if h < 0 or m < 0 or s < 0:
 			return False
 		totalSeconds = s + m * 60 + h * 3600
@@ -25,6 +25,7 @@ class countdown():
 	def start_countdown(self):
 		while self.totalSeconds:
 			m, s = divmod(self.totalSeconds, 60)
+
 			h, m = divmod(m, 60)
 			timeFormat = '{:02d}:{:02d}:{:02d}'.format(h, m, s)
 			print(timeFormat)
