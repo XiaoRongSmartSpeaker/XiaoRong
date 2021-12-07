@@ -190,6 +190,10 @@ class QuestionAnswering():
                 if list(result.keys())[0] == 'title' and list(result.items())[0][1] != None:
                     ans += ( urllib.parse.unquote(str(result)+'\n'))
         
+        ans = (ans.strip())
+        if ans == '':
+            print(f"沒有查到「{search.query}」的相關資料")
+
         return ans
 
     def google_search(self, query):
@@ -199,10 +203,7 @@ class QuestionAnswering():
 
 if __name__ == '__main__':  
     search = QuestionAnswering()
-    results = search.google_search("天氣")
+    results = search.google_search("台北天氣")
     ans = search.get_answer(results)
     
-    if ans == '':
-        print(f"沒有查到「{search.query}」的相關資料")
-    else:
-        print(ans.strip())
+    print(ans)
