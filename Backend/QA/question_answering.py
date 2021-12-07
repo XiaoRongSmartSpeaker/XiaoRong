@@ -176,16 +176,21 @@ class question_answering():
 
 if __name__ == '__main__':  
     search = question_answering()
-    results = search.google_search("台北天氣")
+    results = search.google_search("微軟工程師人數")
     flag = True
+    ans = ''
     for result in results:
         if list(result.keys())[0] != 'title' and list(result.items())[0][1] != None:
-            print( urllib.parse.unquote(str(list(result.items())[0][1])+'\n'))
+            ans += (urllib.parse.unquote(str(list(result.items())[0][1])+'\n'))
             flag = False
             break
     
     if flag:
         for result in results:
             if list(result.keys())[0] == 'title' and list(result.items())[0][1] != None:
-                print( urllib.parse.unquote(str(result)+'\n'))
-                break
+                ans += ( urllib.parse.unquote(str(result)+'\n'))
+
+    if ans == '':
+        print(f"沒有查到「{search.query}」的相關資料")
+    else:
+        print(ans.strip())
