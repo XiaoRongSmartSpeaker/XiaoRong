@@ -64,7 +64,7 @@ class QuestionAnswering():
         css_identifier_weather = ".nawv0d"
         css_identifier_support = ".kno-rdesc span"
         css_identifier_internet_diet = ".kp-blk"
-        css_identifier_time = ".card-section"
+        css_identifier_time = ".card-section.sL6Rbf"
 
         results = response.html.find(css_identifier_result)
 
@@ -203,7 +203,7 @@ class QuestionAnswering():
 
 if __name__ == '__main__':  
     search = QuestionAnswering()
-    results = search.google_search("台北天氣")
+    results = search.google_search("日幣")
     ans = search.get_answer(results)
     
     print(ans)
