@@ -2,7 +2,7 @@ import requests, urllib
 from requests_html import HTML
 from requests_html  import HTMLSession
 
-class question_answering():
+class QuestionAnswering():
     def __init__(self):
         self.query = ""
         self.url = "https://www.google.com/search?q="
@@ -198,8 +198,8 @@ class question_answering():
         return self.parse_results(response)
 
 if __name__ == '__main__':  
-    search = question_answering()
-    results = search.google_search("Neokent")
+    search = QuestionAnswering()
+    results = search.google_search("天氣")
     ans = search.get_answer(results)
     
     if ans == '':
