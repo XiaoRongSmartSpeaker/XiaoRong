@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting</title>
+    <link rel="stylesheet" href="styles.css">
+    
+</head>
+<body>
+    <div class="h-screen flex flex-col justify-evenly items-center">
+        <!--header-->
+        <div class="w-72 h-10">
+            <h1 class="text-theme relative top-9">設定您的小絨</h1>
+        </div>
+        <!--Form-->
+       <div class="w-full max-w-xs">
+            <form class="bg-white  rounded px-8 pt-6 ">
+                <div class="mb-6">
+                    <label class="block text-xs text-light_theme mb-3">
+                        語言
+                    </label>
+                    <div class="relative">
+                        <select id="language" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
+                            <option>中文</option>
+                            <option>English</option>
+                            <option>한국인</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs text-light_theme mb-3">
+                        地區
+                    </label>
+                    <div class="relative">
+                        <select id="location" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
+                            <option>台灣</option>
+                            <option>日本</option>
+                            <option>韓國</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs text-light_theme mb-3">
+                        時區
+                    </label>
+                    <div class="relative">
+                        <select id="time" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
+                            <option>GMT +8</option>
+                            <option>GMT +9</option>
+                            <option>GMT +10</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mb-6">
+                    <label class="block text-xs text-light_theme mb-3">
+                        名稱
+                    </label>
+                    <input id="speaker_name" class="border-2 border-normal_theme text-theme rounded-lg w-full py-2 px-3  mb-3 leading-tight " placeholder="小絨音箱">
+                    
+                </div>
+            
+            </form>
+            
+        </div>
+        <!--Button-->
+        <div>
+            
+            <button class="relative bottom-16 bg-theme w-64  h-10 text-white py-2 px-4 rounded-md " >
+                下一步
+            </button>
+            
+        </div>
+    </div>
+</body>
+<script src="./js/setting.js"></script>
+</html>
