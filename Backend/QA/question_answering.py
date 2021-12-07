@@ -64,6 +64,7 @@ class question_answering():
         css_identifier_weather = ".nawv0d"
         css_identifier_support = ".kno-rdesc span"
         css_identifier_internet_diet = ".kp-blk"
+        css_identifier_time = ".card-section"
 
         results = response.html.find(css_identifier_result)
 
@@ -76,6 +77,7 @@ class question_answering():
         weather = response.html.find(css_identifier_weather, first=False)
         support = response.html.find(css_identifier_support, first=False)
         idiet = response.html.find(css_identifier_internet_diet, first=True)
+        time = response.html.find(css_identifier_time, first=True)
 
         if diet:
             output.append({'diet':diet.text})
@@ -91,6 +93,11 @@ class question_answering():
         #             output[-1]['similar'] += it.html + ' '
         # else:
         #     output.append({'similar':None})
+
+        if time:
+            output.append({'time':time.text})
+        else:
+            output.append({'time':None})
 
         if ecom:
             output.append({'ecom':""})
@@ -153,7 +160,7 @@ class question_answering():
             output.append({'support':None})
 
         if idiet:
-            output.append({'internet_diet':idiet.text})
+            output.append({'internet_diet':idiet.text.replace("查看以下內容的搜尋結果：", "")})
         else:
             output.append({'internet_diet':None})
 
@@ -169,6 +176,22 @@ class question_answering():
             
         return output
 
+    def get_answer(self, results):
+        flag = True
+        ans = ''
+        for result in results:
+            if list(result.keys())[0] != 'title' and list(result.items())[0][1] != None:
+                ans += (urllib.parse.unquote(str(list(result.items())[0][1])+'\n'))
+                flag = False
+                # break
+    
+        if flag:
+            for result in results:
+                if list(result.keys())[0] == 'title' and list(result.items())[0][1] != None:
+                    ans += ( urllib.parse.unquote(str(result)+'\n'))
+        
+        return ans
+
     def google_search(self, query):
         self.query = query
         response = self.get_results()
@@ -176,20 +199,9 @@ class question_answering():
 
 if __name__ == '__main__':  
     search = question_answering()
-    results = search.google_search("微軟工程師人數")
-    flag = True
-    ans = ''
-    for result in results:
-        if list(result.keys())[0] != 'title' and list(result.items())[0][1] != None:
-            ans += (urllib.parse.unquote(str(list(result.items())[0][1])+'\n'))
-            flag = False
-            break
+    results = search.google_search("Neokent")
+    ans = search.get_answer(results)
     
-    if flag:
-        for result in results:
-            if list(result.keys())[0] == 'title' and list(result.items())[0][1] != None:
-                ans += ( urllib.parse.unquote(str(result)+'\n'))
-
     if ans == '':
         print(f"沒有查到「{search.query}」的相關資料")
     else:
