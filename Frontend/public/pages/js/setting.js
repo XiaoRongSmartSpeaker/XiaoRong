@@ -1,6 +1,6 @@
 function post_info(location, language, time, speaker_name)
 {
-  fetch('API', {
+  fetch('http://localhost:3000/speaker_info', {
     method: 'POST',
     body: JSON.stringify({
       location: location,

@@ -1,6 +1,6 @@
 function post_id(google_id)
 {
-  fetch('API', {
+  fetch('http://localhost:3000/user_info', {
     method: 'POST',
     body: JSON.stringify({
       user_id: google_id,
