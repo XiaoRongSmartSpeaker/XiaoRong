@@ -2,7 +2,10 @@ import jieba
 import datetime
 import re
 import number_tran as numt
+import cn2an
 
+day_dict = {'一': 1, '1': 1 , '二': 2, '2': 2 , '三': 3, '3': 3 , '四': 4, '4': 4 , 
+            '五': 5, '5': 5 , '六': 6, '6': 6 , '末': 6 ,'天': 7, '日': 7}
 
 def set_time(newtime):# newtime=[year, month, hour, minute]
 	a = datetime.datetime.now()
@@ -154,3 +157,50 @@ def target_time(input_str, mode): #return the target time and the place to look 
 		result.append(None)
 	result.append(input_str.lstrip())
 	return result
+
+def countdown_target(full_input_str):
+	input_str = full_input_str.replace('兩', '二')
+	input_str = input_str.replace('負', '-')
+	input_str = cn2an.transform(input_str, "cn2an")
+	hour, minute, second = 0, 0, 0
+	time = re.compile(r"(計時(-?\d+(小時))?(-?\d+(分鐘))?(-?\d+秒)?)")
+	print(input_str)
+	if(time.search(input_str)):
+		input_str = time.search(input_str).group()[2:]
+		if('小時' in input_str):
+			hour = int(input_str[:input_str.index('小時')])
+			input_str = input_str[input_str.index('小時')+2:]		
+		if('分鐘' in input_str):
+			minute = int(input_str[:input_str.index('分鐘')])
+			input_str = input_str[input_str.index('分鐘')+2:]		
+		if('秒' in input_str):
+			second = int(input_str[:input_str.index('秒')])
+			input_str = input_str[input_str.index('秒')+1:]		
+		if(hour == 0 and minute == 0 and second == 0):
+			return [None, None, None]
+		else:
+			return [hour, minute, second]
+	else:
+		return [None, None, None]
+# enter a full input str to get final result
+
+def alert_target(input_str):
+	day = None
+	hour = None
+	minute = None
+	day_re = re.compile(r'星期(一|二|三|四|五|六|七|日)')
+	day_obj = day_re.match(input_str) 
+	if(day_obj):
+		day = day_dict[(day_obj.group(1))]
+		input_str = input_str[day_obj.end():]
+	input_str = input_str.replace('兩', '2')
+	input_str = cn2an.transform(input_str, "cn2an")
+	time = re.compile(r'((\d+)(點|時)(\d+)分)')
+	time_obj = time.match(input_str)
+	if(time_obj):
+		hour = int(time_obj.group(2))
+		minute = int(time_obj.group(4))
+	return [day, hour, minute]
+
+test_str = '星期一一點十分的鬧鐘'
+print(alert_target(test_str))

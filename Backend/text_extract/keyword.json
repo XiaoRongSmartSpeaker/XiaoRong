@@ -24,5 +24,8 @@
     "quiter_volume"        :{"class":"volume"    , "keywords":["音量調小聲"]},
     "set_volume"           :{"class":"volume"    , "keywords":["音量調成"]},
     "translate"            :{"class":"translate" , "keywords":["啟動即時翻譯"]},
-    "question_answering"   :{"class":"question"  , "keywords":["幫我查"]}
+    "set_timer"            :{"class":"countdown"}, "keywords":["倒數"]}, 
+    "get_time_at_place"    :{"class":"clock"}    , "keywords":["查詢"]},
+    "set_alert"            :{"class":"alert"}    , "keywords":["倒數"]},
+    "question_answering"   :{"class":"question"} , "keywords":["幫我查"]}
 }
