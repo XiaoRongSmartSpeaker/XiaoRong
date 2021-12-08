@@ -23,7 +23,7 @@ def target_time(input_str, mode): #return the target time and the place to look 
 	time = re.compile(r'((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|兩|三|四|五|六|七|八|九)?)(\.|點|時)(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?))?')
 	later = re.compile(r'((明|後|大後)天)|(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(週|天|個?小時|分鐘)後)|下週(一|二|三|四|五|六|日|天)?')
 	one_99 = re.compile(r'(\d+)|((二|三|四|五|六|七|八|九)?十?(一|二|兩|三|四|五|六|七|八|九)?)')
-	target_obj = -1
+	target_obj = None
 	# target_str = ''
 	time_inter = 0
 	time_str = 'NOW'
@@ -90,7 +90,6 @@ def target_time(input_str, mode): #return the target time and the place to look 
 	if(date.search(input_str)):
 		target_obj = date.search(input_str)
 		month = numt._trans(input_str[target_obj.start():input_str.index('月')])
-		# print(month)
 		# print(target_obj.group())
 		if('日' in target_obj.group()):
 			day = numt._trans(input_str[input_str.index('月')+1:input_str.index('日')])
@@ -126,6 +125,8 @@ def target_time(input_str, mode): #return the target time and the place to look 
 			else:
 				minute = 0
 			# print(hour)
+		# print(day)
+	if(target_obj):
 		result.append(set_time([month, day, hour, minute]))
 	else:
 		result.append(shift_time(0, 0, 0))
@@ -160,11 +161,9 @@ def target_time(input_str, mode): #return the target time and the place to look 
 
 def countdown_target(full_input_str):
 	input_str = full_input_str.replace('兩', '二')
-	input_str = input_str.replace('負', '-')
 	input_str = cn2an.transform(input_str, "cn2an")
 	hour, minute, second = 0, 0, 0
-	time = re.compile(r"(計時(-?\d+(小時))?(-?\d+(分鐘))?(-?\d+秒)?)")
-	print(input_str)
+	time = re.compile(r"(計時(\d+(小時))?(\d+(分鐘))?(\d+秒)?)")
 	if(time.search(input_str)):
 		input_str = time.search(input_str).group()[2:]
 		if('小時' in input_str):
@@ -200,7 +199,5 @@ def alert_target(input_str):
 	if(time_obj):
 		hour = int(time_obj.group(2))
 		minute = int(time_obj.group(4))
+		input_str = input_str[time_obj.end():]
 	return [day, hour, minute]
-
-test_str = '星期一一點十分的鬧鐘'
-print(alert_target(test_str))

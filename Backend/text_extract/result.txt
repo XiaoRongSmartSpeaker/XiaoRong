@@ -17,22 +17,22 @@
 ('calender', 'add_calender', ('2021-12-03 12:00', '2021-12-03 13:00', '家庭聚餐'))
  
 新增行事曆每週二兩點兩分家庭聚餐
-('calender', 'add_calender_week', (2, '2021-12-03 02:02', None, '家庭聚餐'))
+('calender', 'add_calender_week', (2, '2021-12-09 02:02', None, '家庭聚餐'))
  
 新增行事曆每天18點健身
-('calender', 'add_calender_day', ('2021-12-03 18:00', None, '健身'))
+('calender', 'add_calender_day', ('2021-12-09 18:00', None, '健身'))
  
 查看下一個行程
 ('calender', 'next_calender', None)
  
 天氣查詢
-('weather', 'weather_forecast', ('2021-12-03 21:37', 'HERE'))
+('weather', 'weather_forecast', ('2021-12-09 01:35', 'HERE'))
  
 天氣查詢12月3日
-('weather', 'weather_forecast', ('2021-12-03 21:37', 'HERE'))
+('weather', 'weather_forecast', ('2021-12-03 01:35', 'HERE'))
  
 天氣查詢台北
-('weather', 'weather_forecast', ('2021-12-03 21:37', '台北'))
+('weather', 'weather_forecast', ('2021-12-09 01:35', '台北'))
  
 天氣查詢12月五日八點十三的台北
 ('weather', 'weather_forecast', ('2021-12-05 08:13', '台北'))

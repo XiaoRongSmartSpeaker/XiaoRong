@@ -45,11 +45,12 @@ def para_extract(input_str, func_key):
     class_name = func_key[0]
     function_name = func_key[1]
     location = input_str.find(func_key[2])
+    target = input_str
     if(location != -1): # 有這個關鍵字
         target = input_str[location+len(func_key[2]):]
         target = target.lstrip()
     else:
-        return('question', 'question_answering', (input_str))
+        return('question', 'question_answering', tuple([input_str]))
     if( function_name == 'call'):#==================================================CALL=======================================V
         if(len(target) == 0):
             return ('FAILED', 'FAILED', tuple())
@@ -137,10 +138,17 @@ def para_extract(input_str, func_key):
         para = language_extract.target_language(target)
         return(class_name, function_name, tuple(para))
     elif( function_name == 'question_answering'):
-        para = target
-        return(class_name, function_name, tuple([para]))
+        para = [target]
+        return(class_name, function_name, tuple(para))
+    elif( function_name == 'set_timer'):
+        para = time_extract.countdown_target(input_str)
+        return(class_name, function_name, tuple(para))
+    elif( function_name == 'set_alert'):
+        para = time_extract.alert_target(target)
+        return(class_name, function_name, tuple(para))        
     else:
-        return ('question', 'question_answering', tuple([input_str]))
+        para = [input_str]
+        return ('question', 'question_answering', tuple(para))
         
 
 def main(input_str):
