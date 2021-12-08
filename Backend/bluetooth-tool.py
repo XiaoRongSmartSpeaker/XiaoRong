@@ -17,13 +17,12 @@ except ImportError:
 logger = logging.getLogger()
 fileHandler = logging.FileHandler("bluetooth.log")
 streamHandler = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter(
-	'%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 streamHandler.setFormatter(formatter)
 fileHandler.setFormatter(formatter)
 logger.addHandler(streamHandler)
 logger.addHandler(fileHandler)
-logger.setLevel(logging.INFO)
+logger.setLevel(logging.DEBUG)
 
 BUS_NAME = 'org.bluez'
 SERVICE_NAME = "org.bluez"
@@ -55,32 +54,6 @@ def dev_connect(path, bus):
 	dev = dbus.Interface(bus.get_object("org.bluez", path),
 						 "org.bluez.Device1")
 	dev.Connect()
-
-
-# TODO 1: reject any connection requests if there is connection.
-# TODO 2: sync the volume of music_volume & device_volume.
-def property_changed(interface, changed, invalidated, path):
-	iface = interface[interface.rfind(".") + 1:]
-	for name, value in changed.items():
-		val = str(value)
-		logger.debug("{%s.PropertyChanged} [%s] %s = %s" %
-					 (iface, path, name, val))
-
-
-def interfaces_added(path, interfaces):
-	for iface, props in interfaces.items():
-		if not (iface in relevant_ifaces):
-			continue
-		logger.debug("{Added %s} [%s]" % (iface, path))
-		for name, value in props.items():
-			logger.debug("      %s = %s" % (name, value))
-
-
-def interfaces_removed(path, interfaces):
-	for iface in interfaces:
-		if not (iface in relevant_ifaces):
-			continue
-		logger.debug("{Removed %s} [%s]" % (iface, path))
 
 
 def proxyobj(bus, path, interface):
@@ -148,6 +121,44 @@ def find_device_in_objects(objects, device_address, adapter_pattern=None):
 	raise Exception("Bluetooth device not found")
 
 
+class Listener():
+	# TODO 1: reject any connection requests if there is connection.
+	# TODO 2: sync the volume of music_volume & device_volume.
+	def __init__(self) -> None:
+		self.deviceConnected = False
+	def property_changed(self, interface, changed, invalidated, path):
+		iface = interface[interface.rfind(".") + 1:]
+		for name, value in changed.items():
+			# Event handling
+			if name == "Volume":
+				self.volume_change(value)
+			elif iface == "Device1" and name == "Connected" and value == "1" :
+				#self.deviceConnected = True
+				pass
+			val = str(value)
+			logger.debug("{%s.PropertyChanged} [%s] %s = %s" %
+						 (iface, path, name, val))
+
+	def interfaces_added(self, path, interfaces):
+		for iface, props in interfaces.items():
+			if not (iface in relevant_ifaces):
+				continue
+			logger.debug("{Added %s} [%s]" % (iface, path))
+			for name, value in props.items():
+				logger.debug("      %s = %s" % (name, value))
+
+	def interfaces_removed(self, path, interfaces):
+		for iface in interfaces:
+			if not (iface in relevant_ifaces):
+				continue
+			logger.debug("{Removed %s} [%s]" % (iface, path))
+
+	def volume_change(self, volume):
+		# TODO: link to system volume change
+		# add_thread(set_system_volume, volume)
+		pass
+
+
 class Rejected(dbus.DBusException):
 	_dbus_error_name = "org.bluez.Error.Rejected"
 
@@ -162,6 +173,7 @@ class Agent(dbus.service.Object):
 		self.mainloop = mainloop
 		self.bus = conn
 		self.exit_on_release = True
+		self.deviceConnected = False
 
 	@dbus.service.method(AGENT_INTERFACE, in_signature="", out_signature="")
 	def Release(self):
@@ -212,7 +224,7 @@ class Agent(dbus.service.Object):
 	def RequestAuthorization(self, device):
 		print("RequestAuthorization (%s)" % (device))
 		#auth = ask("Authorize? (yes/no): ")
-		if (True):
+		if (self.deviceConnected):
 			return
 		raise Rejected("Pairing rejected")
 
@@ -221,10 +233,12 @@ class Agent(dbus.service.Object):
 		print("Cancel")
 
 
-class Adapter():
-	def __init__(self, bus, idx=0):
+class Adapter(dbus.service.Object):
+	def __init__(self, conn=None, object_path=None, bus_name=None, idx=0):
+		super(self.__class__, self).__init__(conn, object_path, bus_name)
+		self.bus = conn
 		self.path = f'{ADAPTER_ROOT}{idx}'
-		self.adapterObject = bus.get_object(BUS_NAME, self.path)
+		self.adapterObject = self.bus.get_object(BUS_NAME, self.path)
 		self.adapterProps = dbus.Interface(self.adapterObject,
 										   dbus.PROPERTIES_IFACE)
 		self.adapterProps.Set(ADAPTER_INTERFACE, 'Powered', True)
@@ -287,25 +301,26 @@ class Bluetooth():
 		self.manager.RequestDefaultAgent(AGENT_PATH)
 
 		# Listener initialize
+		self.listner = Listener()
 		self.init_listener()
 
 	def init_listener(self):
 		# Event listener
 		self.bus.add_signal_receiver(
-			property_changed,
+			self.lisnter.property_changed,
 			bus_name="org.bluez",
 			dbus_interface="org.freedesktop.DBus.Properties",
 			signal_name="PropertiesChanged",
 			path_keyword="path")
 
 		self.bus.add_signal_receiver(
-			interfaces_added,
+			self.lisnter.interfaces_added,
 			bus_name="org.bluez",
 			dbus_interface="org.freedesktop.DBus.ObjectManager",
 			signal_name="InterfacesAdded")
 
 		self.bus.add_signal_receiver(
-			interfaces_removed,
+			self.lisnter.interfaces_removed,
 			bus_name="org.bluez",
 			dbus_interface="org.freedesktop.DBus.ObjectManager",
 			signal_name="InterfacesRemoved")
