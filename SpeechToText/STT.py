@@ -1,15 +1,21 @@
 import speech_recognition as sr
 from pygame import mixer
 import time
-#import model.mic_vad_streaming as mvs
 from pypinyin import pinyin,Style
 
 class SpeechToText:
-    def Voice_To_Text():
+    def __init__(self):
+        self.thread = None
+        
+    def import_thread(self, thread):
+        self.thread = thread
+
+    def Voice_To_Text(self):
         cnt = 0
         cmd = False
         while True:
             # add thread
+            self.thread.wait_for_exec()
             r = sr.Recognizer()
 
             with sr.Microphone() as source:
@@ -38,7 +44,7 @@ class SpeechToText:
                 elif not cmd:
                     continue
                 else:
-                    #等失衡跟我說怎麼傳
+                    self.thread.add_thread(('小記的class', '小記的func', ('argument')))
                     print('return',zh_text)
                     cmd=False
 
