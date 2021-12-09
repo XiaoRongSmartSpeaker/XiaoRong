@@ -1,9 +1,7 @@
 from pypinyin import pinyin, lazy_pinyin
 import re
 import time
-import time_extract
-import volume_extract
-import language_extract
+import extract
 import json
 
 # 目前還不支援 明/後 天 時間
@@ -16,9 +14,6 @@ class Extract:
         self.day_dict = {'一': 1, '1': 1 , '二': 2, '2': 2 , '三': 3, '3': 3 , '四': 4, '4': 4 , 
             '五': 5, '5': 5 , '六': 6, '6': 6 , '末': 6 ,'天': 7, '日': 7}
         return
-    
-    def isPhoneNumber(self, str):
-        return re.match(r'\d(-\d)*', str)
 
     def text2func(self, input_str):
         key_found = 0
@@ -58,7 +53,7 @@ class Extract:
         if( function_name == 'call'):#==================================================CALL=======================================V
             if(len(target) == 0):
                 return ('FAILED', 'FAILED', tuple())
-            if(self.isPhoneNumber(target)):
+            if(extract.isPhoneNumber(target)):
                 return (func_key[0], 'call', (0, target))
             target_pinyin = lazy_pinyin(target)
             return (func_key[0], 'call', (1, target_pinyin))
@@ -68,27 +63,27 @@ class Extract:
             if(len(target) <= 1):
                 return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
             if(target[0] in self.day_dict.keys()):
-                para = time_extract.target_time(target[1:], 0)
+                para = extract.target_time(target[1:], 0)
                 return (class_name, 'add_calender_week', (self.day_dict[target[0]], para[0], para[1], para[2]))
             else:
                 return ('FAILED', 'FAILED', tuple())
         elif( function_name == 'add_calender_day'):#====================================ADD_CALENDER_DAY
             if(len(target) == 0):
                 return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
-            para = time_extract.target_time(target, 0)
+            para = extract.target_time(target, 0)
             return (class_name, 'add_calender_day', (tuple(para)))
         elif( function_name == 'add_calender'):#========================================ADD_CALENDER
             if(len(target) == 0):
                 return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
-            para = time_extract.target_time(target, 0)
+            para = extract.target_time(target, 0)
             return(class_name, function_name, tuple(para))
         elif( function_name == 'next_calender'):#=======================================NEXT_CALENDER
             return(class_name, function_name, (None))
         elif( function_name == 'read_calender'):#=======================================READ_CALENDER
-            para = time_extract.target_time(target, 0)
+            para = extract.target_time(target, 0)
             return(class_name, function_name, tuple([para[0][5:10]]))
         elif( function_name == 'weather_forecast'):#====================================WEATHER_FORECAST
-            para = time_extract.target_time(target, 1)
+            para = extract.target_time(target, 1)
             place = para[-1]
             if(len(place)==0):
                 place = 'HERE'
@@ -112,43 +107,43 @@ class Extract:
         elif( function_name == 'repeat_playing'):
             return(class_name, function_name, tuple())
         elif( function_name == 'louder_system_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name,tuple(para))
         elif( function_name == 'quiter_system_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name,tuple(para))
         elif( function_name == 'set_system_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name, tuple(para))
         elif( function_name == 'louder_music_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name,tuple(para))
         elif( function_name == 'quiter_music_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name,tuple(para))
         elif( function_name == 'set_music_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name, tuple(para))
         elif( function_name == 'louder_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name,tuple(para))
         elif( function_name == 'quiter_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name,tuple(para))
         elif( function_name == 'set_volume'):
-            para = volume_extract.target_volume(target)
+            para = extract.target_volume(target)
             return(class_name, function_name, tuple(para))
         elif( function_name == 'translate'):
-            para = language_extract.target_language(target)
+            para = extract.target_language(target)
             return(class_name, function_name, tuple(para))
         elif( function_name == 'question_answering'):
             para = [target]
             return(class_name, function_name, tuple(para))
         elif( function_name == 'set_timer'):
-            para = time_extract.countdown_target(input_str)
+            para = extract.countdown_target(input_str)
             return(class_name, function_name, tuple(para))
         elif( function_name == 'set_alert'):
-            para = time_extract.alert_target(target)
+            para = extract.alert_target(target)
             return(class_name, function_name, tuple(para))        
         else:
             para = [input_str]
