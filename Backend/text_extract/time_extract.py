@@ -1,4 +1,4 @@
-import jieba
+# import jieba
 import datetime
 import re
 import number_tran as numt
