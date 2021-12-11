@@ -8,16 +8,80 @@ from importlib import import_module
 feature_path = './feature'
 
 class Main():
-    def __init__(self):
-        self.threads = []
-        self.data_que = queue.Queue()
-        self.feature_list = []
+    def __init__(self) -> None:
+        self.threads = []                           # current running thread
+        self.__data_que = queue.Queue()             # pending data
+        self.feature_list = []                      # imported class
+        self.__declare_class = []                   # declared class
+        self.__pending_threads = queue.Queue()      # pending thread info
+        self.__DAEMON_THREAD = [                    # define daemon work
+            'voice_to_text'
+        ]
+    
+    def add_thread(self, func_info) -> None:
+        self.__pending_threads.put(func_info)
 
-    def add_thread(self, class_name, func_name, args):
-        self.threads.append(Job(class_name, func_name, args))
+    def open_thread(self) -> None:
+        func_info = self.__pending_threads.get()
 
-    def send(self, data):
-        self.data_que.put(data)
+        for dec_class in self.__declare_class:
+            if dec_class['name'] == func_info['name']:
+                try:
+                    func = getattr(dec_class['class'], func_info['func'])
+                    args = func_info['args'] if 'args' in func_info else ()
+
+                    # judge whether this work is daemon feature or not
+                    if func_info['func'] in self.__DAEMON_THREAD:
+                        self.threads.append(Job(self, func_info['name'], func, args))
+                    else:
+                        self.threads.append(Job(self, func_info['name'], func, args, True))
+
+                    self.threads[-1].start()
+                    return
+                except:
+                    print('Could not find method', func_info['func'])
+                    return
+
+
+        for feature in self.feature_list:
+            if feature['name'] == func_info['class']:
+                # initial class instance
+                class_entity = feature['class']()
+                self.__declare_class.append({
+                    'name': func_info['class'],
+                    'instance': class_entity
+                })
+                # get the class method address
+                try:
+                    func = getattr(class_entity, func_info['func'])
+
+                    # judge whether this work is daemon feature or not
+                    if func_info['func'] in self.__DAEMON_THREAD:
+                        self.threads.append(Job(self, func_info['class'], func, func_info['args']))
+                    else:
+                        self.threads.append(Job(self, func_info['class'], func, func_info['args'], True))
+                    
+                    self.threads[-1].start()
+                    return
+                except:
+                    print('Could not find method', func_info['func'])
+                    return
+
+        print('Could not find the feature instance', func_info['class'])
+
+    def threading_empty(self) -> bool:
+        return True if self.__pending_threads.empty() else False
+
+    def data_empty(self) -> bool:
+        return True if self.__data_que.empty() else False
+
+    def send(self, data) -> None:
+        self.__data_que.put(data)
+
+    def close(self) -> None:
+        for thread in self.threads:
+            if not thread.isDaemon():
+                thread.join()
 
 def reciprocal(num):
     for n in range(num, 0, -1):
@@ -28,7 +92,7 @@ if __name__ == "__main__":
     # defination main process
     main = Main()
     
-    # initial feature class
+    # import feature class
     feature_list = os.listdir(feature_path)
     for file in feature_list:
         full_filename = os.path.basename(feature_path + '/' + file)
@@ -52,32 +116,31 @@ if __name__ == "__main__":
                 }
                 main.feature_list.append(feature_obj)
             except:
+                print('import class instance error')
                 continue
         except:
+            print('import module python file error')
             continue
+
+    # initial speaker feature
+    main.add_thread({
+        'class': 'vioce_to_text',
+        'func': 'voice_to_text',
+        'args': ()
+    })
+    main.open_thread()
+    main.add_thread({
+        'class': 'monitering',
+        'func': 'monitering',
+    })
+    main.open_thread()
     
-    main.add_thread('main', reciprocal, (20,))
+    while True:
+        # clear that completed threading
+        for i in range(0, len(main.threads)):
+            if not main.threads[i].is_alive():
+                del main.threads[i]
 
-    main.threads[0].check_info()
-
-    main.threads[0].start()
-
-    reciprocal(10)
-
-    main.threads[0].join()
-
-    while False:
-        for thread in main.threads:
-            if thread.is_run():
-                continue
-            else:
-                thread.start()
-                break
-        
-
-        if not main.data_que.empty():
-            send_data = main.data_que.get()
-            for thread in main.threads:
-                if thread.getName() == send_data.name:
-                    thread.receve(send_data)
-                    break
+        # if there are pending thread data
+        if not main.threading_empty():
+            main.open_thread()
