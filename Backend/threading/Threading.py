@@ -5,10 +5,18 @@ from threading import Thread, Event
 # args: function parameter
 
 class Job(Thread):
-    def __init__(self, class_name, func_name, args):
-        super(Job, self).__init__(  name = class_name,
-                                    target = func_name,
-                                    args = args)
+    def __init__(self, main, name, func, args, daemon = False):
+        super(Job, self).__init__(  name = name,
+                                    target = func,
+                                    args = args,
+                                    daemon = daemon )
+        # threading basic info
+        self.name = name
+        self.func = func.__name__
+        self.args = args
+        
+        # threading control parameter
+        self.__main_porc = main
         self.__running = Event()
         self.__unlock = Event()
         self.__pause = Event()
@@ -16,9 +24,14 @@ class Job(Thread):
         self.__unlock.set()
         self.__pause.clear()
 
-        print("Thread '", class_name, "' setup successfully.", sep='')
+        print("Thread '", name, "' setup successfully.", sep='')
     
-    def run(self):
+    def reset(self) -> None:
+        self.__running.clear()
+        self.__unlock.set()
+        self.__pause.clear()
+    
+    def run(self) -> None:
         if self.__unlock.is_set():
             self.__running.set()
             super(Job, self).run()
@@ -27,26 +40,26 @@ class Job(Thread):
             self.__running.set()
             super(Job, self).run()
 
-    def check_info(self):
-        name = super(Job, self).getName()
-        print("Thread ", name, " running is ", True if self.__running.is_set() else False, sep='')
-        print("Thread ", name, " unlock is ", True if self.__unlock.is_set() else False, sep='')
-        print("Thread ", name, " pause is ", True if self.__pause.is_set() else False, sep='')
+    def add_thread(self, func_info) -> None:
+        self.__main_porc.add_thread(func_info)
 
-    def is_run(self):
+    def check_info(self):
+        print("Thread ", self.name, " running is ", True if self.__running.is_set() else False, sep='')
+        print("Thread ", self.name, " unlock is ", True if self.__unlock.is_set() else False, sep='')
+        print("Thread ", self.name, " pause is ", True if self.__pause.is_set() else False, sep='')
+
+    def is_run(self) -> bool:
         return True if self.__running.is_set() else False
 
-    def pause(self):
+    def pause(self) -> None:
         self.__pause.set()
 
-    def resume(self):
+    def resume(self) -> None:
         self.__pause.clear()
 
-    def lock(self):
+    def lock(self) -> None:
         self.__unlock.clear()
     
-    def unlock(self):
+    def unlock(self) -> None:
         self.__unlock.set()
-
-    # def send(self, class_name, func_name, args):
 
