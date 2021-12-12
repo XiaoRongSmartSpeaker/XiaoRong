@@ -37,7 +37,7 @@ ADAPTER_ROOT = '/org/bluez/hci'
 
 relevant_ifaces = [ADAPTER_INTERFACE, DEVICE_INTERFACE, MEDIA_PLAYER_INTERFACE]
 
-
+### Start -- Some useful utilty function ###
 def proxyobj(bus, path, interface) -> dbus.proxies.Interface:
 	""" commodity to apply an interface to a proxy object """
 	obj = bus.get_object(SERVICE_NAME, path)
@@ -111,6 +111,7 @@ def get_device_address_by_path(path) -> str:
 	except:
 		logger.error("Bluetooth address not found in path.")
 		return 
+### End -- Some useful utilty function ###
 
 class BluetoothError(Exception):
 	pass
