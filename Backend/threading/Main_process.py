@@ -1,6 +1,5 @@
 import os
 import queue
-import time
 
 from Threading import Job
 from importlib import import_module
@@ -32,10 +31,11 @@ class Main():
 
                     # judge whether this work is daemon feature or not
                     if func_info['func'] in self.__DAEMON_THREAD:
-                        self.threads.append(Job(self, func_info['name'], func, args))
+                        new_job = Job(self, func_info['class'], func, args)
                     else:
-                        self.threads.append(Job(self, func_info['name'], func, args, True))
-
+                        new_job = Job(self, func_info['class'], func, args, True)
+                    
+                    self.threads.append(new_job)
                     self.threads[-1].start()
                     return
                 except:
@@ -57,10 +57,14 @@ class Main():
 
                     # judge whether this work is daemon feature or not
                     if func_info['func'] in self.__DAEMON_THREAD:
-                        self.threads.append(Job(self, func_info['class'], func, func_info['args']))
+                        new_job = Job(self, func_info['class'], func, func_info['args'])
                     else:
-                        self.threads.append(Job(self, func_info['class'], func, func_info['args'], True))
+                        new_job = Job(self, func_info['class'], func, func_info['args'], True)
                     
+                    if getattr(class_entity, 'import_thread', None) != None:
+                        class_entity.import_thread(new_job)
+
+                    self.threads.append(new_job)
                     self.threads[-1].start()
                     return
                 except:
@@ -82,11 +86,6 @@ class Main():
         for thread in self.threads:
             if not thread.isDaemon():
                 thread.join()
-
-def reciprocal(num):
-    for n in range(num, 0, -1):
-        print(n, 'seconds')
-        time.sleep(1)
 
 if __name__ == "__main__":
     # defination main process
@@ -124,9 +123,8 @@ if __name__ == "__main__":
 
     # initial speaker feature
     main.add_thread({
-        'class': 'vioce_to_text',
+        'class': 'voice_to_text',
         'func': 'voice_to_text',
-        'args': ()
     })
     main.open_thread()
     main.add_thread({
