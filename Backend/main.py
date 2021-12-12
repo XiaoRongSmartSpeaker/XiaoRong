@@ -4,6 +4,10 @@ from queue import Queue
 
 from Threading import Job
 from importlib import import_module
+from logger import logger 
+
+# log setting
+log = logger.setup_applevel_logger(file_name = './log/smartspeaker.log')
 
 feature_path = './feature'
 
