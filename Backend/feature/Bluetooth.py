@@ -4,7 +4,6 @@
 from __future__ import absolute_import, print_function, unicode_literals
 
 import sys
-import logging
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -12,17 +11,18 @@ try:
 	from gi.repository import GLib
 except ImportError:
 	import Glib as GLib
-
-logger = logging.getLogger()
-fileHandler = logging.FileHandler("bluetooth.log")
-streamHandler = logging.StreamHandler(sys.stdout)
-formatter = logging.Formatter(
-    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-streamHandler.setFormatter(formatter)
-fileHandler.setFormatter(formatter)
-logger.addHandler(streamHandler)
-logger.addHandler(fileHandler)
-logger.setLevel(logging.INFO)
+try:
+	import logger
+	logger = logger.get_logger(__name__)
+except ModuleNotFoundError:
+	import logging
+	logger = logging.getLogger()
+	logger.setLevel(logging.DEBUG)
+	ch = logging.StreamHandler(sys.stdout)
+	ch.setLevel(logging.DEBUG)
+	formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+	ch.setFormatter(formatter)
+	logger.addHandler(ch)
 
 BUS_NAME = 'org.bluez'
 SERVICE_NAME = "org.bluez"
