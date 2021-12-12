@@ -1,12 +1,10 @@
 #!/usr/bin/python
-# SPDX-License-Identifier: LGPL-2.1-or-later
-
-from __future__ import absolute_import, print_function, unicode_literals
-
+from logging import Manager
 import sys
 import dbus
 import dbus.service
 import dbus.mainloop.glib
+import threading
 try:
 	from gi.repository import GLib
 except ImportError:
@@ -20,51 +18,33 @@ except ModuleNotFoundError:
 	logger.setLevel(logging.DEBUG)
 	ch = logging.StreamHandler(sys.stdout)
 	ch.setLevel(logging.DEBUG)
-	formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+	formatter = logging.Formatter(
+	    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 	ch.setFormatter(formatter)
 	logger.addHandler(ch)
 
-BUS_NAME = 'org.bluez'
 SERVICE_NAME = "org.bluez"
 ADAPTER_INTERFACE = SERVICE_NAME + ".Adapter1"
 DEVICE_INTERFACE = SERVICE_NAME + ".Device1"
 AGENT_INTERFACE = SERVICE_NAME + ".Agent1"
 AGENT_MANAGER_INTERFACE = SERVICE_NAME + ".AgentManager1"
+MEDIA_PLAYER_INTERFACE = SERVICE_NAME + "MediaPlayer1"
+OBJECT_MANAGER_INTERFACE = "org.freedesktop.DBus.ObjectManager"
+PROPERTY_INTERFACE = "org.freedesktop.DBus.Properties"
 AGENT_PATH = "/xiaorong/agent"
 DEVICE_PATH = "/xiaorong/device"
 ADAPTER_ROOT = '/org/bluez/hci'
 
-relevant_ifaces = [
-    "org.bluez.Adapter1", "org.bluez.Device1", "org.bluez.MediaPlayer1"
-]
+relevant_ifaces = [ADAPTER_INTERFACE, DEVICE_INTERFACE, MEDIA_PLAYER_INTERFACE]
 
 
-def ask(prompt):
-	try:
-		return raw_input(prompt)
-	except:
-		return input(prompt)
-
-
-def set_trusted(path, bus):
-	props = dbus.Interface(bus.get_object("org.bluez", path),
-	                       "org.freedesktop.DBus.Properties")
-	props.Set("org.bluez.Device1", "Trusted", True)
-
-
-def dev_connect(path, bus):
-	dev = dbus.Interface(bus.get_object("org.bluez", path),
-	                     "org.bluez.Device1")
-	dev.Connect()
-
-
-def proxyobj(bus, path, interface):
+def proxyobj(bus, path, interface) -> dbus.proxies.Interface:
 	""" commodity to apply an interface to a proxy object """
-	obj = bus.get_object('org.bluez', path)
+	obj = bus.get_object(SERVICE_NAME, path)
 	return dbus.Interface(obj, interface)
 
 
-def filter_by_interface(objects, interface_name):
+def filter_by_interface(objects, interface_name) -> list:
 	""" filters the objects based on their support
 		for the specified interface """
 	result = []
@@ -76,36 +56,38 @@ def filter_by_interface(objects, interface_name):
 	return result
 
 
-def get_managed_objects():
+def get_managed_objects() -> dbus.proxies.Interface:
 	bus = dbus.SystemBus()
-	manager = dbus.Interface(bus.get_object("org.bluez", "/"),
-	                         "org.freedesktop.DBus.ObjectManager")
+	manager = proxyobj(bus, "/", OBJECT_MANAGER_INTERFACE)
 	return manager.GetManagedObjects()
 
 
-def find_adapter(pattern=None):
+def find_adapter(pattern=None) -> dbus.proxies.Interface:
 	return find_adapter_in_objects(get_managed_objects(), pattern)
 
 
-def find_adapter_in_objects(objects, pattern=None):
+def find_adapter_in_objects(objects, pattern=None) -> dbus.proxies.Interface:
 	bus = dbus.SystemBus()
 	for path, ifaces in objects.items():
 		adapter = ifaces.get(ADAPTER_INTERFACE)
 		if adapter is None:
 			continue
 		if not pattern or pattern == adapter["Address"] or \
-         path.endswith(pattern):
+                                       path.endswith(pattern):
 			obj = bus.get_object(SERVICE_NAME, path)
 			return dbus.Interface(obj, ADAPTER_INTERFACE)
 	raise Exception("Bluetooth adapter not found")
 
 
-def find_device(device_address, adapter_pattern=None):
+def find_device(device_address,
+                adapter_pattern=None) -> dbus.proxies.Interface:
 	return find_device_in_objects(get_managed_objects(), device_address,
 	                              adapter_pattern)
 
 
-def find_device_in_objects(objects, device_address, adapter_pattern=None):
+def find_device_in_objects(objects,
+                           device_address,
+                           adapter_pattern=None) -> dbus.proxies.Interface:
 	bus = dbus.SystemBus()
 	path_prefix = ""
 	if adapter_pattern:
@@ -122,9 +104,15 @@ def find_device_in_objects(objects, device_address, adapter_pattern=None):
 
 	raise Exception("Bluetooth device not found")
 
+def get_device_address_by_path(path) -> str:
+	try:
+		address = path.split("dev_")[1].replace("_", ":")
+		return address
+	except:
+		logger.error("Bluetooth address not found in path.")
+		return 
 
 class BluetoothError(Exception):
-
 	pass
 
 
@@ -142,64 +130,34 @@ class Agent(dbus.service.Object):
 		self.mainloop = mainloop
 		self.bus = conn
 		self.exit_on_release = True
-		self.deviceConnected = False
+		self.connectedDevice = None
 
 	@dbus.service.method(AGENT_INTERFACE, in_signature="", out_signature="")
 	def Release(self):
-		print("Release")
+		logger.info("Release")
 		if self.exit_on_release:
 			self.mainloop.quit()
 
 	@dbus.service.method(AGENT_INTERFACE, in_signature="os", out_signature="")
 	def AuthorizeService(self, device, uuid):
-		print("AuthorizeService (%s, %s)" % (device, uuid))
-		#authorize = ask("Authorize connection (yes/no): ")
+		logger.info("AuthorizeService (%s, %s)" % (device, uuid))
+		# Authorize any service by default
+		# TODO need to check whether there are security issues.
 		if (True):
 			return
 		raise Rejected("Connection rejected by user")
 
-	@dbus.service.method(AGENT_INTERFACE, in_signature="o", out_signature="s")
-	def RequestPinCode(self, device):
-		print("RequestPinCode (%s)" % (device))
-		set_trusted(device, self.bus)
-		return ask("Enter PIN Code: ")
-
-	@dbus.service.method(AGENT_INTERFACE, in_signature="o", out_signature="u")
-	def RequestPasskey(self, device):
-		print("RequestPasskey (%s)" % (device))
-		set_trusted(device, self.bus)
-		passkey = ask("Enter passkey: ")
-		return dbus.UInt32(passkey)
-
-	@dbus.service.method(AGENT_INTERFACE, in_signature="ouq", out_signature="")
-	def DisplayPasskey(self, device, passkey, entered):
-		print("DisplayPasskey (%s, %06u entered %u)" %
-		      (device, passkey, entered))
-
-	@dbus.service.method(AGENT_INTERFACE, in_signature="os", out_signature="")
-	def DisplayPinCode(self, device, pincode):
-		print("DisplayPinCode (%s, %s)" % (device, pincode))
-
-	@dbus.service.method(AGENT_INTERFACE, in_signature="ou", out_signature="")
-	def RequestConfirmation(self, device, passkey):
-		print("RequestConfirmation (%s, %06d)" % (device, passkey))
-		confirm = ask("Confirm passkey (yes/no): ")
-		if (confirm == "yes"):
-			set_trusted(device, self.bus)
-			return
-		raise Rejected("Passkey doesn't match")
-
 	@dbus.service.method(AGENT_INTERFACE, in_signature="o", out_signature="")
 	def RequestAuthorization(self, device):
-		print("RequestAuthorization (%s)" % (device))
-		#auth = ask("Authorize? (yes/no): ")
-		if (not self.deviceConnected):
+		logger.info("RequestAuthorization (%s)" % (device))
+		# Accept any request
+		if (True):
 			return
 		raise Rejected("Pairing rejected")
 
 	@dbus.service.method(AGENT_INTERFACE, in_signature="", out_signature="")
 	def Cancel(self):
-		print("Cancel")
+		logger.info("Cancel")
 
 
 class Adapter(dbus.service.Object):
@@ -228,12 +186,16 @@ class Adapter(dbus.service.Object):
 		self.adapterProps.Set(ADAPTER_INTERFACE, 'Pairable', True)
 		logger.info("Bluetooth pairable on")
 
+	def change_alias(self, alias):
+		self.adapterProps.Set(ADAPTER_INTERFACE, 'Alias', alias)
+		logger.info(f"Change bluetooth alias into {alias}")
 
 class Device():
 	def __init__(self, bus):
+		# initialize
 		self.bus = bus
 
-		# Disconnect connected devices
+		# disconnect already connected devices
 		connectedDevicesList = self.get_connected_devices_list()
 		for device in connectedDevicesList:
 			self.disconnect(device["address"], device["name"])
@@ -257,37 +219,42 @@ class Device():
 		connectedDevicesObj = []
 		devicesObj = self.get_devices_obj()
 		for deviceObj in devicesObj:
-			obj = proxyobj(self.bus, deviceObj,
-			               'org.freedesktop.DBus.Properties')
+			obj = proxyobj(self.bus, deviceObj, PROPERTY_INTERFACE)
 			if obj.Get(DEVICE_INTERFACE, "Connected"):
 				connectedDevicesObj.append({
 				    "name":
-				    str(obj.Get("org.bluez.Device1", "Name")),
+				    str(obj.Get(DEVICE_INTERFACE, "Name")),
 				    "address":
-				    str(obj.Get("org.bluez.Device1", "Address")),
+				    str(obj.Get(DEVICE_INTERFACE, "Address")),
 				    "connected":
-				    str(obj.Get("org.bluez.Device1", "Connected"))
+				    str(obj.Get(DEVICE_INTERFACE, "Connected"))
 				})
 		return connectedDevicesObj
 
 
-class Player():
+class MediaPlayer():
 	def __init__(self, bus):
+		# initialize
 		self.bus = bus
 		self.player_iface = None
 		self.transport_prop_iface = None
+
+		# obtain MediaPlayer1 & MediaTransport1 interface
 		for path, ifaces in get_managed_objects().items():
-			if 'org.bluez.MediaPlayer1' in ifaces:
-				self.player_iface = dbus.Interface(
-				    self.bus.get_object('org.bluez', path),
-				    'org.bluez.MediaPlayer1')
+			if MEDIA_PLAYER_INTERFACE in ifaces:
+				self.player_iface = proxyobj(SERVICE_NAME, path,
+				                             MEDIA_PLAYER_INTERFACE)
+
 			elif 'org.bluez.MediaTransport1' in ifaces:
-				self.transport_prop_iface = dbus.Interface(
-				    self.bus.get_object('org.bluez', path),
-				    'org.freedesktop.DBus.Properties')
+				self.transport_prop_iface = proxyobj(SERVICE_NAME, path,
+				                                     PROPERTY_INTERFACE)
+
+		# can't obtain MediaPlayer1 interface
 		if not self.player_iface:
 			logger.error('Media Player not found.')
 			return None
+
+		# can't obtain MediaTransport1 interface
 		if not self.transport_prop_iface:
 			logger.error('DBus.Properties MediaTransport1 iface not found.')
 			return None
@@ -304,25 +271,21 @@ class Player():
 class Bluetooth():
 	def __init__(self):
 		capability = "NoInputNoOutput"
+		# threadHandler initialize (for main function)
 		self.threadHandler = None
 
-		# Main loop setting
+		# Main loop setting (bluetooth monitor daemon)
 		dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 		self.mainloop = GLib.MainLoop()
 
-		# Bus initialize
+		# Bus, Adapter, Device, Agent, MediaPlayer initialize
 		self.bus = dbus.SystemBus()
-
-		# Adpater initialize
 		self.adapter = Adapter(self.bus)
-
-		# Device initialize
 		self.device = Device(self.bus)
-
-		# Agent Initialize
 		self.agent = Agent(conn=self.bus,
 		                   object_path=AGENT_PATH,
 		                   mainloop=self.mainloop)
+		self.mediaPlayer = None
 
 		# Agent manager initialize
 		self.manager = proxyobj(self.bus, "/org/bluez",
@@ -331,53 +294,36 @@ class Bluetooth():
 		## Register Agent
 		self.manager.RegisterAgent(AGENT_PATH, capability)
 		logger.info("Agent registered")
+		self.manager.RequestDefaultAgent(AGENT_PATH)
 
-		# MediaPlayer Initialize
-		self.player = None
 
-		# Listener initialize
+		# Event Listener initialize
 		self.__init_listener()
 
-	def import_thread(self, thread):
-		self.threadHandler = thread
+		logger.info("Ready to start bluetooth daemon")
 
-	def __init_listener(self):
-		# Event listener
-		self.bus.add_signal_receiver(
-		    self.property_changed,
-		    bus_name="org.bluez",
-		    dbus_interface="org.freedesktop.DBus.Properties",
-		    signal_name="PropertiesChanged",
-		    path_keyword="path")
-
-		self.bus.add_signal_receiver(
-		    self.interfaces_added,
-		    bus_name="org.bluez",
-		    dbus_interface="org.freedesktop.DBus.ObjectManager",
-		    signal_name="InterfacesAdded")
-
-		self.bus.add_signal_receiver(
-		    self.interfaces_removed,
-		    bus_name="org.bluez",
-		    dbus_interface="org.freedesktop.DBus.ObjectManager",
-		    signal_name="InterfacesRemoved")
-
-	def bluetooth_daemon_start(self):
+	def bluetooth_daemon_start(self) -> None:
 		self.mainloop.run()
 
-	def open_bluetooth(self):
+	def open_bluetooth(self) -> None:
+		logger.info("Bluetooth daemon start")
 		# adapter setting
 		self.adapter.make_power_on()
 		self.adapter.make_pairable()
 		self.adapter.make_discoverable()
 		#self.mainloop.run()
-		self.threadHandler.add_thread({
-			'class': 'Bluetooth',
-			'func': 'bluetooth_daemon_start',
-    	})
-		
+		if self.threadHandler:
+			self.threadHandler.add_thread({
+				'class': 'Bluetooth',
+				'func': 'bluetooth_daemon_start',
+			})
+		else:
+			logger.error("threadHandler not exist. Failed to add thread.")
+			logger.info("try to start bluetooth daemon in current thread...")
+			t = threading.Thread(target=self.bluetooth_daemon_start)
+			return t
 
-	def close_bluetooth(self):
+	def close_bluetooth(self) -> None:
 		self.adapter.make_power_off()
 		self.manager.UnregisterAgent(AGENT_PATH)
 		self.mainloop.quit()
@@ -385,7 +331,7 @@ class Bluetooth():
 	def get_bluetooth_status(self):
 		connectedDevicesList = self.device.get_connected_devices_list()
 		if len(connectedDevicesList) > 1:
-			logging.error("Multiple bluetooth devices connected.")
+			logger.error("Multiple bluetooth devices connected.")
 			raise BluetoothError
 		elif len(connectedDevicesList) == 1:
 			return True, connectedDevicesList[0]["address"]
@@ -394,8 +340,8 @@ class Bluetooth():
 
 	def pause_bluetooth_playing(self):
 		try:
-			if self.player:
-				self.player.pause()
+			if self.mediaPlayer:
+				self.mediaPlayer.pause()
 				logger.info("Pause bluetooth device's music")
 			else:
 				logger.error("Bluetooth's Media Player not found.")
@@ -405,8 +351,8 @@ class Bluetooth():
 
 	def play_bluetooth_playing(self):
 		try:
-			if self.player:
-				self.player.play()
+			if self.mediaPlayer:
+				self.mediaPlayer.play()
 				logger.info("Pause bluetooth device's music")
 			else:
 				logger.error("Bluetooth's Media Player not found.")
@@ -414,19 +360,53 @@ class Bluetooth():
 		except BluetoothError as e:
 			logger.critical(f"Bluetooth.pause_bluetooth_playing failed, {e}")
 
+	def volume_change(self, volume):
+		# TODO: link to system volume change
+		# add_thread(set_system_volume, volume)
+		pass
+
+	def set_bluetooth_alias(self, alias):
+		self.adapter.change_alias(alias)
+
+	def import_thread(self, thread):
+		self.threadHandler = thread
+
+	def __init_listener(self):
+		# Event listener
+		self.bus.add_signal_receiver(self.property_changed,
+		                             bus_name=SERVICE_NAME,
+		                             dbus_interface=PROPERTY_INTERFACE,
+		                             signal_name="PropertiesChanged",
+		                             path_keyword="path")
+
+		self.bus.add_signal_receiver(self.interfaces_added,
+		                             bus_name=SERVICE_NAME,
+		                             dbus_interface=OBJECT_MANAGER_INTERFACE,
+		                             signal_name="InterfacesAdded")
+
+		self.bus.add_signal_receiver(self.interfaces_removed,
+		                             bus_name=SERVICE_NAME,
+		                             dbus_interface=OBJECT_MANAGER_INTERFACE,
+		                             signal_name="InterfacesRemoved")
+
 	def property_changed(self, interface, changed, invalidated, path):
 		iface = interface[interface.rfind(".") + 1:]
 		for name, value in changed.items():
-			val = str(value)
+			stringValue = str(value)
 			logger.debug("{%s.PropertyChanged} [%s] %s = %s" %
-			             (iface, path, name, val))
+			             (iface, path, name, stringValue))
 			# Event handling
 			if name == "Volume":  # Volume change
 				self.volume_change(value)
-			elif iface == "Device1" and name == "Connected" and value == "1":  # Device connected
-				self.agent.deviceConnected = True
-			elif iface == "Device1" and name == "Connected" and value == "0":  # Device disconnected
-				self.agent.deviceConnected = False
+			elif iface == "Device1" and name == "Connected" and value == 1:  # Device connected
+				device_address = get_device_address_by_path(path)
+				if self.agent.connectedDevice:
+					self.device.disconnect(device_address)
+					logger.info("Other device already connected.")
+				else:
+					self.agent.connectedDevice = device_address
+			elif iface == "Device1" and name == "Connected" and value == 0:  # Device disconnected
+				self.agent.connectedDevice = None
 
 	def interfaces_added(self, path, interfaces):
 		for iface, props in interfaces.items():
@@ -437,8 +417,8 @@ class Bluetooth():
 				logger.debug("      %s = %s" % (name, value))
 
 			# Handle interfaces_added to create interfaces
-			if iface == "org.bluez.MediaPlayer1":
-				self.player = Player(self.bus)
+			if iface == MEDIA_PLAYER_INTERFACE:
+				self.mediaPlayer = MediaPlayer(self.bus)
 
 	def interfaces_removed(self, path, interfaces):
 		for iface in interfaces:
@@ -447,23 +427,31 @@ class Bluetooth():
 			logger.debug("{Removed %s} [%s]" % (iface, path))
 
 			# Handle interfaces_remove to delete interfaces
-			if iface == "org.bluez.MediaPlayer1":
-				self.player = None
-
-	def volume_change(self, volume):
-		# TODO: link to system volume change
-		# add_thread(set_system_volume, volume)
-		pass
+			if iface == MEDIA_PLAYER_INTERFACE:
+				self.mediaPlayer = None
 
 
 if __name__ == '__main__':
+	'''		Demo	 '''
 	import time
+	# initialize Bluetooth instance
 	bl = Bluetooth()
-	time.sleep(10)
+	time.sleep(3)
+
+	# start bluetooth
 	t = bl.open_bluetooth()
-	#time.sleep(30)
+	t.start()
+
+	# pause bluetooth music playing
 	bl.pause_bluetooth_playing()
-	#isConnected, addr = bl.get_bluetooth_status()
-	#logging.info(f"status: {isConnected}, {addr}")
-	time.sleep(30)
+	
+	# set bluetooth shown name
+	bl.set_bluetooth_alias("Hello")
+
+	# check bluetooth connection status
+	isConnected, addr = bl.get_bluetooth_status()
+	print(f"status: {isConnected}, {addr}")
+	time.sleep(60)
+
+	# close bluetooth
 	bl.close_bluetooth()
