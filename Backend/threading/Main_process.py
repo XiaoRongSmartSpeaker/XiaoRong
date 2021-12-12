@@ -24,16 +24,16 @@ class Main():
         func_info = self.__pending_threads.get()
 
         for dec_class in self.__declare_class:
-            if dec_class['name'] == func_info['name']:
+            if dec_class['name'] == func_info['class']:
                 try:
-                    func = getattr(dec_class['class'], func_info['func'])
+                    func = getattr(dec_class['instance'], func_info['func'])
                     args = func_info['args'] if 'args' in func_info else ()
 
                     # judge whether this work is daemon feature or not
                     if func_info['func'] in self.__DAEMON_THREAD:
-                        new_job = Job(self, func_info['class'], func, args)
-                    else:
                         new_job = Job(self, func_info['class'], func, args, True)
+                    else:
+                        new_job = Job(self, func_info['class'], func, args)
                     
                     self.threads.append(new_job)
                     self.threads[-1].start()
@@ -58,10 +58,8 @@ class Main():
 
                     # judge whether this work is daemon feature or not
                     if func_info['func'] in self.__DAEMON_THREAD:
-                        print('daemon')
                         new_job = Job(self, func_info['class'], func, args, True)
                     else:
-                        print('not daemon')
                         new_job = Job(self, func_info['class'], func, args)
                     
                     if getattr(class_entity, 'import_thread', None) != None:
@@ -125,30 +123,23 @@ if __name__ == "__main__":
             continue
 
     # initial speaker feature
-    # main.add_thread({
-    #     'class': 'voice_to_text',
-    #     'func': 'voice_to_text',
-    # })
-    # main.open_thread()
-    # main.add_thread({
-    #     'class': 'monitering',
-    #     'func': 'monitering',
-    # })
-    # main.open_thread()
-    
     main.add_thread({
-        'class': 'Class_A',
-        'func': 'reciprocal',
-        'args': (10,)
+        'class': 'voice_to_text',
+        'func': 'voice_to_text',
     })
     main.open_thread()
-    
-    while False:
-        # clear that completed threading
-        for i in range(0, len(main.threads)):
-            if not main.threads[i].is_alive():
-                del main.threads[i]
+    main.add_thread({
+        'class': 'monitering',
+        'func': 'monitering',
+    })
+    main.open_thread()
 
+    while True:
+        # clear that completed threading
+        for thread in main.threads:
+            if not thread.is_alive():
+                del thread
+        
         # if there are pending thread data
         if not main.threading_empty():
             main.open_thread()
