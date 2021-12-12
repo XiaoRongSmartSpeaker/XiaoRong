@@ -54,12 +54,15 @@ class Main():
                 # get the class method address
                 try:
                     func = getattr(class_entity, func_info['func'])
+                    args = func_info['args'] if 'args' in func_info else ()
 
                     # judge whether this work is daemon feature or not
                     if func_info['func'] in self.__DAEMON_THREAD:
-                        new_job = Job(self, func_info['class'], func, func_info['args'])
+                        print('daemon')
+                        new_job = Job(self, func_info['class'], func, args, True)
                     else:
-                        new_job = Job(self, func_info['class'], func, func_info['args'], True)
+                        print('not daemon')
+                        new_job = Job(self, func_info['class'], func, args)
                     
                     if getattr(class_entity, 'import_thread', None) != None:
                         class_entity.import_thread(new_job)
@@ -122,18 +125,25 @@ if __name__ == "__main__":
             continue
 
     # initial speaker feature
+    # main.add_thread({
+    #     'class': 'voice_to_text',
+    #     'func': 'voice_to_text',
+    # })
+    # main.open_thread()
+    # main.add_thread({
+    #     'class': 'monitering',
+    #     'func': 'monitering',
+    # })
+    # main.open_thread()
+    
     main.add_thread({
-        'class': 'voice_to_text',
-        'func': 'voice_to_text',
-    })
-    main.open_thread()
-    main.add_thread({
-        'class': 'monitering',
-        'func': 'monitering',
+        'class': 'Class_A',
+        'func': 'reciprocal',
+        'args': (10,)
     })
     main.open_thread()
     
-    while True:
+    while False:
         # clear that completed threading
         for i in range(0, len(main.threads)):
             if not main.threads[i].is_alive():
