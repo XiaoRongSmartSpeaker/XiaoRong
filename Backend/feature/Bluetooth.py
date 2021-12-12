@@ -5,7 +5,6 @@ from __future__ import absolute_import, print_function, unicode_literals
 
 import sys
 import logging
-import threading
 import dbus
 import dbus.service
 import dbus.mainloop.glib
@@ -23,7 +22,7 @@ streamHandler.setFormatter(formatter)
 fileHandler.setFormatter(formatter)
 logger.addHandler(streamHandler)
 logger.addHandler(fileHandler)
-logger.setLevel(logging.DEBUG)
+logger.setLevel(logging.INFO)
 
 BUS_NAME = 'org.bluez'
 SERVICE_NAME = "org.bluez"
@@ -305,6 +304,7 @@ class Player():
 class Bluetooth():
 	def __init__(self):
 		capability = "NoInputNoOutput"
+		self.threadHandler = None
 
 		# Main loop setting
 		dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
@@ -338,6 +338,9 @@ class Bluetooth():
 		# Listener initialize
 		self.__init_listener()
 
+	def import_thread(self, thread):
+		self.threadHandler = thread
+
 	def __init_listener(self):
 		# Event listener
 		self.bus.add_signal_receiver(
@@ -359,15 +362,20 @@ class Bluetooth():
 		    dbus_interface="org.freedesktop.DBus.ObjectManager",
 		    signal_name="InterfacesRemoved")
 
+	def bluetooth_daemon_start(self):
+		self.mainloop.run()
+
 	def open_bluetooth(self):
 		# adapter setting
 		self.adapter.make_power_on()
 		self.adapter.make_pairable()
 		self.adapter.make_discoverable()
 		#self.mainloop.run()
-		t = threading.Thread(target=self.mainloop.run)
-		t.start()
-		return t
+		self.threadHandler.add_thread({
+			'class': 'Bluetooth',
+			'func': 'bluetooth_daemon_start',
+    	})
+		
 
 	def close_bluetooth(self):
 		self.adapter.make_power_off()
