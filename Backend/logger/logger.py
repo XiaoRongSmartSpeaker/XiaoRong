@@ -4,10 +4,12 @@ import os
 
 APP_LOGGER_NAME = 'SmartSpeaker'
 
-def setup_applevel_logger(logger_name = APP_LOGGER_NAME, file_name=None): 
+
+def setup_applevel_logger(logger_name=APP_LOGGER_NAME, file_name=None):
     logger = logging.getLogger(logger_name)
     logger.setLevel(logging.DEBUG)
-    formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
+    formatter = logging.Formatter(
+        "%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     sh = logging.StreamHandler(sys.stdout)
     sh.setFormatter(formatter)
     logger.handlers.clear()
@@ -19,5 +21,6 @@ def setup_applevel_logger(logger_name = APP_LOGGER_NAME, file_name=None):
         logger.addHandler(fh)
     return logger
 
-def get_logger(module_name):    
-   return logging.getLogger(APP_LOGGER_NAME).getChild(module_name)
+
+def get_logger(module_name):
+    return logging.getLogger(APP_LOGGER_NAME).getChild(module_name)

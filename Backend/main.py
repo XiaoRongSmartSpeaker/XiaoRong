@@ -3,12 +3,13 @@ import queue
 
 from Threading import Job
 from importlib import import_module
-from logger import logger 
+from logger import logger
 
 # log setting
-log = logger.setup_applevel_logger(file_name = './log/smartspeaker.log')
+log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
 
 feature_path = './feature'
+
 
 class Main():
     def __init__(self) -> None:
@@ -20,7 +21,7 @@ class Main():
         self.__DAEMON_THREAD = [                    # define daemon work
             'voice_to_text'
         ]
-    
+
     def add_thread(self, func_info) -> None:
         self.__pending_threads.put(func_info)
 
@@ -35,17 +36,17 @@ class Main():
 
                     # judge whether this work is daemon feature or not
                     if func_info['func'] in self.__DAEMON_THREAD:
-                        new_job = Job(self, func_info['class'], func, args, True)
+                        new_job = Job(
+                            self, func_info['class'], func, args, True)
                     else:
                         new_job = Job(self, func_info['class'], func, args)
-                    
+
                     self.threads.append(new_job)
                     self.threads[-1].start()
                     return
-                except:
+                except BaseException:
                     print('Could not find method', func_info['func'])
                     return
-
 
         for feature in self.feature_list:
             if feature['name'] == func_info['class']:
@@ -62,17 +63,21 @@ class Main():
 
                     # judge whether this work is daemon feature or not
                     if func_info['func'] in self.__DAEMON_THREAD:
-                        new_job = Job(self, func_info['class'], func, args, True)
+                        new_job = Job(
+                            self, func_info['class'], func, args, True)
                     else:
                         new_job = Job(self, func_info['class'], func, args)
-                    
-                    if getattr(class_entity, 'import_thread', None) != None:
+
+                    if getattr(
+                        class_entity,
+                        'import_thread',
+                            None) is not None:
                         class_entity.import_thread(new_job)
 
                     self.threads.append(new_job)
                     self.threads[-1].start()
                     return
-                except:
+                except BaseException:
                     print('Could not find method', func_info['func'])
                     return
 
@@ -92,10 +97,11 @@ class Main():
             if not thread.isDaemon():
                 thread.join()
 
+
 if __name__ == "__main__":
     # defination main process
     main = Main()
-    
+
     # import feature class
     feature_list = os.listdir(feature_path)
     for file in feature_list:
@@ -107,10 +113,12 @@ if __name__ == "__main__":
             continue
         else:
             feature = filename[0]
-        
+
         try:
             # import feature module
-            module = import_module(feature_path.replace('./', '') + '.' + feature)
+            module = import_module(
+                feature_path.replace(
+                    './', '') + '.' + feature)
             try:
                 # from feature module get class object
                 class_entity = getattr(module, feature)
@@ -119,10 +127,10 @@ if __name__ == "__main__":
                     'name': feature
                 }
                 main.feature_list.append(feature_obj)
-            except:
+            except BaseException:
                 print('import class instance error')
                 continue
-        except:
+        except BaseException:
             print('import module python file error')
             continue
 
@@ -143,7 +151,7 @@ if __name__ == "__main__":
         for thread in main.threads:
             if not thread.is_alive():
                 del thread
-        
+
         # if there are pending thread data
         if not main.threading_empty():
             main.open_thread()
