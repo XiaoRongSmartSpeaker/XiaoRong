@@ -73,7 +73,7 @@ class MusicStreaming():
         
         
 if __name__ == "__main__":
-    text = 'chungha killing me'
+    text = '周杰倫的給我一首歌的時間'
     music = MusicStreaming(text)
     music.play_music()
     
