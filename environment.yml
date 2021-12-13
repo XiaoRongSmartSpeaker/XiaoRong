@@ -1,0 +1,4 @@
+name: smartspeaker
+channels: 
+	- defaults
+dependencies:
