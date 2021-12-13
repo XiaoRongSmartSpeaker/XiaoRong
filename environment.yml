@@ -1,4 +1,5 @@
 name: smartspeaker
 channels: 
-	- defaults
+  - defaults
 dependencies:
+  - pypinyin==0.44.0
