@@ -189,6 +189,8 @@ class Adapter(dbus.service.Object):
 
 	def change_alias(self, alias):
 		self.adapterProps.Set(ADAPTER_INTERFACE, 'Alias', alias)
+		if alias == "":
+			alias = self.adapterProps.Get(ADAPTER_INTERFACE, 'Name')
 		logger.info(f"Change bluetooth alias into {alias}")
 
 class Device():
