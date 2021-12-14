@@ -60,7 +60,8 @@ class SpeechToText:
                     mixer.music.load('./Audio/noInternet.mp3')
                     mixer.music.play()
                     time.sleep(2)
-
+                else:
+                    print('no Internet')
             except sr.UnknownValueError:
                 if cmd:
                     mixer.init()
