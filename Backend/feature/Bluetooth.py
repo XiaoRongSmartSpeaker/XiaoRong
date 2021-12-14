@@ -406,7 +406,7 @@ class Bluetooth():
 					logger.info("Other device already connected.")
 				else:
 					self.agent.connectedDevice = device_address
-			elif iface == "Device1" and name == "Connected" and value == 0:  # Device disconnected
+			elif iface == "Device1" and name == "Connected" and value == 0 and self.agent.connectedDevice == get_device_address_by_path(path):  # Device disconnected
 				self.agent.connectedDevice = None
 
 	def interfaces_added(self, path, interfaces):
