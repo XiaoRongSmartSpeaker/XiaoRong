@@ -23,6 +23,7 @@ except ModuleNotFoundError:
 	ch.setFormatter(formatter)
 	logger.addHandler(ch)
 
+# static name & path setting
 SERVICE_NAME = "org.bluez"
 ADAPTER_INTERFACE = SERVICE_NAME + ".Adapter1"
 DEVICE_INTERFACE = SERVICE_NAME + ".Device1"
@@ -171,9 +172,11 @@ class Adapter(dbus.service.Object):
 
 	def make_power_on(self):
 		self.adapterProps.Set(ADAPTER_INTERFACE, 'Powered', True)
+		logger.info("Bluetooth power on")
 
 	def make_power_off(self):
 		self.adapterProps.Set(ADAPTER_INTERFACE, 'Powered', False)
+		logger.info("Bluetooth power off")
 
 	def make_discoverable(self, secs=60):
 		self.adapterProps.Set(ADAPTER_INTERFACE, 'DiscoverableTimeout',
@@ -192,6 +195,7 @@ class Adapter(dbus.service.Object):
 		if alias == "":
 			alias = self.adapterProps.Get(ADAPTER_INTERFACE, 'Name')
 		logger.info(f"Change bluetooth alias into {alias}")
+
 
 class Device():
 	def __init__(self, bus):
@@ -308,19 +312,20 @@ class Bluetooth():
 	def bluetooth_daemon_start(self) -> None:
 		self.mainloop.run()
 
-	def open_bluetooth(self) -> None:
+	def open_bluetooth(self):
 		logger.info("Bluetooth daemon start")
 		# adapter setting
 		self.adapter.make_power_on()
 		self.adapter.make_pairable()
 		self.adapter.make_discoverable()
-		#self.mainloop.run()
 		if self.threadHandler:
 			self.threadHandler.add_thread({
 				'class': 'Bluetooth',
 				'func': 'bluetooth_daemon_start',
 			})
+			return
 		else:
+			# When threadHandler doesn't exist return thread to start.
 			logger.error("threadHandler not exist. Failed to add thread.")
 			logger.info("try to start bluetooth daemon in current thread...")
 			t = threading.Thread(target=self.bluetooth_daemon_start)
@@ -341,27 +346,31 @@ class Bluetooth():
 		else:
 			return False, None
 
-	def pause_bluetooth_playing(self):
+	def pause_bluetooth_playing(self) -> bool:
 		try:
 			if self.mediaPlayer:
 				self.mediaPlayer.pause()
 				logger.info("Pause bluetooth device's music")
+				return 1
 			else:
 				logger.error("Bluetooth's Media Player not found.")
 				return 0
 		except BluetoothError as e:
 			logger.critical(f"Bluetooth.pause_bluetooth_playing failed, {e}")
+			return 0
 
-	def play_bluetooth_playing(self):
+	def play_bluetooth_playing(self) -> bool:
 		try:
 			if self.mediaPlayer:
 				self.mediaPlayer.play()
 				logger.info("Pause bluetooth device's music")
+				return 1
 			else:
 				logger.error("Bluetooth's Media Player not found.")
 				return 0
 		except BluetoothError as e:
 			logger.critical(f"Bluetooth.pause_bluetooth_playing failed, {e}")
+			return  0
 
 	def volume_change(self, volume):
 		# TODO: link to system volume change
