@@ -38,13 +38,7 @@ class countdown():
 		print('end of ring')
 		return True
 	def stop_countdown(self):
-		if h <= 0 or m <= 0 or s <= 0:
-			return False
-		totalSeconds = s + m * 60 + h * 3600
-		if 0 <= totalSeconds <= 7200:
-			self.totalSeconds = totalSeconds
-			return True
-		return False
+		pass
 		 
 if __name__ == "__main__":
 	a = countdown()
