@@ -33,6 +33,8 @@ class countdown():
 			self.totalSeconds -= 1
 		print('Time\'s up!')
 		playsound.playsound(self.audio_file, True) 
+		time.sleep(15)
+		print('end of ring')
 		return True
 	def stop_countdown(self):
 		if h <= 0 or m <= 0 or s <= 0:
