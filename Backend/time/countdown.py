@@ -13,7 +13,8 @@ class countdown():
 		self.audio_file = 'sound.mp3'                             
 		return
 
-	def set_countdown(self, h: int, m: int, s: int) -> bool:
+
+	def set_countdown(self, h: int, m: int, s: int):
 		if h < 0 or m < 0 or s < 0:
 			return False
 		totalSeconds = s + m * 60 + h * 3600
@@ -44,13 +45,9 @@ class countdown():
 			self.totalSeconds = totalSeconds
 			return True
 		return False
-	def stopCountdown(self):
-		pass
 		 
 if __name__ == "__main__":
 	a = countdown()
 	h, m, s = map(int,input("輸入到計時時間（格式：hh:mm:ss）").split(":"))
 	if a.set_countdown(h, m, s) == False:
 		print('error time!')
-
-
