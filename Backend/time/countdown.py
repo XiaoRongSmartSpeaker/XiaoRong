@@ -50,3 +50,5 @@ if __name__ == "__main__":
 	h, m, s = map(int,input("輸入到計時時間（格式：hh:mm:ss）").split(":"))
 	if a.set_countdown(h, m, s) == False:
 		print('error time!')
+
+
