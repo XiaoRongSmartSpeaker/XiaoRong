@@ -9,7 +9,8 @@ sys.path.append(os.path.abspath(scriptpath))
 from Threading import Job
 class countdown():
 	def __init__(self):
-		self.totalSeconds = 0                               
+		self.totalSeconds = 0 
+		self.audio_file = 'sound.mp3'                              
 		return
 
 	def set_countdown(self, h: int, m: int, s: int):
@@ -31,8 +32,8 @@ class countdown():
 			time.sleep(1)
 			self.totalSeconds -= 1
 		# print('Time\'s up!')
-		audio_file = 'sound.mp3'
-		playsound.playsound(audio_file, True) 
+		
+		playsound.playsound(self.audio_file, True) 
 		return True
 	def stop_countdown(self):
 		pass
@@ -41,4 +42,6 @@ if __name__ == "__main__":
 	a = countdown()
 	h, m, s = map(int,input("輸入到計時時間（格式：hh:mm:ss）").split(":"))
 	if a.set_countdown(h, m, s) == False:
-		print('error time!')
+		print('error time!')                                    
+
+
