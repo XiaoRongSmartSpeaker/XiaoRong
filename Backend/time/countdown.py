@@ -12,8 +12,7 @@ class countdown():
 		self.totalSeconds = 0  
 		self.audio_file = 'sound.mp3'                             
 		return
-
-
+		
 	def set_countdown(self, h: int, m: int, s: int):
 		if h < 0 or m < 0 or s < 0:
 			return False
