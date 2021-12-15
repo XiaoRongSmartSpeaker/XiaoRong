@@ -1,5 +1,5 @@
 {
-    "call"                 :{"class":"Call"             , "keywords":["打電話給", "撥電話", "打給"]}, 
+    "make_call"            :{"class":"Call"             , "keywords":["打電話給", "撥電話", "打給"]}, 
     "add_calender_week"    :{"class":"Calendar"         , "keywords":["新增行事曆每週", "新增行事曆 每週", "新增行事曆每周", "新增行事曆 每周"]},
     "add_calender_day"     :{"class":"Calendar"         , "keywords":["新增行事曆每天", "新增行事曆 每天"]},
     "add_calender"         :{"class":"Calendar"         , "keywords":["新增行事曆"]},
