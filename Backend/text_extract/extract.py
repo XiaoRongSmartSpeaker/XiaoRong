@@ -1,276 +1,140 @@
+from pypinyin import pinyin, lazy_pinyin
 import re
-import datetime
-import cn2an
-digit = {'一': 1, '兩':2, '二': 2, '三': 3, '四': 4, '五': 5, '六': 6, '七': 7, '八': 8, '九': 9}
+import time
+import para_extract
+import json
 
-def _trans(s):
-    if s.isdigit():
-        return(int(s))
-    num = 0
-    if s:
-        idx_q, idx_b, idx_s = s.find('千'), s.find('百'), s.find('十')
-        if idx_q != -1:
-            num += digit[s[idx_q - 1:idx_q]] * 1000
-        if idx_b != -1:
-            num += digit[s[idx_b - 1:idx_b]] * 100
-        if idx_s != -1:
-            # 十前忽略一的处理
-            num += digit.get(s[idx_s - 1:idx_s], 1) * 10
-        if s[-1] in digit:
-            num += digit[s[-1]]
-    return num
-#==========================================================
-def isPhoneNumber(str):
-    return re.match(r'\d(-\d)*', str)
-#================================================================================================================
-day_dict = {'一': 1, '1': 1 , '二': 2, '2': 2 , '三': 3, '3': 3 , '四': 4, '4': 4 , 
+# 目前還不支援 明/後 天 時間
+
+class Extract:
+
+    def __init__(self) -> None:
+        with open('./keyword.json', encoding="utf-8") as f :
+            self.func_dict = json.load(f) 
+        self.day_dict = {'一': 1, '1': 1 , '二': 2, '2': 2 , '三': 3, '3': 3 , '四': 4, '4': 4 , 
             '五': 5, '5': 5 , '六': 6, '6': 6 , '末': 6 ,'天': 7, '日': 7}
+        return
 
-def set_time(newtime):# newtime=[year, month, hour, minute]
-    a = datetime.datetime.now()
-    time = [a.month, a.day, a.hour, a.minute]
-    for i in range(4):
-        if (newtime[i] != -1):
-            time[i] = newtime[i]
-    return ("%04d-%02d-%02d %02d:%02d" %(int(a.year), int(time[0]), int(time[1]), int(time[2]), int(time[3])))
+    def text2func(self, input_str):
+        key_found = 0
+        keyword_index = -1
+        smallest_index = 999999999
+        keyword_str = 'UNKNOWN'
+        classname = 'UNKNOWN'
+        allfunc_list = []
+        for func_name in list(self.func_dict):
+            for keyword in list(self.func_dict[func_name]["keywords"]):
+                allfunc_list.append(keyword)
+        for keyword in allfunc_list:
+            keyword_index = input_str.find(keyword)
+            if (keyword_index!=-1):
+                if(keyword_index < smallest_index):
+                    smallest_index = keyword_index
+                    keyword_str = keyword
+        for func_name in list(self.func_dict):
+            for keyword in list(self.func_dict[func_name]["keywords"]):
+                if( keyword == keyword_str):
+                    keyword_str = keyword
+                    classname = self.func_dict[func_name]["class"]
+                    return [classname, func_name, keyword]
+        return [classname, func_name, 'None']
 
-def shift_time(day, hour, minute):
-    return (datetime.datetime.now()+datetime.timedelta(days=day, hours=hour, minutes=minute)).strftime("%Y-%m-%d %H:%M")
 
-def zh2cnnum(input_str):
-    input_str = input_str.replace('兩', '二')
-    input_str = input_str.replace('萬', '万')
-    input_str = input_str.replace('億', '亿')
-    return input_str
-
-def target_time(input_str, mode): #return the target time and the place to look later
-    date = re.compile(r'((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)月((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(日|號)')
-    time = re.compile(r'((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|兩|三|四|五|六|七|八|九)?)(\.|點|時)(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?))?')
-    later = re.compile(r'((明|後|大後)天)|(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(週|天|個?小時|分鐘)後)|下週(一|二|三|四|五|六|日|天)?')
-    one_99 = re.compile(r'(\d+)|((二|三|四|五|六|七|八|九)?十?(一|二|兩|三|四|五|六|七|八|九)?)')
-    target_obj = None
-    # target_str = ''
-    time_inter = 0
-    time_str = 'NOW'
-    month = int(-1)
-    day = int(-1)
-    hour = int(-1)
-    minute = int(-1)
-    endhour = int(-1)
-    endminute = int(-1)
-    time_inter = 0
-    result = []
-    if(later.search(input_str)):
-        target_obj = later.search(input_str)
-        target_str = target_obj.group()
-        time_str = "1970-01-01 00:00"
-        if (target_str=='明天'):
-            time_str = shift_time(1, 0, 0)
-        elif (target_str=='後天'):
-            time_str = shift_time(2, 0, 0)
-        elif (target_str=='大後天'):
-            time_str = shift_time(3, 0, 0)
-        input_str = input_str[target_obj.end():]
-        if(time.search(input_str)):
-            ntarget_obj = time.search(input_str)
-            ntarget_str = ntarget_obj.group()
-            minute = 0
-            if(ntarget_str.find('點')):
-                hour = _trans(ntarget_str[:ntarget_str.index('點')])
-                if('分' in ntarget_str):
-                        minute = _trans(ntarget_str[ntarget_str.index('點')+1:ntarget_str.index('分')])
-            elif(ntarget_str.find('時')):
-                hour = _trans(ntarget_str[:ntarget_str.index('時')])
-                if('分' in ntarget_str):
-                        minute = _trans(ntarget_str[ntarget_str.index('點')+1:ntarget_str.index('分')])
-            time_str = time_str[0:11]+("%02d:%02d" %(hour, minute))
-            result.append(time_str)
-            input_str = input_str[ntarget_obj.end():]
+    def para_extract(self, input_str, func_key):
+        class_name = func_key[0]
+        function_name = func_key[1]
+        location = input_str.find(func_key[2])
+        target = input_str
+        para = ()
+        if(location != -1): # 有這個關鍵字
+            target = input_str[location+len(func_key[2]):]
+            target = target.lstrip()
         else:
-            if(mode == 0):
-                result.append(time_str[0:11]+'00:00')
+            return('question', 'question_answering', tuple([input_str]))
+        if( function_name == 'call'):#==================================================CALL=======================================V
+            para = para_extract.target_call(target)
+        elif( function_name == 'add_calender_week'):#==================================ADD_CALENDER_WEEK
+            if(len(target) == 0):
+                return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
+            if(len(target) <= 1):
+                return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
+            if(target[0] in self.day_dict.keys()):
+                para = para_extract.target_time(target[1:], 0)
+                para = [self.day_dict[target[0]], para[0], para[1], para[2]]
             else:
-                result.append(time_str[0:11]+'06:00')
-        if(input_str[0]=='到' and time.search(input_str) and mode == 0):
-            if(time.search(input_str)):
-                ntarget_obj = time.search(input_str)
-                ntarget_str = ntarget_obj.group()
-                minute = 0
-                if(ntarget_str.find('點')):
-                    hour = _trans(ntarget_str[:ntarget_str.index('點')])
-                    if('分' in ntarget_str):
-                        minute = _trans(ntarget_str[ntarget_str.index('點')+1:ntarget_str.index('分')])
-                elif(ntarget_str.find('時')):
-                    hour = _trans(ntarget_str[:ntarget_str.index('時')])
-                    if('分' in ntarget_str):
-                            minute = _trans(ntarget_str[ntarget_str.index('點')+1:ntarget_str.index('分')])
-                result.append(time_str)
-                time_str = time_str[0:11]+("%02d:%02d" %(hour, minute))
-                input_str = input_str[ntarget_obj.end():]
-        elif(mode == 0):
-            result.append(None)
-        result.append(input_str)
-        return result
-        ############################################################################ABSOLUTE##############################################
-    if(date.search(input_str)):
-        target_obj = date.search(input_str)
-        month = _trans(input_str[target_obj.start():input_str.index('月')])
-        # print(target_obj.group())
-        if('日' in target_obj.group()):
-            day = _trans(input_str[input_str.index('月')+1:input_str.index('日')])
-            # print(day)
-        elif('號' in target_obj.group()):
-            day = _trans(input_str[input_str.index('月')+1:input_str.index('號')])
-            # print(day)
-        input_str = input_str[target_obj.end():]
-    if(time.search(input_str)):
-        target_obj = time.search(input_str)
-        target_str = target_obj.group()
-        if('點' in target_obj.group() and target_obj.group()[:target_obj.group().index('點')].isnumeric() ):
-            hour = _trans(input_str[target_obj.start():input_str.index('點')])
-            input_str = input_str[input_str.index('點')+1:]
-            if( one_99.search(input_str)):
-                # print(one_99.search(input_str).group())
-                minute = _trans(one_99.search(input_str).group())
-                input_str = input_str[one_99.search(input_str).end():]
-                if('分' in input_str):
-                    input_str = input_str[1:]
-                # minute = _trans(input_str[:input_str.index('分')])
-                # input_str = input_str[input_str.index('分')+1:]
-            else:
-                minute = 0
-            # print(hour)
-        elif('時' in target_obj.group() and target_obj.group()[:target_obj.group().index('時')].isnumeric()):
-            hour = _trans(input_str[target_obj.start():input_str.index('時')])
-            input_str = input_str[input_str.index('時')+1:]
-            if('分' in target_str):
-                minute = _trans(input_str[:input_str.index('分')])
-                input_str = input_str[input_str.index('分')+1:]
-                # print(minute)
-            else:
-                minute = 0
-            # print(hour)
-        # print(day)
-    if(target_obj):
-        result.append(set_time([month, day, hour, minute]))
-    else:
-        result.append(shift_time(0, 0, 0))
-    if(mode==0 and ('到' or ' 到')in input_str):
-        if(time.search(input_str)):
-            time_inter = 1
-            target_obj = time.search(input_str)
-            # print("======TO======")
-            if('點' in target_obj.group()):
-                endhour = _trans(input_str[target_obj.start():input_str.index('點')])
-                input_str = input_str[input_str.index('點')+1:]
-                # print(endhour)
-            elif('時' in target_obj.group()):
-                endhour = _trans(input_str[target_obj.start():input_str.index('時')])
-                input_str = input_str[input_str.index('時')+1:]
-                # print(endhour)
-            if( one_99.search(input_str)):
-                # print(one_99.search(input_str).group())
-                endminute = _trans(one_99.search(input_str).group())
-                input_str = input_str[one_99.search(input_str).end():]
-            else:
-                endminute = 0
-            result.append(set_time([month, day, endhour, endminute]))
+                return ('FAILED', 'FAILED', tuple())
+        elif( function_name == 'add_calender_day'):#====================================ADD_CALENDER_DAY
+            if(len(target) == 0):
+                return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
+            para = para_extract.target_time(target, 0)
+        elif( function_name == 'add_calender'):#========================================ADD_CALENDER
+            if(len(target) == 0):
+                return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
+            para = para_extract.target_time(target, 0)
+        elif( function_name == 'next_calender'):#=======================================NEXT_CALENDER
+            para = ()
+        elif( function_name == 'read_calender'):#=======================================READ_CALENDER
+            para = para_extract.target_time(target, 0)
+            para = [para[0][5:10]]
+        elif( function_name == 'weather_forecast'):#====================================WEATHER_FORECAST
+            para = para_extract.target_time(target, 1)
+            place = para[-1]
+            if(len(place)==0):
+                place = 'HERE'
+            elif(place[0] == '的'):
+                place = place[1:]
+            para = [para[0], place]
+        elif( function_name == 'open_bluetooth'):#======================================OPEN_BLUETOOTH============================
+            para = ()
+        elif( function_name == 'close_bluetooth'):#=====================================CLOSE_BLUETOOTH===========================
+            para = ()
+        elif( function_name == 'play_music'):
+            para = [target]
+        elif( function_name == 'pause_music'):
+            para = ()
+        elif( function_name == 'continue_music'):
+            para = ()
+        elif( function_name == 'stop_music'):
+            para = ()
+        elif( function_name == 'now_playing'):
+            para = ()
+        elif( function_name == 'repeat_playing'):
+            para = ()
+        elif( function_name == 'louder_system_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'quiter_system_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'set_system_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'louder_music_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'quiter_music_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'set_music_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'louder_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'quiter_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'set_volume'):
+            para = para_extract.target_volume(target)
+        elif( function_name == 'translate'):
+            para = para_extract.target_language(target)
+        elif( function_name == 'question_answering'):
+            para = [target]
+        elif( function_name == 'set_timer'):
+            para = para_extract.target_countdown(input_str)
+        elif( function_name == 'set_alert'):
+            para = para_extract.target_alert(target)
         else:
-            time_inter = 0
-            result.append(None)
-    else:
-        time_inter = 0
-        result.append(None)
-    result.append(input_str.lstrip())
-    return result
+            para = [input_str]
+            return{"name":'question', "func":'question_answering', "args":tuple(para)}
+        return{"name":class_name, "func":function_name, "args":tuple(para)}        
+            
 
-def countdown_target(full_input_str):
-    input_str = cn2an.transform(zh2cnnum(full_input_str), "cn2an")
-    hour, minute, second = 0, 0, 0
-    time = re.compile(r"(計時(\d+(小時))?(\d+(分鐘))?(\d+秒)?)")
-    if(time.search(input_str)):
-        input_str = time.search(input_str).group()[2:]
-        if('小時' in input_str):
-            hour = int(input_str[:input_str.index('小時')])
-            input_str = input_str[input_str.index('小時')+2:]     
-        if('分鐘' in input_str):
-            minute = int(input_str[:input_str.index('分鐘')])
-            input_str = input_str[input_str.index('分鐘')+2:]     
-        if('秒' in input_str):
-            second = int(input_str[:input_str.index('秒')])
-            input_str = input_str[input_str.index('秒')+1:]      
-        if(hour == 0 and minute == 0 and second == 0):
-            return [None, None, None]
-        else:
-            return [hour, minute, second]
-    else:
-        return [None, None, None]
-# enter a full input str to get final result
-print(countdown_target('計時一秒'))
-
-def alert_target(input_str):
-    day = None
-    hour = None
-    minute = None
-    day_re = re.compile(r'星期(一|二|三|四|五|六|七|日)')
-    day_obj = day_re.match(input_str) 
-    if(day_obj):
-        day = day_dict[(day_obj.group(1))]
-        input_str = input_str[day_obj.end():]
-    input_str = input_str.replace('兩', '2')
-    input_str = cn2an.transform(input_str, "cn2an")
-    time = re.compile(r'((\d+)(點|時)(\d+)分)')
-    time_obj = time.match(input_str)
-    if(time_obj):
-        hour = int(time_obj.group(2))
-        minute = int(time_obj.group(4))
-        input_str = input_str[time_obj.end():]
-    return [day, hour, minute]
-
-def target_volume(input_str):
-    percent = re.compile(r'((\d+)|((一百)|(二|三|四|五|六|七|八|九)?((十?(一|二|兩|三|四|五|六|七|八|九))|十)))(趴|%)?')
-    target_obj = percent.search(input_str)
-    if('零' in input_str):
-        target_num = 0 
-    elif('百' in input_str or '千' in input_str):
-        target_num = 100
-    elif(target_obj):
-        target_str = target_obj.group()
-        if('趴' in target_str):
-            target_str = target_str.replace('趴', '')
-        elif('%' in target_str):
-            target_str = target_str.replace('%', '')
-        target_num = _trans(target_str)
-        if('百' in input_str or target_num>100):
-            target_num = 100
-    else:
-        return [None]
-    if(input_str[0] == '負' or input_str[0] == '-'):
-        target_num *= -1
-    return [target_num]
-
-def place_target(full_input_str):
-    input_str = full_input_str
-    place = None
-    place_re = re.compile(r'(查詢(.*)時間|(.*)時區)')
-    place_obj = place_re.match(input_str)
-    if(place_obj):
-        if('時間' in input_str):
-            place = place_obj.group(2)
-        elif('時區' in input_str):
-            place = place_obj.group(3)
-    return place
-
-def target_language(inputSTR):
-    language_dict = {"中文":"zh-TW", "英文":"en", "法文":"fr"}
-    if('翻' in inputSTR):
-        fromLanguage = inputSTR[:inputSTR.index('翻')]
-        fromLanguage.lstrip()
-        toLanguage = inputSTR[inputSTR.index('翻')+1:]
-        toLanguage.lstrip()
-        if(len(fromLanguage)==0 or len(toLanguage)==0 or (fromLanguage not in language_dict) or (toLanguage not in language_dict)):
-            return [None, None]
-        else:
-            return (language_dict[fromLanguage], language_dict[toLanguage])
-    else:
-        return [None, None]
+    def main(self, input_str):
+        print(input_str)
+        which = self.text2func(input_str)
+        ret = self.para_extract(input_str, which)
+        return ret
+    
