@@ -1,4 +1,5 @@
 var wifi_name;
+let lan = 'ch';
 
 function Show_spinner()
 {
@@ -39,7 +40,15 @@ function wifis_onclick()
             wifi_name = wifi.querySelector("#wifi_name").innerHTML;
             console.log(wifi_name);
 
-            document.querySelector('#modal_wifi_name').innerHTML = `輸入${wifi_name}的密碼`;
+            if(lan == 'en')
+            {
+                document.querySelector('#modal_wifi_name').innerHTML = `Enter the password for ${wifi_name}`;
+            }
+            else if(lan == 'ch')
+            {
+                document.querySelector('#modal_wifi_name').innerHTML = `輸入${wifi_name}的密碼`;
+            }
+            
 
             //Show input modal
             document.querySelector('#wifi_modal').style.display = "block";
@@ -160,7 +169,7 @@ function input_password(wifi_name, pw)
         //if success, then redirect to google signin page
         if(connect == "success")
         {
-            window.location.href = "signin.html";
+            window.location.href = `signin.html?lan=${lan}`;
         }
         //if error, show error message ,clear input form and hide connect spinner
         else
@@ -184,6 +193,56 @@ function input_password(wifi_name, pw)
 }
 
 
+function get_lan()
+{
+    const params = new URLSearchParams(window.location.search);
+    var trans = {};
+    
+    if(params.has('lan'))
+    {
+        lan = params.get('lan');
+    }
+    
+
+    if(lan == 'en')
+    {
+        trans = {
+            'modal_wifi_name': 'Enter Password',
+            'error_mes': 'Incorrect Password',
+            'modal-title': 'Password',
+            'cancel_button': 'Cancel',
+            'connect_button': 'Connect',
+            'header': 'Connect to Wi-Fi',
+            'sub_header': 'Choose the Wi-Fi network you\'d like to use with your XiaoRong',
+            'network': 'Networks'
+        };
+    }
+    else if(lan == 'ch')
+    {
+        trans = {
+            'modal_wifi_name': '輸入密碼',
+            'error_mes': '密碼錯誤',
+            'modal-title': '密碼',
+            'cancel_button': '取消',
+            'connect_button': '連線',
+            'header': '連接網路',
+            'sub_header': '輸入密碼以連接 Wi-Fi',
+            'network': '可用的網路'
+        };
+    }
+    
+
+    // Set language
+    for(var key in trans)
+    {
+        document.getElementById(key).innerHTML = trans[key];
+    }
+
+    console.log(params.has('lan'));
+
+}
+
+get_lan();
 document.addEventListener('DOMContentLoaded', function(){
     fetch_show_wifi();
     
