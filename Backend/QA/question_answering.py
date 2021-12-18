@@ -203,7 +203,7 @@ class QuestionAnswering():
 
 if __name__ == '__main__':  
     search = QuestionAnswering()
-    results = search.google_search("日幣")
+    results = search.google_search(str(input("請輸入問題:")))
     ans = search.get_answer(results)
     
     print(ans)
