@@ -1,108 +1,69 @@
-import os
+#import numpy as np
 from linebot.models import *
-from linebot.exceptions import (InvalidSignatureError)
-from linebot import (LineBotApi, WebhookHandler)
-from flask import Flask, request, abort
-from linebot import LineBotApi
-from linebot.models import TextSendMessage
-from linebot.exceptions import LineBotApiError
-import time
-import json
-import random
+import wave
+#import sys
+import pyaudio
+import requests
 
-VERIFICATION_PATH = "./Verification_code.json"
+# server的東東
+ServerPath = "http://b298-2001-b400-e734-a52e-74ee-cb06-d9e5-ce53.ngrok.io/delivery"
+
+# 看server那邊的json檔要放哪裡
+# 假設搜尋結果長這樣
+searchResultURL = 'https://www.google.com/search?q=%E5%BE%AE%E7%A9%8D%E5%88%86&oq=%E5%BE%AE%E7%A9%8D%E5%88%86&aqs=chrome..69i57j0i131i433i512j0i512l8.1211j0j7&sourceid=chrome&ie=UTF-8'
+userLINEID = 'Uc6e3d440bfe6da66232ce9005b34b375'
+searchKeyWord = '微積分'
 
 
 class Delivery:
-    # 建構子
 
-    # 設定驗證碼
-    def setVerificationCode(self, event):
-        code_list = []
-        len = 8
-        for i in range(10):  # 0-9數字
-            code_list.append(str(i))
-        for i in range(65, 91):  # 對應從“A”到“Z”的ASCII碼
-            code_list.append(chr(i))
-        for i in range(97, 123):  # 對應從“a”到“z”的ASCII碼
-            code_list.append(chr(i))
-        myslice = random.sample(code_list, len)  # 從list中隨機獲取6個元素，作為一個片斷返回
-        verification_code = ''.join(myslice)  # list to string
-
-        Time = time.time()
-        fileName = VERIFICATION_PATH
-        jsonString = {"verification": verification_code, "time": Time}
-        #jsonString = json.loads(jsonString)
-
-        file = open(fileName, "w")
-        json.dump(jsonString, file)
-        file.close()
-        #replyMsg = {"type": 'text', "text": verification_code}
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text=verification_code))
-
-    # 檢查驗證碼
-    def checkVerificationCode(self, event):
-        with open(VERIFICATION_PATH) as f:
-            code = json.load(f)
-        if code['verification'] == event.message.text:  # 驗證碼正確
-            today = time.time()
-            if today - code['time'] <= 300:  # 時間內
-                # 回傳LINEID
-                print(event)
-                #replyMsg = event.source
-            else:
-                replyMsg = "驗證碼已過期"
-        else:  # 驗證碼錯誤
-            replyMsg = "驗證碼錯誤"
-        line_bot_api.reply_message(
-            event.reply_token, TextSendMessage(text=replyMsg))
-    # 透過LINE傳送
-
-    def LINE_push_message(searchResultURL, userLINEID, searchKeyWord, channel_access_token):
-
-        try:
-            line_bot_api.push_message(
-                userLINEID, TextSendMessage("搜尋關鍵字：" + searchKeyWord + "\n搜尋結果:" + searchResultURL))
-        except LineBotApiError as e:
-            pass
-            # error handle
-
-    #    def deliver_to_cellphone(resultURL, keyWord):
+    def deliver_to_cellphone(self, resultURL, keyWord, userId):
+        # 把東西給server
+        # userId如果沒有，就是空字串
+        r = requests.post(
+            ServerPath, data={'data': resultURL + ' ' + keyWord + ' ' + userId})
+    # fin
 
 
-app = Flask(__name__)
-line_bot_api = LineBotApi(
-    'DDtWE84ugYYwdBxhJV8dd65JrEEeFoK0HzTmYk32FJYsZLeDEIschqNASNqRiILtGqhXbJbj/bW7A72l+7E3wxVmXDRlz4kgOZ/aV17mnW7PsCs3ZAe3hE50yM4yRMphRnm08lR0b+VOorUD6hUJngdB04t89/1O/w1cDnyilFU=')
-handler = WebhookHandler('384462bb9f27a9ab50f784441a4e45a2')
+CHUNK = 512
+FORMAT = pyaudio.paInt16
+CHANNELS = 1
+RATE = 44100
+RECORD_SECONDS = 5
+WAVE_OUTPUT_FILENAME = "output.wav"
 
 
-@app.route("/callback", methods=['POST'])
-def callback():
-    # get X-Line-Signature header value
-    signature = request.headers['X-Line-Signature']
-    # get request body as text
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-    # handle webhook body
-    try:
-        handler.handle(body, signature)
-    except InvalidSignatureError:
-        abort(400)
-    return 'OK'
+class Memorandum:
 
-
-@handler.add(MessageEvent, message=TextMessage)
-def handle_message(event):
-    print(event.message.text)
-    message = TextSendMessage(text=event.message.text)
-    if event.message.text == "設定驗證碼":
-        delivery.setVerificationCode(event)
-    else:
-        delivery.checkVerificationCode(event)
-    #line_bot_api.reply_message(event.reply_token, message)
+    def memorandum(self):
+        print("memorandum")
+        p = pyaudio.PyAudio()
+        stream = p.open(format=FORMAT,
+                        channels=CHANNELS,
+                        rate=RATE,
+                        input=True,
+                        frames_per_buffer=CHUNK)
+        print("recording...")
+        frames = []
+        for i in range(0, int(RATE / CHUNK * RECORD_SECONDS)):
+            data = stream.read(CHUNK)
+            frames.append(data)
+        print("done")
+        stream.stop_stream()
+        stream.close()
+        p.terminate()
+        wf = wave.open(WAVE_OUTPUT_FILENAME, 'wb')
+        wf.setnchannels(CHANNELS)
+        wf.setsampwidth(p.get_sample_size(FORMAT))
+        wf.setframerate(RATE)
+        wf.writeframes(b''.join(frames))
+        wf.close()
 
 
 if __name__ == "__main__":
     delivery = Delivery()
-    app.run()
+    memorandum = Memorandum()
+    print("start")
+    delivery.deliver_to_cellphone(searchResultURL, searchKeyWord, userLINEID)
+    # memorandum.memorandum()
+    # app.run()
