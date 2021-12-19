@@ -195,7 +195,7 @@ def target_time(input_str, mode): #return the target time and the place to look 
     result.append(input_str.lstrip())
     return result
 
-def countdown_target(full_input_str):
+def target_countdown(full_input_str):
     input_str = cn2an.transform(zh2cnnum(full_input_str), "cn2an")
     hour, minute, second = 0, 0, 0
     time = re.compile(r"(計時(\d+(小時))?(\d+(分鐘))?(\d+秒)?)")
@@ -217,9 +217,8 @@ def countdown_target(full_input_str):
     else:
         return [None, None, None]
 # enter a full input str to get final result
-print(countdown_target('計時一秒'))
 
-def alert_target(input_str):
+def target_alert(input_str):
     day = None
     hour = None
     minute = None
