@@ -1,4 +1,5 @@
 from logging import Manager
+import Threading 
 import time
 import playsound
 import sys
@@ -18,9 +19,11 @@ except ModuleNotFoundError:
 	ch.setFormatter(formatter)
 	logger.addHandler(ch)
 
-# Add the directory containing your module to the Python path (wants absolute paths)
+# Add the directory containing your module to the Python path (wants
+# absolute paths)
 sys.path.append(os.path.abspath(scriptpath))
-from Threading import Job
+
+
 class countdown():
 	def __init__(self):
 		self.totalSeconds = 0  
@@ -52,9 +55,9 @@ class countdown():
 		return True
 	def stop_countdown(self):
 		pass
-		 
+		
 if __name__ == "__main__":
-	a = countdown()
-	h, m, s = map(int,input("輸入到計時時間（格式：hh:mm:ss）").split(":"))
-	if a.set_countdown(h, m, s) == False:
-		print('error time!')
+    a = countdown()
+    h, m, s = map(int, input("輸入到計時時間（格式：hh:mm:ss）").split(":"))
+    if a.set_countdown(h, m, s) == False:
+        print('error time!')
