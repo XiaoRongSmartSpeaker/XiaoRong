@@ -1,8 +1,22 @@
+from logging import Manager
 import time
 import playsound
 import sys
 import os
 scriptpath = "../"
+try:
+	import logger
+	logger = logger.get_logger(__name__)
+except ModuleNotFoundError:
+	import logging
+	logger = logging.getLogger()
+	logger.setLevel(logging.DEBUG)
+	ch = logging.StreamHandler(sys.stdout)
+	ch.setLevel(logging.DEBUG)
+	formatter = logging.Formatter(
+	    '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+	ch.setFormatter(formatter)
+	logger.addHandler(ch)
 
 # Add the directory containing your module to the Python path (wants absolute paths)
 sys.path.append(os.path.abspath(scriptpath))
@@ -31,10 +45,10 @@ class countdown():
 			print(timeFormat)
 			time.sleep(1)
 			self.totalSeconds -= 1
-		print('Time\'s up!')
+		logger.debug('Time\'s up')
 		playsound.playsound(self.audio_file, True) 
-		time.sleep(15)
-		print('end of ring')
+		time.sleep(150)
+		logger.debug('end of ring')
 		return True
 	def stop_countdown(self):
 		pass
