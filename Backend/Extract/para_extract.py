@@ -1,4 +1,5 @@
 import re
+# from datetime import datetime
 import datetime
 import cn2an
 from pypinyin import pinyin
@@ -224,9 +225,30 @@ def target_alert(input_str):
     minute = None
     day_re = re.compile(r'星期(一|二|三|四|五|六|七|日)')
     day_obj = day_re.match(input_str) 
+    later_re = re.compile(r'((明|後|大後)天)|((\d+)天後?)')
+    later_obj = later_re.match(cn2an.transform(input_str, 'cn2an'))
     if(day_obj):
         day = day_dict[(day_obj.group(1))]
         input_str = input_str[day_obj.end():]
+    elif(later_obj):
+        day = datetime.datetime.today().weekday()
+        if(later_obj.group(2)):
+            later = later_obj.group(2)
+            if(later == '明'):
+                day += 1
+            elif(later == '後'):
+                day += 2
+            elif(later == '大後'):
+                day += 3
+            else:
+                day += 0
+        elif(later_obj.group(4)):
+            later = later_obj.group(4)
+            day += int(later)
+        else:
+            day += 0
+        day = day % 7 + 1
+        input_str = input_str[later_obj.end():]
     input_str = input_str.replace('兩', '2')
     input_str = cn2an.transform(input_str, "cn2an")
     time = re.compile(r'((\d+)(點|時)(\d+)分)')
@@ -236,6 +258,7 @@ def target_alert(input_str):
         minute = int(time_obj.group(4))
         input_str = input_str[time_obj.end():]
     return [day, hour, minute]
+
 
 def target_volume(input_str):
     percent = re.compile(r'((\d+)|((一百)|(二|三|四|五|六|七|八|九)?((十?(一|二|兩|三|四|五|六|七|八|九))|十)))(趴|%)?')
@@ -274,7 +297,7 @@ def target_place(full_input_str):
     return place
 
 def target_language(inputSTR):
-    language_dict = {"中文":"zh-TW", "英文":"en", "法文":"fr"}
+    language_dict = {"中文":"zh-TW", "英文":"en"}
     if('翻' in inputSTR):
         fromLanguage = inputSTR[:inputSTR.index('翻')]
         fromLanguage.lstrip()
