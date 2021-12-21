@@ -19,7 +19,7 @@ class Main():
         self.__declare_class = []                   # declared class
         self.__pending_threads = queue.Queue()      # pending thread info
         self.__DAEMON_THREAD = [                    # define daemon work
-            'voice_to_text'
+            'factory_reset'
         ]
 
     def add_thread(self, func_info) -> None:
@@ -136,15 +136,15 @@ if __name__ == "__main__":
 
     # initial speaker feature
     main.add_thread({
-        'class': 'voice_to_text',
-        'func': 'voice_to_text',
+        'class': 'FactoryReset',
+        'func': 'listen_reset_button',
     })
     main.open_thread()
-    main.add_thread({
-        'class': 'monitering',
-        'func': 'monitering',
-    })
-    main.open_thread()
+    # main.add_thread({
+    #     'class': 'monitering',
+    #     'func': 'monitering',
+    # })
+    # main.open_thread()
 
     while True:
         # clear that completed threading
