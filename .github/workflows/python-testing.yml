@@ -16,7 +16,7 @@ jobs:
         python-version: 3.7
     - name: Install dependencies
       run: |
-        pip install ./Backend/environments.txt
+        pip install ./Backend/requirements.txt
     - name: Lint with flake8
       run: |
         conda install flake8
