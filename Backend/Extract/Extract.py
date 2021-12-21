@@ -13,6 +13,7 @@ class Extract:
             self.func_dict = json.load(f) 
         self.day_dict = {'一': 1, '1': 1 , '二': 2, '2': 2 , '三': 3, '3': 3 , '四': 4, '4': 4 , 
             '五': 5, '5': 5 , '六': 6, '6': 6 , '末': 6 ,'天': 7, '日': 7}
+        self.therad = None
         return
 
     def text2func(self, input_str):
@@ -130,11 +131,16 @@ class Extract:
             para = [input_str]
             return{"name":'question', "func":'question_answering', "args":tuple(para)}
         return{"name":class_name, "func":function_name, "args":tuple(para)}        
-            
+    
+    def import_thread(self, thread): # function to implement threading
+        self.thread = thread
 
     def main(self, input_str):
         print(input_str)
         which = self.text2func(input_str)
         ret = self.para_extract(input_str, which)
+        # open thread and call the function
+        if self.thread != None:
+            self.thread.add_thread(ret)
         return ret
     
