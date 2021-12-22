@@ -10,7 +10,7 @@ class volume:
         return
     #alsa setting
     def set_amixer(self, value):
-        cmd = "amixer -c 0 set Master {}\%".format(value)
+        cmd = "amixer -M set Master {}\%".format(value)
         returned_value = os.system(cmd)
         # print("returned value:", returned_value)
         return True
