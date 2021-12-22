@@ -3,16 +3,28 @@ import sys
 import logging
 import requests
 import time
+import configparser
 from gpiozero import Button, LED
+from dotenv import load_dotenv
 
+# get gpio pin number from config file
+config = configparser.ConfigParser()
+config.read('config.ini')
+BUTTON_RESET = int(config['GPIO']['BUTTON_RESET'])
+LED_RED = int(config['GPIO']['LED_RED'])
+LED_YELLOW = int(config['GPIO']['LED_YELLOW'])
+LED_GREEN = int(config['GPIO']['LED_GREEN'])
+
+# load .env in /feature
+load_dotenv()
 
 class ResetGPIO:
     def __init__(self):
-        self._sw_1 = Button(24)
-        self._sw_2 = Button(25)
-        self._led_r = LED(20)
-        self._led_y = LED(16)
-        self._led_g = LED(12)
+        self._sw_1 = Button(BUTTON_RESET)
+        self._sw_2 = Button(23)
+        self._led_r = LED(LED_RED)
+        self._led_y = LED(LED_YELLOW)
+        self._led_g = LED(LED_GREEN)
 
     def light_y(self):
         self._led_y.source = self._sw_1
@@ -70,11 +82,10 @@ except ModuleNotFoundError:
 
 class FactoryReset:
     def __init__(self):
-        self._default_config_path = os.environ.get('CONFIG_PATH')     # get factory default config file path
-        self._config_path = os.environ.get('CONFIG_PATH')             # get current config file path
-        self._speaker_name = os.environ.get('SPEAKER_NAME')           # get speaker_name for server API request
-
-        self._server_url = ''
+        self._default_config_path = os.getenv('DEFAULT_CONFIG_FILE')     # get factory default config file path
+        self._config_path = os.getenv('CONFIG_FILE')             # get current config file path
+        # self._speaker_name = os.getenv('SPEAKER_NAME')           # get speaker_name for server API request
+        # self._server_url = ''
     
     def listen_reset_button(self):
         logger.debug("Begin to listen for gpio signal")
@@ -119,7 +130,7 @@ class FactoryReset:
 
         with open(self._default_config_path, 'r') as src_file, open(self._config_path, 'w') as dst_file:
             default_config_content = src_file.read()
-            dst_file.wrtielines(default_config_content)
+            dst_file.write(default_config_content)
         
         logger.debug("Config file restored to factory default")
 
@@ -130,7 +141,7 @@ class FactoryReset:
 
         # self._terminate_other_process()
 
-        # self._restore_config()
+        self._restore_config()
 
         logger.debug("Rebooting ...")
         # os.system('reboot')
