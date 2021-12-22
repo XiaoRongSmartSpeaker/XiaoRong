@@ -102,6 +102,9 @@ class FactoryReset:
         # log request result
         pass
 
+    def _delete_device_user_data(self):
+        pass
+
     def _terminate_other_process(self):
         # method 1: have main terminate all the other threads
         # method 2: kill all python process running on this machine
@@ -110,18 +113,15 @@ class FactoryReset:
     def _restore_config(self):
         if not os.path.exists(self._default_config_path):
             logger.error("Default config file does not exist")
-            return False
         
         if not os.path.exists(self._config_path):
             logger.error("Current config file does not exist")
-            return False
 
         with open(self._default_config_path, 'r') as src_file, open(self._config_path, 'w') as dst_file:
             default_config_content = src_file.read()
             dst_file.wrtielines(default_config_content)
         
         logger.debug("Config file restored to factory default")
-        return True
 
     def factory_reset(self):
         # delete user data
@@ -131,8 +131,6 @@ class FactoryReset:
         # self._terminate_other_process()
 
         # self._restore_config()
-
-        # log the results of previous steps
 
         logger.debug("Rebooting ...")
         # os.system('reboot')

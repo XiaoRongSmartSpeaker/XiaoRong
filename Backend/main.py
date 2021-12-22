@@ -137,7 +137,7 @@ if __name__ == "__main__":
     # initial speaker feature
     main.add_thread({
         'class': 'FactoryReset',
-        'func': 'listen_reset_button',
+        'func': 'factory_reset',
     })
     main.open_thread()
     # main.add_thread({
