@@ -1,6 +1,6 @@
 function post_id(google_id)
 {
-  fetch('API', {
+  fetch('http://localhost:5000/signin', {
     method: 'POST',
     body: JSON.stringify({
       user_id: google_id,
@@ -47,4 +47,7 @@ function attachSignin(element) {
         alert(JSON.stringify(error, undefined, 2));
       });
 }
-startApp();
+
+// startApp();
+post_id('username')
+window.location.href = "setting.html";

@@ -66,7 +66,7 @@ function fetch_show_wifi()
     Show_spinner();
     
     
-    fetch('http://localhost:3000/wifis')
+    fetch('http://localhost:5000/wifis')
     .then(response => response.json())
     .then(networks => {
         
@@ -78,9 +78,8 @@ function fetch_show_wifi()
         wifi_lists = document.querySelector("#wifi_lists");
         for(let i=0; i<total_networks; i++)
         {
-            wifi = `<div id="wifi" class="flex items-center"><div class="p-3"><svg class="" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.3167 9.1666L20 7.48327C18.6899 6.16528 17.1317 5.11994 15.4153 4.40763C13.6989 3.69532 11.8583 3.33017 10 3.33327C6.09167 3.33327 2.55833 4.9166 0 7.48327L5.29167 12.7833L10 17.4999L12.5417 14.9583V12.4999C12.5417 12.1249 12.6167 11.7666 12.7333 11.4249C13.1833 10.1166 14.4083 9.1666 15.875 9.1666H18.3167Z" fill="#415765"/><path d="M18.3332 13.3334V12.5C18.3332 11.5834 17.5832 10.8334 16.6665 10.8334C15.7498 10.8334 14.9998 11.5834 14.9998 12.5V13.3334C14.5415 13.3334 14.1665 13.7084 14.1665 14.1667V16.6667C14.1665 17.125 14.5415 17.5 14.9998 17.5H18.3332C18.7915 17.5 19.1665 17.125 19.1665 16.6667V14.1667C19.1665 13.7084 18.7915 13.3334 18.3332 13.3334ZM17.4998 13.3334H15.8332V12.5C15.8332 12.0417 16.2082 11.6667 16.6665 11.6667C17.1248 11.6667 17.4998 12.0417 17.4998 12.5V13.3334Z" fill="#415765"></svg></div><div id="wifi_name" class="text-theme text-xs p-2 ">${networks[i].name}</div> </div>`;
+            wifi = `<div id="wifi" class="flex items-center"><div class="p-3"><svg class="" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M18.3167 9.1666L20 7.48327C18.6899 6.16528 17.1317 5.11994 15.4153 4.40763C13.6989 3.69532 11.8583 3.33017 10 3.33327C6.09167 3.33327 2.55833 4.9166 0 7.48327L5.29167 12.7833L10 17.4999L12.5417 14.9583V12.4999C12.5417 12.1249 12.6167 11.7666 12.7333 11.4249C13.1833 10.1166 14.4083 9.1666 15.875 9.1666H18.3167Z" fill="#415765"/><path d="M18.3332 13.3334V12.5C18.3332 11.5834 17.5832 10.8334 16.6665 10.8334C15.7498 10.8334 14.9998 11.5834 14.9998 12.5V13.3334C14.5415 13.3334 14.1665 13.7084 14.1665 14.1667V16.6667C14.1665 17.125 14.5415 17.5 14.9998 17.5H18.3332C18.7915 17.5 19.1665 17.125 19.1665 16.6667V14.1667C19.1665 13.7084 18.7915 13.3334 18.3332 13.3334ZM17.4998 13.3334H15.8332V12.5C15.8332 12.0417 16.2082 11.6667 16.6665 11.6667C17.1248 11.6667 17.4998 12.0417 17.4998 12.5V13.3334Z" fill="#415765"></svg></div><div id="wifi_name" class="text-theme text-xs p-2 ">${networks[i].SSID}</div> </div>`;
             wifi_lists.innerHTML += wifi;
-            
         }
         Hide_spinner();
     })
@@ -104,7 +103,7 @@ function input_password(wifi_name, pw)
     document.querySelector('#connect_spinner').style.display = "block";
 
     //Post pw to api
-    fetch('http://localhost:3000/setting_wifi', {
+    fetch('http://localhost:5000/setting_wifi', {
         method: 'PUT',
         body: JSON.stringify({
           SSID: wifi_name,
@@ -118,7 +117,7 @@ function input_password(wifi_name, pw)
         console.log(connect);
 
         //if success, then redirect to google signin page
-        if(connect == "success")
+        if(connect.isConnected)
         {
             window.location.href = "signin.html";
         }
