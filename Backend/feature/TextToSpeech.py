@@ -4,11 +4,6 @@ import time
 import librosa
 import os
 
-
-# # print('Please enter a sentence:')
-# # s = input()
-# # tts = gTTS(s, lang="zh")
-# # tts.save("again.mp3")
 class TextToSpeech:
     def text_to_voice(sentence):
         tts=gTTS(text=sentence, lang='zh-TW')
@@ -20,6 +15,3 @@ class TextToSpeech:
         mixer.music.play(1)
         time.sleep(s)
         os.system('rm temp.mp3')
-                    
-# sentence = "我喜歡Bruno Mars的歌"
-# TextToSpeech.text_to_voice(sentence)
