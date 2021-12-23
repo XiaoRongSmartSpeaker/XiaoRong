@@ -1,4 +1,19 @@
 let lan = 'ch';
+let language = {
+  "en":{
+        'header':'Sign In',
+        'sub_header': 'Please sign in to XiaoRong Speaker',
+        'create_account': '<a href="https://accounts.google.com/signup" class="underline" target="_blank">Create Account</a>'
+  },
+  "ch":{
+        'header':'登入',
+        'sub_header': '登入您的小絨音箱',
+        'create_account': '還沒有帳號嗎？<a href="https://accounts.google.com/signup" class="underline" target="_blank">馬上註冊!</a>'
+  },
+}
+window.onload = function(){
+  get_lan();
+}
 function post_id(google_id)
 {
   fetch('http://localhost:3000/user_info', {
@@ -61,7 +76,8 @@ function get_lan()
         lan = params.get('lan');
     }
     
-
+    trans = language[lan];
+    /*
     if(lan == 'en')
     {
       trans = {
@@ -79,9 +95,9 @@ function get_lan()
     };
     }
     
-
+    */
     // Set language
-    for(var key in trans)
+    for(let key in trans)
     {
         document.getElementById(key).innerHTML = trans[key];
     }
@@ -90,5 +106,5 @@ function get_lan()
 
 }
 
-get_lan();
+//get_lan();
 startApp();

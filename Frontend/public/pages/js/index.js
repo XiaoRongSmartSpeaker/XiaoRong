@@ -1,4 +1,16 @@
-console.log("innn");
+let language = {
+    "en":{
+        'start_button':'Start',
+        'language': '<a href="?lan=ch">中文</a>'
+    },
+    "ch":{
+        'start_button':'開始使用',
+        'language': '<a href="?lan=en">English</a>'
+    },
+}
+window.onload = function(){
+    get_lan();
+}
 let lan = 'ch';
 function get_lan()
 {
@@ -10,7 +22,8 @@ function get_lan()
         lan = params.get('lan');
     }
     
-
+    trans = language[lan];
+    /*
     if(lan == 'en')
     {
         trans = {
@@ -25,9 +38,10 @@ function get_lan()
             'language': '<a href="?lan=en">English</a>'
         };
     }
+    */
 
     // Set language
-    for(var key in trans)
+    for(let key in trans)
     {
         document.getElementById(key).innerHTML = trans[key];
     }
@@ -36,7 +50,7 @@ function get_lan()
 
 }
 
-get_lan();
+//get_lan();
 document.getElementById('start_button').addEventListener('click', () => {
     console.log(lan);
     

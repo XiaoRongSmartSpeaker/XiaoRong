@@ -1,5 +1,32 @@
 var wifi_name;
 let lan = 'ch';
+let language = {
+    "en":{
+        'modal_wifi_name': 'Enter Password',
+        'error_mes': 'Incorrect Password',
+        'modal-title': 'Password',
+        'cancel_button': 'Cancel',
+        'connect_button': 'Connect',
+        'ok_button': 'Ok',
+        'header': 'Connect to Wi-Fi',
+        'sub_header': 'Choose the Wi-Fi network you\'d like to use with your XiaoRong',
+        'network': 'Networks'
+    },
+    "ch":{
+        'modal_wifi_name': '輸入密碼',
+        'error_mes': '密碼錯誤',
+        'modal-title': '密碼',
+        'cancel_button': '取消',
+        'connect_button': '連線',
+        'ok_button': '好',
+        'header': '連接網路',
+        'sub_header': '輸入密碼以連接 Wi-Fi',
+        'network': '可用的網路'
+    },
+}
+window.onload = function(){
+    get_lan();
+}
 
 function Show_spinner()
 {
@@ -346,8 +373,8 @@ function get_lan()
     {
         lan = params.get('lan');
     }
-    
-
+    trans = language[lan];
+    /*
     if(lan == 'en')
     {
         trans = {
@@ -377,9 +404,9 @@ function get_lan()
         };
     }
     
-
+    */
     // Set language
-    for(var key in trans)
+    for(let key in trans)
     {
         document.getElementById(key).innerHTML = trans[key];
     }
@@ -388,7 +415,7 @@ function get_lan()
 
 }
 
-get_lan();
+//get_lan();
 document.addEventListener('DOMContentLoaded', function(){
     fetch_show_wifi();
     

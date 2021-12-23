@@ -1,4 +1,29 @@
 let lan = 'ch';
+let language = {
+  "en":{
+        'header':'Setup your XiaoRong',
+        'label_language': 'Language',
+        'language': '<option>English</option><option>中文</option><option>한국인</option>',
+        'label_location': 'Location',
+        'location': '<option>Taiwan</option><option>Japan</option><option>Korea</option>',
+        'label_timezone': 'Timezone',
+        'label_speaker_name': 'Name',
+        'next_button': 'Next'
+  },
+  "ch":{
+        'header':'設定您的小絨',
+        'label_language': '語言',
+        'language': '<option>中文</option><option>English</option><option>한국인</option>',
+        'label_location': '地區',
+        'location': '<option>台灣</option><option>日本</option><option>韓國</option>',
+        'label_timezone': '時區',
+        'label_speaker_name': '名稱',
+        'next_button': '下一步'
+  },
+}
+window.onload = function(){
+  get_lan();
+}
 function get_lan()
 {
     const params = new URLSearchParams(window.location.search);
@@ -8,10 +33,11 @@ function get_lan()
     {
         lan = params.get('lan');
     }
+    trans = language[lan];
     
-
     if(lan == 'en')
     {
+      /*
       trans = {
           'header':'Setup your XiaoRong',
           'label_language': 'Language',
@@ -22,12 +48,13 @@ function get_lan()
           'label_speaker_name': 'Name',
           'next_button': 'Next'
 
-      };
+      };*/
       // Update placeholder of input form
       document.getElementById('speaker_name').placeholder = "XiaoRong speaker";
     }
     else if(lan == 'ch')
     {
+      /*
       trans = {
         'header':'設定您的小絨',
         'label_language': '語言',
@@ -38,14 +65,14 @@ function get_lan()
         'label_speaker_name': '名稱',
         'next_button': '下一步'
 
-    };
+    };*/
     // Update placeholder of input form
     document.getElementById('speaker_name').placeholder = "小絨音箱";
     }
     
 
     // Set language
-    for(var key in trans)
+    for(let key in trans)
     {
         document.getElementById(key).innerHTML = trans[key];
     }
@@ -54,7 +81,7 @@ function get_lan()
 
 }
 
-get_lan();
+//get_lan();
 function post_info(location, language, time, speaker_name)
 {
   fetch('http://localhost:3000/speaker_info', {
