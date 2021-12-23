@@ -19,12 +19,8 @@ except ModuleNotFoundError:
 	ch.setFormatter(formatter)
 	logger.addHandler(ch)
 
-# Add the directory containing your module to the Python path (wants
-# absolute paths)
-sys.path.append(os.path.abspath(scriptpath))
 
-
-class countdown():
+class Countdown():
 	def __init__(self):
 		self.totalSeconds = 0  
 		self.audio_file = 'sound.mp3'                             
@@ -57,7 +53,7 @@ class countdown():
 		pass
 		
 if __name__ == "__main__":
-    a = countdown()
+    a = Countdown()
     h, m, s = map(int, input("輸入到計時時間（格式：hh:mm:ss）").split(":"))
     if a.set_countdown(h, m, s) == False:
         print('error time!')
