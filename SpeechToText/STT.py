@@ -35,7 +35,7 @@ class SpeechToText:
                 for e in z:
                     s+=e[0]
                 #print(s)
-                if 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄌㄨㄥˊ' in s or 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄖㄨㄥˊ' in s or 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄖㄡˊ' in s or 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄌㄡˊ' in s or 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄖㄣˊ' in s:
+                if 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄌㄨㄥˊ' in s or 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄖㄨㄥˊ' in s or 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄖㄡˊ' in s or 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄌㄡˊ' in s or 'ㄋㄧˇㄏㄠˇㄕㄠˇㄖㄨㄥˊ' in s or 'ㄋㄧˇㄏㄠˇㄒㄧㄠˇㄖㄣˊ' in s:
                     mixer.init()
                     mixer.music.load('./Audio/what.mp3')
                     mixer.music.play()
