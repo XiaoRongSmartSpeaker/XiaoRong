@@ -1,6 +1,11 @@
+let lan = 'ch';
 function post_id(google_id)
 {
+<<<<<<< HEAD
   fetch('http://localhost:5000/signin', {
+=======
+  fetch('http://localhost:3000/user_info', {
+>>>>>>> origin/jhsu12
     method: 'POST',
     body: JSON.stringify({
       user_id: google_id,
@@ -36,18 +41,64 @@ function attachSignin(element) {
       function(googleUser) {
         var profile = googleUser.getBasicProfile();
         console.log(profile)
+        
         // POST user's ID to backend 
         post_id(profile.getId());
 
         // Redirect to setting.html
           
-        window.location.href = "setting.html";
+        window.location.href = `setting.html?lan=${lan}`;
         
       }, function(error) {
         alert(JSON.stringify(error, undefined, 2));
       });
 }
 
+<<<<<<< HEAD
 // startApp();
 post_id('username')
 window.location.href = "setting.html";
+=======
+
+function get_lan()
+{
+    const params = new URLSearchParams(window.location.search);
+    var trans = {};
+    
+    if(params.has('lan'))
+    {
+        lan = params.get('lan');
+    }
+    
+
+    if(lan == 'en')
+    {
+      trans = {
+          'header':'Sign In',
+          'sub_header': 'Please sign in to XiaoRong Speaker',
+          'create_account': '<a href="https://accounts.google.com/signup" class="underline" target="_blank">Create Account</a>'
+      };
+    }
+    else if(lan == 'ch')
+    {
+      trans = {
+        'header':'登入',
+        'sub_header': '登入您的小絨音箱',
+        'create_account': '還沒有帳號嗎？<a href="https://accounts.google.com/signup" class="underline" target="_blank">馬上註冊!</a>'
+    };
+    }
+    
+
+    // Set language
+    for(var key in trans)
+    {
+        document.getElementById(key).innerHTML = trans[key];
+    }
+
+    console.log(params.has('lan'));
+
+}
+
+get_lan();
+startApp();
+>>>>>>> origin/jhsu12
