@@ -14,9 +14,10 @@ class Translate:
             try:
                 r = sr.Recognizer()
                 with sr.Microphone() as source:
-                    #r.adjust_for_ambient_noise(source, duration=1)
+                    r.adjust_for_ambient_noise(source, duration=0.5)
                     print("Say something!")
-                    r.energy_threshold=9000
+                    if r.energy_threshold<9000:
+                        r.energy_threshold=9000
                     r.pause_threshold=1
                     audio=r.listen(source,timeout=10)
 
