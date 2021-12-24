@@ -41,6 +41,7 @@ function Show_spinner()
     
    //loading_spinner.hidden = false;
 }
+
 function Hide_spinner()
 {
     
@@ -54,6 +55,7 @@ function Hide_spinner()
     //loading_spinner.hidden = true;
 }
 
+//After the user clicks the wifi, input password's modal pops up
 function wifis_onclick()
 {
     var wifis = document.querySelectorAll('#wifi');
@@ -119,6 +121,7 @@ function wifis_onclick()
     });
 }
 
+//fetch wifi info and show image and wifi info
 function fetch_show_wifi()
 {
     Show_spinner();
@@ -141,8 +144,10 @@ function fetch_show_wifi()
             wifi_encry = networks[i].Encryption_key
             //console.log(wifi_signal, wifi_encry);
 
+            //wifi encryption == 'on
             if(wifi_encry == 'on')
             {
+                // different wifi_signals has different images
                 if(wifi_signal >= 75)
                 {
                     
@@ -273,7 +278,7 @@ function fetch_show_wifi()
             }
 
             
-            
+            // add to wifi lists
             wifi_lists.innerHTML += wifi;
             
         }
@@ -290,6 +295,7 @@ function fetch_show_wifi()
 
 }
 
+//post wifi info to api, wifi with password or without password depends on wifi encryption
 function input_password(wifi_name, pw, wifi_encry)
 {
     
@@ -363,7 +369,7 @@ function input_password(wifi_name, pw, wifi_encry)
 
 }
 
-
+// Get language and set language
 function get_lan()
 {
     const params = new URLSearchParams(window.location.search);
@@ -419,7 +425,7 @@ function get_lan()
 document.addEventListener('DOMContentLoaded', function(){
     fetch_show_wifi();
     
-    // Refresh button onclick (Not showing spinner?)
+    // Refresh button onclick then fetch again
     document.querySelector('#refresh_button').addEventListener('click', () => {
 
         // Clear wifi_lists innerHTMl
@@ -434,7 +440,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 })
 
-//Connect button onclick
+//Connect button onclick then post wifi info to api
 document.querySelector('#connect_button').addEventListener('click', () => {
                 
     // Get the password

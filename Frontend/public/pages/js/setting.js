@@ -66,8 +66,8 @@ function get_lan()
         'next_button': '下一步'
 
     };*/
-    // Update placeholder of input form
-    document.getElementById('speaker_name').placeholder = "小絨音箱";
+      // Update placeholder of input form
+      document.getElementById('speaker_name').placeholder = "小絨音箱";
     }
     
 
