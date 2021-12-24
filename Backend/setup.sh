@@ -27,3 +27,9 @@ sudo rm /usr/bin/llvm-config
 sudo ln -s /usr/bin/llvm-config-11 /usr/bin/llvm-config
 
 python3.7 -m pip install --user -r requirements.txt
+
+sudo apt-get update
+git clone https://github.com/respeaker/seeed-voicecard.git
+sudo ./seeed-voicecard/install.sh
+sudo rm -r ./seeed-voicecard
+sudo reboot
