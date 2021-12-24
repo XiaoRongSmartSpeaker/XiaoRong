@@ -1,5 +1,6 @@
 import os
-import queue
+import time
+from queue import Queue
 
 from Threading import Job
 from importlib import import_module
@@ -9,10 +10,11 @@ feature_path = './feature'
 class Main():
     def __init__(self) -> None:
         self.threads = []                           # current running thread
-        self.__data_que = queue.Queue()             # pending data
-        self.feature_list = []                      # imported class
-        self.__declare_class = []                   # declared class
-        self.__pending_threads = queue.Queue()      # pending thread info
+        self.__data_que = Queue()                   # pending data
+        self.feature_list = []                      # imported classes
+        self.declare_class = []                     # declared classes
+        self.instance_thread_correspond = {}        # instance corresponding thread
+        self.__pending_threads = Queue()            # pending thread info
         self.__DAEMON_THREAD = [                    # define daemon work
             'voice_to_text'
         ]
@@ -23,7 +25,7 @@ class Main():
     def open_thread(self) -> None:
         func_info = self.__pending_threads.get()
 
-        for dec_class in self.__declare_class:
+        for dec_class in self.declare_class:
             if dec_class['name'] == func_info['class']:
                 try:
                     func = getattr(dec_class['instance'], func_info['func'])
@@ -34,6 +36,11 @@ class Main():
                         new_job = Job(self, func_info['class'], func, args, True)
                     else:
                         new_job = Job(self, func_info['class'], func, args)
+
+                    if getattr(dec_class['instance'], 'import_thread', None) != None:
+                        dec_class['instance'].import_thread(new_job)
+                        print(self.instance_thread_correspond[func_info['class']])
+                        self.instance_thread_correspond[func_info['class']].append(new_job)
                     
                     self.threads.append(new_job)
                     self.threads[-1].start()
@@ -47,7 +54,7 @@ class Main():
             if feature['name'] == func_info['class']:
                 # initial class instance
                 class_entity = feature['class']()
-                self.__declare_class.append({
+                self.declare_class.append({
                     'name': func_info['class'],
                     'instance': class_entity
                 })
@@ -64,6 +71,7 @@ class Main():
                     
                     if getattr(class_entity, 'import_thread', None) != None:
                         class_entity.import_thread(new_job)
+                        self.instance_thread_correspond[func_info['class']].append(new_job)
 
                     self.threads.append(new_job)
                     self.threads[-1].start()
@@ -114,7 +122,10 @@ if __name__ == "__main__":
                     'class': class_entity,
                     'name': feature
                 }
+                print('import class instance successfully')
                 main.feature_list.append(feature_obj)
+                # initialize instance corresponding thread
+                main.instance_thread_correspond[feature] = []
             except:
                 print('import class instance error')
                 continue
@@ -135,10 +146,35 @@ if __name__ == "__main__":
     main.open_thread()
 
     while True:
+        # check every second
+        time.sleep(1)
+
         # clear that completed threading
+        # because newer threads are at the back of list 
+        main.threads.reverse()
         for thread in main.threads:
             if not thread.is_alive():
-                del thread
+                # discard the last one thread on a feature instance
+                main.instance_thread_correspond[thread.name].pop()
+                
+                # get the previous one thread on a feature instance
+                try:
+                    last_thread = main.instance_thread_correspond[thread.name][-1]
+                except:
+                    last_thread = None
+                
+                # search instance and update thread pointer 
+                for dec_class in main.declare_class:
+                    if dec_class['name'] == thread.name:
+                        if getattr(dec_class['name'], 'import_thread', None) != None:
+                            dec_class['name'].import_thread(last_thread)
+                        break
+                
+                # delete thread
+                print('delete thread', thread)
+                main.threads.remove(thread)
+
+        main.threads.reverse()
         
         # if there are pending thread data
         if not main.threading_empty():
