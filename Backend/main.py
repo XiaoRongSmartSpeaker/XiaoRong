@@ -1,11 +1,11 @@
+from logger import logger
 import os
 import time
 from queue import Queue
 
 from Threading import Job
 from importlib import import_module
-<<<<<<< HEAD:Backend/main.py
-from logger import logger
+<< << << < HEAD: Backend / main.py
 
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
@@ -44,11 +44,16 @@ class Main():
                     else:
                         new_job = Job(self, func_info['class'], func, args)
 
-                    if getattr(dec_class['instance'], 'import_thread', None) != None:
+                    if getattr(
+                        dec_class['instance'],
+                        'import_thread',
+                            None) is not None:
                         dec_class['instance'].import_thread(new_job)
-                        print(self.instance_thread_correspond[func_info['class']])
-                        self.instance_thread_correspond[func_info['class']].append(new_job)
-                    
+                        print(
+                            self.instance_thread_correspond[func_info['class']])
+                        self.instance_thread_correspond[func_info['class']].append(
+                            new_job)
+
                     self.threads.append(new_job)
                     self.threads[-1].start()
                     return
@@ -81,7 +86,8 @@ class Main():
                         'import_thread',
                             None) is not None:
                         class_entity.import_thread(new_job)
-                        self.instance_thread_correspond[func_info['class']].append(new_job)
+                        self.instance_thread_correspond[func_info['class']].append(
+                            new_job)
 
                     self.threads.append(new_job)
                     self.threads[-1].start()
@@ -163,32 +169,35 @@ if __name__ == "__main__":
         time.sleep(1)
 
         # clear that completed threading
-        # because newer threads are at the back of list 
+        # because newer threads are at the back of list
         main.threads.reverse()
         for thread in main.threads:
             if not thread.is_alive():
                 # discard the last one thread on a feature instance
                 main.instance_thread_correspond[thread.name].pop()
-                
+
                 # get the previous one thread on a feature instance
                 try:
                     last_thread = main.instance_thread_correspond[thread.name][-1]
-                except:
+                except BaseException:
                     last_thread = None
-                
-                # search instance and update thread pointer 
+
+                # search instance and update thread pointer
                 for dec_class in main.declare_class:
                     if dec_class['name'] == thread.name:
-                        if getattr(dec_class['name'], 'import_thread', None) != None:
+                        if getattr(
+                            dec_class['name'],
+                            'import_thread',
+                                None) is not None:
                             dec_class['name'].import_thread(last_thread)
                         break
-                
+
                 # delete thread
                 print('delete thread', thread)
                 main.threads.remove(thread)
 
         main.threads.reverse()
-        
+
         # if there are pending thread data
         if not main.threading_empty():
             main.open_thread()
