@@ -4,7 +4,6 @@ from queue import Queue
 
 from Threading import Job
 from importlib import import_module
-<<<<<<< HEAD:Backend/main.py
 from logger import logger
 
 # log setting
