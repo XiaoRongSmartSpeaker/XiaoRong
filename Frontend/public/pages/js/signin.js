@@ -1,5 +1,5 @@
-let lan = 'ch';
-let language = {
+var lan = 'ch';
+var language = {
   "en":{
         'header':'Sign In',
         'sub_header': 'Please sign in to XiaoRong Speaker',
@@ -77,25 +77,7 @@ function get_lan()
     }
     
     trans = language[lan];
-    /*
-    if(lan == 'en')
-    {
-      trans = {
-          'header':'Sign In',
-          'sub_header': 'Please sign in to XiaoRong Speaker',
-          'create_account': '<a href="https://accounts.google.com/signup" class="underline" target="_blank">Create Account</a>'
-      };
-    }
-    else if(lan == 'ch')
-    {
-      trans = {
-        'header':'登入',
-        'sub_header': '登入您的小絨音箱',
-        'create_account': '還沒有帳號嗎？<a href="https://accounts.google.com/signup" class="underline" target="_blank">馬上註冊!</a>'
-    };
-    }
-    
-    */
+   
     // Set language
     for(let key in trans)
     {
@@ -106,5 +88,5 @@ function get_lan()
 
 }
 
-//get_lan();
+
 startApp();

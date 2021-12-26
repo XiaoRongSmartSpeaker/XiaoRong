@@ -1,4 +1,4 @@
-let language = {
+var language = {
     "en":{
         'start_button':'Start',
         'language': '<a href="?lan=ch">中文</a>'
@@ -23,22 +23,6 @@ function get_lan()
     }
     
     trans = language[lan];
-    /*
-    if(lan == 'en')
-    {
-        trans = {
-            'start_button':'Start',
-            'language': '<a href="?lan=ch">中文</a>'
-        };
-    }
-    else if(lan == 'ch')
-    {
-        trans = {
-            'start_button':'開始使用',
-            'language': '<a href="?lan=en">English</a>'
-        };
-    }
-    */
 
     // Set language
     for(let key in trans)
@@ -50,9 +34,9 @@ function get_lan()
 
 }
 
-//get_lan();
+
 document.getElementById('start_button').addEventListener('click', () => {
-    console.log(lan);
+   
     
     window.location.href = `wifi.html?lan=${lan}`;
 });

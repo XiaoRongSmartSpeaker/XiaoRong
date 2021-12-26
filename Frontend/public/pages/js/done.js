@@ -1,5 +1,5 @@
-let lan = 'ch';
-let language = {
+var lan = 'ch';
+var language = {
     "en":{
         'header':'Your speaker is Ready',
         'sub_header': 'Let\'s get started',
@@ -24,25 +24,6 @@ function get_lan()
         lan = params.get('lan');
     }
     trans = language[lan];
-    /*
-    if(lan == 'en')
-    {
-        trans = {
-            'header':'Your speaker is Ready',
-            'sub_header': 'Let\'s get started',
-            'done_button': 'Done'
-        };
-    }
-    else if(lan == 'ch')
-    {
-        trans = {
-            'header':'您的音箱已就緒',
-            'sub_header': '準備開始享受您與小絨的完美旅程!',
-            'done_button': '完成設定'
-        };
-    }*/
-    
-
     // Set language
     for(let key in trans)
     {
@@ -54,4 +35,3 @@ function get_lan()
 
 }
 
-//get_lan();
