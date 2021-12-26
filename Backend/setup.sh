@@ -1,5 +1,5 @@
 sudo apt update
-sudo apt-get install -y build-essential tk-dev libncurses5-dev libnss3-dev libatlas-base-dev libffi6-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
+sudo apt-get install -y build-essential tk-dev libncurses5-dev libnss3-dev libatlas-base-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
 if [type -P python3.7 > /dev/null 2>&1] 
 then
     echo "Python3.7 is already installed"
@@ -21,6 +21,7 @@ sudo apt-get install -y flac
 sudo apt-get install -y libasound-dev
 sudo apt-get install -y portaudio19-dev
 sudo apt-get install -y python3-pyaudio
+sudo apt-get install -y libdbus-1-dev
 sudo apt-get install -y libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0
 sudo apt-get install -y llvm-11-dev
 sudo rm /usr/bin/llvm-config
