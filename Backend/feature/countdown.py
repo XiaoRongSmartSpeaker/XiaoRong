@@ -1,10 +1,7 @@
 from logging import Manager
-import Threading 
 import time
 import playsound
 import sys
-import os
-scriptpath = "../"
 try:
 	import logger
 	logger = logger.get_logger(__name__)
@@ -23,34 +20,48 @@ except ModuleNotFoundError:
 class Countdown():
 	def __init__(self):
 		self.totalSeconds = 0  
-		self.audio_file = 'sound.mp3'                             
+		self.audio_file = 'sound.mp3'  
+		self.threadHandler = None  
+		self.isCounting = False                         
 		return
-		
+	def import_thread(self, thread):
+		self.threadHandler = thread
+		return
 	def set_countdown(self, h: int, m: int, s: int):
 		if h < 0 or m < 0 or s < 0:
 			return False
 		totalSeconds = s + m * 60 + h * 3600
 		if 0 <= totalSeconds <= 7200:
 			self.totalSeconds = totalSeconds
-			self.start_countdown()
+			self.isCounting = True
+			self.threadHandler.add_thread({
+                'class': 'Countdown',
+                'func': 'start_countdown',
+            })
 			return True
-		
 		return False
 	def start_countdown(self):
-		while self.totalSeconds:
+		while self.totalSeconds and self.isCounting:
 			m, s = divmod(self.totalSeconds, 60)
 			h, m = divmod(m, 60)
 			timeFormat = '{:02d}:{:02d}:{:02d}'.format(h, m, s)
 			print(timeFormat)
 			time.sleep(1)
 			self.totalSeconds -= 1
-		logger.debug('Time\'s up')
-		playsound.playsound(self.audio_file, True) 
-		time.sleep(150)
-		logger.debug('end of ring')
+		if self.isCounting:
+			logger.debug('Time\'s up')
+			playsound.playsound(self.audio_file, True) 
+			time.sleep(150)
+			logger.debug('end of ring')
+		else:
+			logger.debug('Cancel countdown')
 		return True
 	def stop_countdown(self):
-		pass
+		self.isCounting = False
+		return
+	def stop_ringing(self):
+		playsound.playsound(None, True)
+		return
 		
 if __name__ == "__main__":
     a = Countdown()
