@@ -28,7 +28,7 @@ sudo rm /usr/bin/llvm-config
 sudo ln -s /usr/bin/llvm-config-11 /usr/bin/llvm-config
 
 
-if [ -z "$(uname -a | grep raspberrypi)"]
+if [ -z "$(cat /proc/cpuinfo | grep -E "Model\s+:\sRaspberry")"]
 then
     echo "Not a raspberrypi, stop installing seeed-voicecard package & stop installing pip packages."
 else
