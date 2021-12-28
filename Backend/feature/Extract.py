@@ -13,7 +13,7 @@ class Extract:
             self.func_dict = json.load(f) 
         self.day_dict = {'一': 1, '1': 1 , '二': 2, '2': 2 , '三': 3, '3': 3 , '四': 4, '4': 4 , 
             '五': 5, '5': 5 , '六': 6, '6': 6 , '末': 6 ,'天': 7, '日': 7}
-        self.therad = None
+        self.thread = None
         return
 
     def text2func(self, input_str):
@@ -127,6 +127,8 @@ class Extract:
             para = para_extract.target_countdown(input_str)
         elif( function_name == 'set_alert'):
             para = para_extract.target_alert(target)
+        elif( function_name == 'memorandum'):
+            para = ()
         else:
             para = [input_str]
             return{"name":'question', "func":'question_answering', "args":tuple(para)}
