@@ -20,7 +20,7 @@ except ModuleNotFoundError:
 class Countdown():
 	def __init__(self):
 		self.totalSeconds = 0  
-		self.audio_file = 'sound.mp3'  
+		self.audioFile = 'sound.mp3'  
 		self.threadHandler = None  
 		self.isCounting = False                         
 		return
