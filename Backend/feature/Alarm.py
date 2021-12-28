@@ -1,7 +1,9 @@
 from logging import Manager
 import time
+
 import playsound
 import sys
+import json
 try:
 	import logger
 	logger = logger.get_logger(__name__)
@@ -19,13 +21,20 @@ except ModuleNotFoundError:
 
 class Alarm():
 	def __init__(self):
-		self.alarmList = 0  
-		self.audio_file = 'sound.mp3'  
+		self.alarmList = []
+		self.audioFile = 'sound.mp3'  
 		self.threadHandler = None                        
 		return
 	def import_thread(self, thread):
 		self.threadHandler = thread
 		return
+
+	def get_alarm_list():
+		with open( "AlarmList.json", encoding="utf-8") as f:
+			jsonContent = f.read()
+		jsonContent = json.loads(jsonContent)
+		# 取得 json "BODY" 欄位
+		AlarmList = jsonContent["AlarmList"]  
 	# TODO
 	def set_alarm(self, day: int, h: int, m: int):
 		if not 1 <= day <= 7:
@@ -37,7 +46,7 @@ class Alarm():
 		elif not 0 <= m < 60:
 			logger.debug('Error minute')
 			return False
-		pass
+		
 		return
 	# TODO
 	def main(self):
