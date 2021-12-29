@@ -10,11 +10,17 @@ def str_to_class(field):
     try:
         identifier = getattr(sys.modules[__name__], field)
     except AttributeError:
-        raise NameError("%s doesn't exist." % field)
+        raise NameError("%s doesn't exist." % field) 
     # print(isinstance(identifier, Worker))
     if isinstance(identifier, ((type))):
         return identifier
     TypeError("%s is not a class." % field)
+
+class Test():
+    @classmethod
+    def listen(cls, Worker): 
+        if Worker.device.is_pressed:
+            print("Pressed2" , Worker.device.pin)
 
 class Worker(threading.Thread):
     def __init__(self, device, cls, func):
@@ -60,26 +66,7 @@ class ButtonController():
                 self._sw.append({Button(key):func})
             if typ=='LED':
                 self._led.append({PWMLED(key):func})
-        # self._sw_1 = Button(24)
-        # self._sw_2 = Button(25)
-        # self._led_r = LED(20)
-        # self._led_y = LED(16)
-        # self._led_g = LED(12)
-
-    # def light_y(self):
-    #     self._led_y.source = self._sw_1
-
-    # def light_g(self):
-    #     self._led_g.source = self._sw_1
-
-    # def light_r(self):
-    #     self._led_r.source = self._sw_1
-
-    # def turn_off_LED(self):
-    #     self._led_y.source = self._led_y
-    #     self._led_g.source = self._led_g
-    #     self._led_r.source = self._led_r
-
+        
     def start(self):
         for item in self._sw:
             but, func = list(item.items())[0]
@@ -91,6 +78,13 @@ class ButtonController():
             self._led_threads.append(Worker(led, func.split(',')[0],func.split(',')[1]))
             self._led_threads[-1].daemon = True
             self._led_threads[-1].start()
+
+    def modify_button_function(self, index, new_func):
+        device = self._sw_threads[index].device
+        self._sw_threads[index].kill=True
+        self._sw_threads[index] = Worker(device, new_func.split(',')[0],new_func.split(',')[1])
+        self._sw_threads[index].daemon = True
+        self._sw_threads[index].start()
 
     def wait_until_finish(self):
         for thread in self._sw_threads:
@@ -107,14 +101,21 @@ class ButtonController():
         for led in self._led:
             self._led_threads[index].kill=True
             index += 1
-            
+
 
 if __name__=='__main__':
     check = True
-    BC = ButtonController({23:{'BUTTON':'Worker,listen'},24:{'BUTTON':'Worker,listen'},12:{'LED':'Worker,light'},16:{'LED':'Worker,light'},20:{'LED':'Worker,light'}})
+    BC = ButtonController({27:{'BUTTON':'Worker,listen'},24:{'BUTTON':'Worker,listen'},12:{'LED':'Worker,light'},16:{'LED':'Worker,light'},20:{'LED':'Worker,light'}})
     try:
         print("Starting Threads...")
         BC.start()
+        print(BC._sw_threads)
+        sleep(10)
+        BC.modify_button_function(0,'Test,listen')
+        print(BC._sw_threads)
+        sleep(10)
+        BC.modify_button_function(0,'Worker,listen')
+        print(BC._sw_threads)
         BC.wait_until_finish()
     except:
         print("Shutting down...")
