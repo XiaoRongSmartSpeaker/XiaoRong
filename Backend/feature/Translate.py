@@ -62,6 +62,7 @@ class Translate:
                 mixer.music.load('./Audio/noInternet.mp3')
                 mixer.music.play()
                 time.sleep(2)
+                break
             
             except sr.WaitTimeoutError:
                 print('No voice')
