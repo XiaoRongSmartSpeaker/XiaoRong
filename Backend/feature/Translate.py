@@ -22,6 +22,14 @@ class Translate:
                 sttTXT_org = r.recognize_google(audio, language = fromLanguage)
                 print(sttTXT_org)
                 if '結束翻譯' in sttTXT_org:
+                    end_message = gTTS('翻譯已結束', lang='zh-TW')
+                    end_message.save('temp.mp3')
+                    s=librosa.get_duration(filename='./temp.mp3')
+                    mixer.init()
+                    mixer.music.load('./temp.mp3')
+                    mixer.music.play(1)
+                    time.sleep(s)
+                    os.system('rm temp.mp3')
                     break
                 
                 sttTXT_tblob = TextBlob(sttTXT_org)
