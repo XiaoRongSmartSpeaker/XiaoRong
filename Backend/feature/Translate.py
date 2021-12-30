@@ -21,11 +21,15 @@ class Translate:
 
                 sttTXT_org = r.recognize_google(audio, language = fromLanguage)
                 print(sttTXT_org)
-                if '翻譯結束' in sttTXT_org:
+                if '結束翻譯' in sttTXT_org:
                     break
-
+                
                 sttTXT_tblob = TextBlob(sttTXT_org)
-                blobTranslated = sttTXT_tblob.translate(to=toLanguage)
+                try:
+                    blobTranslated = sttTXT_tblob.translate(to=toLanguage)
+                except:
+                    print('not translated')
+                    continue
                 print('Translated: ' + blobTranslated.raw)
 
                 tts = gTTS(blobTranslated.raw, lang=toLanguage)
@@ -55,4 +59,4 @@ class Translate:
                 print('No voice')
                 continue
 
-#Translate.translate() 
+Translate.translate() 
