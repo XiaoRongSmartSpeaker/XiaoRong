@@ -20,8 +20,9 @@ class Translate:
                     audio=r.listen(source,timeout=10)
 
                 sttTXT_org = r.recognize_google(audio, language = fromLanguage)
+                cmd = r.recognize_google(audio, language='zh-TW')
                 print(sttTXT_org)
-                if '結束翻譯' in sttTXT_org:
+                if '結束翻譯' in cmd:
                     end_message = gTTS('翻譯已結束', lang='zh-TW')
                     end_message.save('temp.mp3')
                     s=librosa.get_duration(filename='./temp.mp3')
