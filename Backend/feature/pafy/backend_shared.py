@@ -15,7 +15,8 @@ if sys.version_info[:2] >= (3, 0):
 else:
     from urllib2 import urlopen, build_opener, HTTPError, URLError
     from urlparse import parse_qs, urlparse
-    uni, pyver = unicode, 2
+    # uni, pyver = unicode, 2
+    uni, pyver = bytes, 2
 
 early_py_version = sys.version_info[:2] < (2, 7)
 

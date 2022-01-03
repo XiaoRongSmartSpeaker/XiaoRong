@@ -1,31 +1,97 @@
-import pafy
+from feature import pafy
 import vlc
-#import youtube_dl
-import yt_dlp as youtube_dl
+from feature import youtube_dl
+#import yt_dlp as youtube_dl
 #import webbrowser
 from googleapiclient.discovery import build
 import urllib.request
+import threading
+
+import time
 
 API_KEY = 'AIzaSyDYvK29Z74AqL3lGK8c3tgR0RsFygKyJkU'
 
 class MusicStreaming():
 
-    def __init__(self, text):
-        self.target = text
+    def __init__(self):
+        self.thread = None
+        self.play_video = None
+        self.player = None
+        self.isPlaying = None
+        self.isPause = None
+        self.isStop = None
+        
+    def import_thread(self, thread):
+        self.thread = thread
+        
+    def pause_music(self):
+        self.player.set_pause(True)
+        self.isPlaying = False
+        self.isPause = True
+        self.isStop = False
+        print('Player paused')
+
+    def continue_music(self):
+        self.player.set_pause(False)
+        self.isPlaying = True
+        self.isPause = False
+        self.isStop = False
+        print('Player continued')
+
+    def stop_music(self):
+        self.player.stop()
+        self.isPlaying = False
+        self.isPause = False
+        self.isStop = True
+        print('Player stop')
+
+    def now_playing(self):
+        self.pause_music()
+        now_music = self.pafy_video.title
+        self.continue_music()
+        return now_music
+
+    def repeat_playing(self):
+        while(self.thread.is_run == False):
+            self.playing()
+        
+
+    def return_playing_status(self):
+        return [self.isPlaying, self.isPause, self.isStop]
+        
+                        
+    def playing(self):
+        self.player.play()
+        good_states = ["State.Playing", "State.NothingSpecial", "State.Opening", "State.Paused"]
+        while str(self.player.get_state()) in good_states:
+            self.isPlaying = True
+            self.isPause = False
+            self.isStop = False
+            # print(self.thread.is_pause())
+            if self.thread.is_pause():
+                self.pause_music()
+            else:
+                self.continue_music()
+
+            if self.thread.is_run() == False:
+                self.stop_music()
+
+            print('Stream is working. Current state = {}'.format(self.player.get_state()))
+
+        print('Stream is not working. Current state = {}'.format(self.player.get_state()))
+        self.set_stop()
 
     def pafy_video(self, videoId):
         url = 'https://www.youtube.com/watch?v={0}'.format(videoId)
         print(url)
-    #    webbrowser.open(url)
     #    ydl_opts = {"--no-check-certificate": True}
     #    play_video = pafy.new(url, ydl_opts)
-        play_video = pafy.new(url)
-        best = play_video.getbestaudio()
-    #    media = vlc.MediaPlayer(best.url)
-    #    media.play()
+        self.play_video = pafy.new(url)
+        # print("title: ", self.play_video.title)
+        best = self.play_video.getbestaudio()
         play_url = best.url
         Instance = vlc.Instance()
-        player = Instance.media_player_new()
+        self.player = Instance.media_player_new()
         
         code = urllib.request.urlopen(url).getcode()
         if str(code).startswith('2') or str(code).startswith('3'):
@@ -35,26 +101,49 @@ class MusicStreaming():
         
         Media = Instance.media_new(play_url)
         Media.get_mrl()
-        player.set_media(Media)
-        events = player.event_manager()
-        player.play()
-        print(events)
+        self.player.set_media(Media)
+        events = self.player.event_manager()
         
-        good_states = ["State.Playing", "State.NothingSpecial", "State.Opening"]
-        while str(player.get_state()) in good_states:
-            print('Stream is working. Current state = {}'.format(player.get_state()))
+        self.thread.add_thread({
+        'class': 'MusicStreaming',
+        'func': 'playing',
+        })
+        
+#        player.play()
+#        good_states = ["State.Playing", "State.NothingSpecial", "State.Opening"]
+#        while str(player.get_state()) in good_states:
+#            print('Stream is working. Current state = {}'.format(player.get_state()))
+#
+#        print('Stream is not working. Current state = {}'.format(player.get_state()))
+#        player.stop()
+        
+#        if self.thread:
+#            self.thread.add_thread({
+#                'class': 'MusicStreaming',
+#                'func': 'playing',
+#            })
+#
+#            return
+#        else:
+#            # When threadHandler doesn't exist return thread to start.
+##            logger.error("threadHandler not exist. Failed to add thread.")
+##            logger.info("try to start playing music in current thread...")
+#            t = threading.Thread(target=self.playing)
+#            return t
+            
+#        print(events)
+        
+        
 
-        print('Stream is not working. Current state = {}'.format(player.get_state()))
-        player.stop()
-
-    def play_music(self):
+    def play_music(self, target):
+        
         youtube = build('youtube', 'v3', developerKey=API_KEY)
 
         request = youtube.search().list(
                 part = 'id, snippet',
                 maxResults = 3,
                 order = 'viewCount',
-                q = self.target
+                q = target
             )
 
         response = request.execute()
@@ -72,10 +161,10 @@ class MusicStreaming():
             self.pafy_video(videos[0])
         
         
-if __name__ == "__main__":
-    text = '周杰倫的給我一首歌的時間'
-    music = MusicStreaming(text)
-    music.play_music()
+# if __name__ == "__main__":
+#     text = 'chungha killing me'
+#     music = MusicStreaming()
+#     music.play_music(text)
     
 #Instance = vlc.Instance()
 #player = Instance.media_player_new()
