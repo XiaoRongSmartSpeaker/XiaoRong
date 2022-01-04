@@ -9,7 +9,6 @@ import threading
 
 import time
 
-API_KEY = 'AIzaSyDYvK29Z74AqL3lGK8c3tgR0RsFygKyJkU'
 
 class MusicStreaming():
 
@@ -108,36 +107,10 @@ class MusicStreaming():
         'class': 'MusicStreaming',
         'func': 'playing',
         })
-        
-#        player.play()
-#        good_states = ["State.Playing", "State.NothingSpecial", "State.Opening"]
-#        while str(player.get_state()) in good_states:
-#            print('Stream is working. Current state = {}'.format(player.get_state()))
-#
-#        print('Stream is not working. Current state = {}'.format(player.get_state()))
-#        player.stop()
-        
-#        if self.thread:
-#            self.thread.add_thread({
-#                'class': 'MusicStreaming',
-#                'func': 'playing',
-#            })
-#
-#            return
-#        else:
-#            # When threadHandler doesn't exist return thread to start.
-##            logger.error("threadHandler not exist. Failed to add thread.")
-##            logger.info("try to start playing music in current thread...")
-#            t = threading.Thread(target=self.playing)
-#            return t
-            
-#        print(events)
-        
-        
 
     def play_music(self, target):
         
-        youtube = build('youtube', 'v3', developerKey=API_KEY)
+        youtube = build('youtube', 'v3', developerKey='AIzaSyCXM0btueTkMj9MaQMp6-0zhQiTAgfHYV8')
 
         request = youtube.search().list(
                 part = 'id, snippet',
@@ -159,26 +132,3 @@ class MusicStreaming():
         if videos:
             print('Videos:{0}'.format(videos))
             self.pafy_video(videos[0])
-        
-        
-# if __name__ == "__main__":
-#     text = 'chungha killing me'
-#     music = MusicStreaming()
-#     music.play_music(text)
-    
-#Instance = vlc.Instance()
-#player = Instance.media_player_new()
-#Media = Instance.media_new('test.mp3')
-#Media.get_mrl()
-#player.set_media(Media)
-#player.play()
-#
-#print(player.play())
-
-#import mpv
-#import yt_dlp
-#player = mpv.MPV(ytdl=True)
-#player.play('https://youtu.be/DOmdB7D-pUU');
-#print(player.metadata);
-#player.wait_for_playback();
-
