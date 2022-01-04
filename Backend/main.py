@@ -1,5 +1,6 @@
 import os
 import time
+import sys, inspect
 from queue import Queue
 
 from Threading import Job
@@ -91,7 +92,8 @@ class Main():
                     self.threads.append(new_job)
                     self.threads[-1].start()
                     return
-                except BaseException:
+                except BaseException as e:
+                    print(e)
                     print('Could not find method', func_info['func'])
                     return
 
@@ -117,39 +119,20 @@ if __name__ == "__main__":
     main = Main()
 
     # import feature class
-    feature_list = os.listdir(feature_path)
-    for file in feature_list:
-        full_filename = os.path.basename(feature_path + '/' + file)
-        filename = os.path.splitext(full_filename)
-
-        # if not a python file skip
-        if filename[1] != '.py':
-            continue
-        else:
-            feature = filename[0]
-
+    import feature
+    featureClasses = inspect.getmembers(sys.modules[feature.__name__], inspect.isclass)
+    for featureClass in featureClasses:
         try:
-            # import feature module
-            module = import_module(
-                feature_path.replace(
-                    './', '') + '.' + feature)
-            try:
-                # from feature module get class object
-                class_entity = getattr(module, feature)
-                feature_obj = {
-                    'class': class_entity,
-                    'name': feature
-                }
-                print('import class instance successfully')
-                main.feature_list.append(feature_obj)
-                # initialize instance corresponding thread
-                main.instance_thread_correspond[feature] = []
-            except BaseException:
-                print('import class instance error')
-                continue
+            feature_obj = {
+                'class': featureClass[1],
+                'name': featureClass[0]
+            }
+            print('import class instance successfully')
+            main.feature_list.append(feature_obj)
+            # initialize instance corresponding thread
+            main.instance_thread_correspond[feature_obj['name']] = []
         except BaseException:
-            print('import module python file error')
-            continue
+            print('import class instance failed')
 
     # initial speaker feature
     main.add_thread({
