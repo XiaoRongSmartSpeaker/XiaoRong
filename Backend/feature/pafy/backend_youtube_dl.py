@@ -8,7 +8,8 @@ if sys.version_info[:2] >= (3, 0):
     # pylint: disable=E0611,F0401,I0011
     uni = str
 else:
-    uni = unicode
+    # uni = unicode
+    uni = bytes
 
 import youtube_dl
 
