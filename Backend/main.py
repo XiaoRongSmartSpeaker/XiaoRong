@@ -136,7 +136,7 @@ if __name__ == "__main__":
 
     # initial speaker feature
     main.add_thread({
-        'class': 'voice_to_text',
+        'class': 'SpeechToText',
         'func': 'voice_to_text',
     })
     main.open_thread()
