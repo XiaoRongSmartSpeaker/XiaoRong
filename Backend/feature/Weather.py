@@ -3,8 +3,6 @@ import json
 import pandas as pd
 import datetime
 
-API_Key = 'CWB-441817A1-2E20-456F-B571-01E7888AAA2C'
-
 class Weather:
 
     def __init__(self):
@@ -30,9 +28,9 @@ class Weather:
                              'Taipei City', 'Nantou County', 'Penghu County', 'Keelung City', 'Taoyuan City', 'Hualien County', 'Lienchiang County', 'Taitung County', 'Chiayi City', 
                              'Chiayi County', 'Pingtung County', 'Taichung City', 'Hsinchu City']
 
-        url_Taiwan = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-441817A1-2E20-456F-B571-01E7888AAA2C'
+        url_Taiwan = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/F-D0047-091?Authorization=CWB-A6020B36-5BF6-4E24-A5B4-F6CD842D3CBC'
 
-        url_World = 'https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/F-C0032-007?Authorization=CWB-441817A1-2E20-456F-B571-01E7888AAA2C&downloadType=WEB&format=JSON'
+        url_World = 'https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/F-C0032-007?Authorization=CWB-A6020B36-5BF6-4E24-A5B4-F6CD842D3CBC&downloadType=WEB&format=JSON'
 
 
         r = requests.get(url_Taiwan)
@@ -150,7 +148,7 @@ class Weather:
 
 
 if __name__ == "__main__":
-    time = "2022-01-03 05:00"
+    time = "2022-01-05 12:00"
     place = "臺北市"
     weather = Weather()
     situation = weather.weather_forecast(time, place)
