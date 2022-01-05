@@ -114,7 +114,6 @@ class MusicStreaming():
 
         load_dotenv()
         API_Key = os.getenv("YOUTUBE_API_KEY")
-        print(API_Key)
         
         youtube = build('youtube', 'v3', developerKey=API_Key)
 
