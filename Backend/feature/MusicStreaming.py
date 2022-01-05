@@ -6,6 +6,8 @@ from feature import youtube_dl
 from googleapiclient.discovery import build
 import urllib.request
 import threading
+import os
+from dotenv import load_dotenv
 
 import time
 
@@ -109,8 +111,12 @@ class MusicStreaming():
         })
 
     def play_music(self, target):
+
+        load_dotenv()
+        API_Key = os.getenv("YOUTUBE_API_KEY")
+        print(API_Key)
         
-        youtube = build('youtube', 'v3', developerKey='AIzaSyCXM0btueTkMj9MaQMp6-0zhQiTAgfHYV8')
+        youtube = build('youtube', 'v3', developerKey=API_Key)
 
         request = youtube.search().list(
                 part = 'id, snippet',
