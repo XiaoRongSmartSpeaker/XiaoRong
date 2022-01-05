@@ -3,7 +3,6 @@ import Extract
 extract = Extract.Extract()
 
 
-
 print(extract.main('幫我打給小絨'))
 print(' ')
 print(extract.main('打給0800000123'))
