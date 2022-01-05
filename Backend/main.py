@@ -1,6 +1,7 @@
 import os
 import time
-import sys, inspect
+import sys
+import inspect
 from queue import Queue
 
 from Threading import Job
@@ -120,7 +121,8 @@ if __name__ == "__main__":
 
     # import feature class
     import feature
-    featureClasses = inspect.getmembers(sys.modules[feature.__name__], inspect.isclass)
+    featureClasses = inspect.getmembers(
+        sys.modules[feature.__name__], inspect.isclass)
     for featureClass in featureClasses:
         try:
             feature_obj = {
