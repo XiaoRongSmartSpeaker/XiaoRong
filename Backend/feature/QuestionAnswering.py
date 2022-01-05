@@ -137,7 +137,7 @@ class QuestionAnswering():
             output.append({'support':None})
 
         if idiet:
-            output.append({'internet_diet':idiet.text.replace("查看以下內容的搜尋結果：", "")})
+            output.append({'internet_diet':idiet.text.replace("查看以下內容的搜尋結果:", "")})
         else:
             output.append({'internet_diet':None})
 
@@ -167,12 +167,12 @@ class QuestionAnswering():
             if list(result.keys())[0] != 'title' and list(result.items())[0][1] != None:
                 ans += (urllib.parse.unquote(str(list(result.items())[0][1])+'\n'))
                 flag = False
-                # break
+                break
     
         if flag:
-            for result in results:
+            for result in results[:11]:
                 if list(result.keys())[0] == 'title' and list(result.items())[0][1] != None:
-                    ans += ( urllib.parse.unquote(str(result)+'\n'))
+                    ans += ( urllib.parse.unquote(str(result['title'])+','+str(result['text'])+'\n'))
         
         ans = (ans.strip())
         if ans == '':
