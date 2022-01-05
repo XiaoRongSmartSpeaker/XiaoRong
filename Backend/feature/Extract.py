@@ -3,13 +3,14 @@ import re
 import time
 import para_extract
 import json
+import os
 
 # 目前還不支援 明/後 天 時間
 
 class Extract:
 
     def __init__(self) -> None:
-        with open('./keyword.json', encoding="utf-8") as f :
+        with open(os.path.join(os.path.dirname(__file__), 'keyword.json'), encoding="utf-8") as f :
             self.func_dict = json.load(f) 
         self.day_dict = {'一': 1, '1': 1 , '二': 2, '2': 2 , '三': 3, '3': 3 , '四': 4, '4': 4 , 
             '五': 5, '5': 5 , '六': 6, '6': 6 , '末': 6 ,'天': 7, '日': 7}
