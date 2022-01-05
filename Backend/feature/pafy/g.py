@@ -22,7 +22,7 @@ urls = {
                 'eurl=https://youtube.googleapis.com/v/%s&sts=%s'),
     'embed': "https://youtube.com/embed/%s"
 }
-api_key = os.environ['YOUTUBE_API_KEY'] 
+api_key = os.getenv('YOUTUBE_API_KEY')
 user_agent = "pafy " + __version__
 lifespan = 60 * 60 * 5  # 5 hours
 opener = build_opener()
