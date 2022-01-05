@@ -58,6 +58,7 @@ class Extract:
         elif( function_name == 'add_calender_week'):#==================================ADD_CALENDER_WEEK
             if(len(target) <= 1):
                 return {"name":class_name, "func":function_name, "args":tuple(para)}
+
             if(target[0] in self.day_dict.keys()):
                 para = para_extract.target_time(target[1:], 0)
                 para = [self.day_dict[target[0]], para[0], para[1], para[2]]

@@ -1,6 +1,22 @@
+var lan = 'ch';
+var language = {
+  "en":{
+        'header':'Sign In',
+        'sub_header': 'Please sign in to XiaoRong Speaker',
+        'create_account': '<a href="https://accounts.google.com/signup" class="underline" target="_blank">Create Account</a>'
+  },
+  "ch":{
+        'header':'登入',
+        'sub_header': '登入您的小絨音箱',
+        'create_account': '還沒有帳號嗎？<a href="https://accounts.google.com/signup" class="underline" target="_blank">馬上註冊!</a>'
+  },
+}
+window.onload = function(){
+  get_lan();
+}
 function post_id(google_id)
 {
-  fetch('API', {
+  fetch('http://localhost:3000/user_info', {
     method: 'POST',
     body: JSON.stringify({
       user_id: google_id,
@@ -36,15 +52,41 @@ function attachSignin(element) {
       function(googleUser) {
         var profile = googleUser.getBasicProfile();
         console.log(profile)
+        
         // POST user's ID to backend 
         post_id(profile.getId());
 
         // Redirect to setting.html
           
-        window.location.href = "setting.html";
+        window.location.href = `setting.html?lan=${lan}`;
         
       }, function(error) {
         alert(JSON.stringify(error, undefined, 2));
       });
 }
+
+
+function get_lan()
+{
+    const params = new URLSearchParams(window.location.search);
+    var trans = {};
+    
+    if(params.has('lan'))
+    {
+        lan = params.get('lan');
+    }
+    
+    trans = language[lan];
+   
+    // Set language
+    for(let key in trans)
+    {
+        document.getElementById(key).innerHTML = trans[key];
+    }
+
+    console.log(params.has('lan'));
+
+}
+
+
 startApp();
