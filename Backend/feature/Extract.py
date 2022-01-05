@@ -3,17 +3,18 @@ import re
 import time
 import para_extract
 import json
+import os
 
 # 目前還不支援 明/後 天 時間
 
 class Extract:
 
     def __init__(self) -> None:
-        with open('./keyword.json', encoding="utf-8") as f :
+        with open(os.path.join(os.path.dirname(__file__), 'keyword.json'), encoding="utf-8") as f :
             self.func_dict = json.load(f) 
         self.day_dict = {'一': 1, '1': 1 , '二': 2, '2': 2 , '三': 3, '3': 3 , '四': 4, '4': 4 , 
             '五': 5, '5': 5 , '六': 6, '6': 6 , '末': 6 ,'天': 7, '日': 7}
-        self.therad = None
+        self.thread = None
         return
 
     def text2func(self, input_str):
@@ -46,32 +47,33 @@ class Extract:
         function_name = func_key[1]
         location = input_str.find(func_key[2])
         target = input_str
-        para = ()
+        para = ([input_str])
         if(location != -1): # 有這個關鍵字
             target = input_str[location+len(func_key[2]):]
             target = target.lstrip()
         else:
-            return('question', 'question_answering', tuple([input_str]))
-        if( function_name == 'call'):#==================================================CALL=======================================V
+            return{"name":'question', "func":'question_answering', "args":tuple(para)}
+        if( function_name == 'make_call'):#==================================================CALL=======================================V
             para = para_extract.target_call(target)
         elif( function_name == 'add_calender_week'):#==================================ADD_CALENDER_WEEK
-            if(len(target) == 0):
-                return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
             if(len(target) <= 1):
-                return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
+                return {"name":class_name, "func":function_name, "args":tuple(para)}
+
             if(target[0] in self.day_dict.keys()):
                 para = para_extract.target_time(target[1:], 0)
                 para = [self.day_dict[target[0]], para[0], para[1], para[2]]
             else:
-                return ('FAILED', 'FAILED', tuple())
+                return {"name":class_name, "func":function_name, "args":tuple(para)}
         elif( function_name == 'add_calender_day'):#====================================ADD_CALENDER_DAY
             if(len(target) == 0):
-                return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
-            para = para_extract.target_time(target, 0)
+                return {"name":class_name, "func":function_name, "args":tuple(para)}
+            else:
+                para = para_extract.target_time(target, 0)
         elif( function_name == 'add_calender'):#========================================ADD_CALENDER
             if(len(target) == 0):
-                return (func_key[0], 'FAILED', ('TARGET NOT FOUND'))
-            para = para_extract.target_time(target, 0)
+                return {"name":class_name, "func":function_name, "args":tuple(para)}
+            else:
+                para = para_extract.target_time(target, 0)
         elif( function_name == 'next_calender'):#=======================================NEXT_CALENDER
             para = ()
         elif( function_name == 'read_calender'):#=======================================READ_CALENDER
@@ -127,6 +129,8 @@ class Extract:
             para = para_extract.target_countdown(input_str)
         elif( function_name == 'set_alert'):
             para = para_extract.target_alert(target)
+        elif( function_name == 'memorandum'):
+            para = ()
         else:
             para = [input_str]
             return{"name":'question', "func":'question_answering', "args":tuple(para)}
