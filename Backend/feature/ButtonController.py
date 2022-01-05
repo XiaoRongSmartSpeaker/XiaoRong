@@ -5,22 +5,24 @@ import logging
 import threading
 from time import sleep
 from gpiozero import Button, PWMLED
+from FactoryReset import FactoryReset
 
 def str_to_class(field):
     try:
         identifier = getattr(sys.modules[__name__], field)
     except AttributeError:
-        raise NameError("%s doesn't exist." % field) 
+        print( NameError("%s doesn't exist." % field) )
     # print(isinstance(identifier, Worker))
     if isinstance(identifier, ((type))):
         return identifier
-    TypeError("%s is not a class." % field)
+    print(TypeError("%s is not a class." % field))
 
 class Test():
-    @classmethod
-    def listen(cls, Worker): 
-        if Worker.device.is_pressed:
-            print("Pressed2" , Worker.device.pin)
+    def __init__(self):
+        pass
+    
+    def listen(self): 
+        print("Pressed2")
 
 class Worker(threading.Thread):
     def __init__(self, device, cls, func):
@@ -33,15 +35,20 @@ class Worker(threading.Thread):
     def run(self):
         while not self.kill:
             try:
-                #print(str_to_class(self.cls))
-                todo = getattr(str_to_class(self.cls), self.func)
-                todo(self)
+                todo = getattr(self.cls, self.func)
+                self.device.when_pressed = todo
             except:
+                print("Exiting...")
                 exit()
-            
+    
     def listen(self): 
+        print("Pressed" , self.device.pin)
+
+    def change_func(self):
         if self.device.is_pressed:
-            print("Pressed" , self.device.pin)
+            BC.modify_button_function(0,'Test,listen')
+        else:
+            BC.modify_button_function(0,'Worker,listen')
 
     def light(self):
         self.device.value = 0.5  # half brightness
@@ -70,12 +77,12 @@ class ButtonController():
     def start(self):
         for item in self._sw:
             but, func = list(item.items())[0]
-            self._sw_threads.append(Worker(but, func.split(',')[0],func.split(',')[1]))
+            self._sw_threads.append(Worker(but, func[0],func[1]))
             self._sw_threads[-1].daemon = True
             self._sw_threads[-1].start()
         for item in self._led:
             led, func = list(item.items())[0]
-            self._led_threads.append(Worker(led, func.split(',')[0],func.split(',')[1]))
+            self._led_threads.append(Worker(led, func[0],func[1]))
             self._led_threads[-1].daemon = True
             self._led_threads[-1].start()
 
@@ -105,7 +112,9 @@ class ButtonController():
 
 if __name__=='__main__':
     check = True
-    BC = ButtonController({27:{'BUTTON':'Worker,listen'},24:{'BUTTON':'Worker,listen'},12:{'LED':'Worker,light'},16:{'LED':'Worker,light'},20:{'LED':'Worker,light'}})
+    T = Test()
+    BC = ButtonController({14:{'BUTTON':[T,'listen']},15:{'BUTTON':[T,'listen']}})
+    # BC = ButtonController({27:{'BUTTON':'Worker,listen'},24:{'BUTTON':'Worker,listen'},12:{'LED':'Worker,light'},16:{'LED':'Worker,light'},20:{'LED':'Worker,light'}})
     try:
         print("Starting Threads...")
         BC.start()
