@@ -5,30 +5,30 @@ from pypinyin import pinyin, Style
 
 
 class SpeechToText:
-    def __init__(self):
-        self.thread = None
+    # def __init__(self):
+    #     self.thread = None
 
-    def import_thread(self, thread):
-        self.thread = thread
+    # def import_thread(self, thread):
+    #     self.thread = thread
 
-    def voice_to_text(self):
+    # def voice_to_text(self):
+    def voice_to_text():
         cnt = 0
         cmd = False
         while True:
             # add thread
-            self.thread.wait_for_exec()
+            # self.thread.wait_for_exec()
             r = sr.Recognizer()
-
-            with sr.Microphone() as source:
-                r.adjust_for_ambient_noise(source, duration=0.5)
-                print("Say something!")
-                if r.energy_threshold < 8000:
-                    r.energy_threshold = 8000
-                r.pause_threshold = 1
-                audio = r.listen(source, timeout=10, phrase_time_limit=5)
 
             zh_text = ""
             try:
+                with sr.Microphone() as source:
+                    r.adjust_for_ambient_noise(source, duration=0.5)
+                    print("Say something!")
+                    if r.energy_threshold < 8000:
+                        r.energy_threshold = 8000
+                    r.pause_threshold = 1
+                    audio = r.listen(source, timeout=10, phrase_time_limit=5)
                 zh_text = r.recognize_google(audio, language="zh-TW")
                 print(zh_text)
                 z = pinyin(zh_text, style=Style.BOPOMOFO)
@@ -46,12 +46,12 @@ class SpeechToText:
                 elif not cmd:
                     continue
                 else:
-                    self.thread.add_thread({
-                        "name": "Extract",
-                        "func": "main",
-                        "args": (zh_text,)
-                    })
-                    self.thread.pause()
+                    # self.thread.add_thread({
+                    #     "name": "Extract",
+                    #     "func": "main",
+                    #     "args": (zh_text,)
+                    # })
+                    # self.thread.pause()
                     print('return', zh_text)
                     cmd = False
 
@@ -85,4 +85,4 @@ class SpeechToText:
                 continue
 
 
-# SpeechToText.voice_to_text()
+SpeechToText.voice_to_text()
