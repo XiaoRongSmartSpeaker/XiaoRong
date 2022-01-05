@@ -84,5 +84,4 @@ class SpeechToText:
                 print('No voice')
                 continue
 
-
 # SpeechToText.voice_to_text()
