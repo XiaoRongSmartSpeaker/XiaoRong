@@ -1,10 +1,13 @@
 import os
 import queue
+# from Documents.xiaorong.Backend.feature.ButtonController import ButtonController
 
 from Threading import Job
 from importlib import import_module
 from logger import logger
 
+import FactoryReset
+import ButtonController
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
 
@@ -19,7 +22,6 @@ class Main():
         self.__declare_class = []                   # declared class
         self.__pending_threads = queue.Queue()      # pending thread info
         self.__DAEMON_THREAD = [                    # define daemon work
-            'voice_to_text'
         ]
 
     def add_thread(self, func_info) -> None:
@@ -101,6 +103,8 @@ class Main():
 if __name__ == "__main__":
     # defination main process
     main = Main()
+    factory_reset = FactoryReset.FactoryReset(main)
+    # factory_reset.factory_reset()
 
     # import feature class
     feature_list = os.listdir(feature_path)
@@ -128,23 +132,31 @@ if __name__ == "__main__":
                 }
                 main.feature_list.append(feature_obj)
             except BaseException:
-                print('import class instance error')
+                print('import class instance error '+module)
                 continue
         except BaseException:
-            print('import module python file error')
+            print('import module python file error '+feature)
             continue
 
+    BC = ButtonController.ButtonController({14:{'BUTTON':[factory_reset,'factory_reset']},15:{'BUTTON':[factory_reset,'listen']}})
+    try:
+        print("Starting Threads...")
+        BC.start()
+        BC.wait_until_finish()
+    except:
+        print("Shutting down...")
+        BC.kill()
     # initial speaker feature
-    main.add_thread({
-        'class': 'voice_to_text',
-        'func': 'voice_to_text',
-    })
-    main.open_thread()
-    main.add_thread({
-        'class': 'monitering',
-        'func': 'monitering',
-    })
-    main.open_thread()
+    # main.add_thread({
+    #     'class': 'voice_to_text',
+    #     'func': 'voice_to_text',
+    # })
+    # main.open_thread()
+    # main.add_thread({
+    #     'class': 'monitering',
+    #     'func': 'monitering',
+    # })
+    # main.open_thread()
 
     while True:
         # clear that completed threading
