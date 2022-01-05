@@ -1,12 +1,15 @@
 import requests
 import json
+import urllib.request
 import pandas as pd
 import datetime
 import os
+from dotenv import load_dotenv
 
 class Weather:
 
     def __init__(self):
+        load_dotenv()
         self.__weather_api_key = os.getenv('WEATHER_API_KEY')
 
     def weather_forecast(self, time, place):
@@ -140,16 +143,13 @@ class Weather:
             print(message)
 
     def find_place(self):
-        import urllib.request
-        import json
-
         with urllib.request.urlopen("https://geolocation-db.com/json") as url:
             data = json.loads(url.read().decode())
             return data['state']
 
 
 if __name__ == "__main__":
-    time = "2022-01-05 12:00"
+    time = "2022-01-10 12:00"
     place = "臺北市"
     weather = Weather()
     situation = weather.weather_forecast(time, place)
