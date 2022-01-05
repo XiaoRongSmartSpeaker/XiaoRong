@@ -1,4 +1,5 @@
 import sys
+import os
 if sys.version_info[:2] >= (3, 0):
     # pylint: disable=E0611,F0401,I0011
     from urllib.request import build_opener
@@ -21,7 +22,7 @@ urls = {
                 'eurl=https://youtube.googleapis.com/v/%s&sts=%s'),
     'embed': "https://youtube.com/embed/%s"
 }
-api_key = "AIzaSyCIM4EzNqi1in22f4Z3Ru3iYvLaY8tc3bo"
+api_key = os.environ['YOUTUBE_API_KEY'] 
 user_agent = "pafy " + __version__
 lifespan = 60 * 60 * 5  # 5 hours
 opener = build_opener()
