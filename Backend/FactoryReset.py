@@ -7,7 +7,7 @@ import shutil
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'config.ini')
 DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'default', 'default_config.ini')
-config = configparser.ConfigParser()
+config = configparser.ConfigParser(allow_no_value=True)
 config.read(CONFIG_PATH)
 
 # set up logger
@@ -45,35 +45,50 @@ class FactoryReset:
             logger.error(errt)
         except requests.exceptions.RequestException as err:
             logger.error(err)
+        else:
+            logger.info("Successfully sent request to delete speaker data")
+            # print response
 
     def _delete_device_user_data(self):
         # delete specific files
-        file_list = config.get('File Path', 'files_to_delete').split(',\n')
+        if config['File Path']['files_to_delete']:
+            file_list = config.get('File Path', 'files_to_delete').split(',\n')
+        else:
+            file_list = []
+        
         for file in file_list:
             try:
                 os.remove(file)
             except OSError as e:
-                logger.error(e)
+                logger.error('Failed to delete %s. Reason: %s' % (file, e))
             else:
                 logger.info("File successfully deleted: " + file)
 
         # restore specific files
-        file_pair_list = config.get('File Path', 'files_to_restore').split(',\n')
+        if config['File Path']['files_to_restore']:
+            file_pair_list = config.get('File Path', 'files_to_restore').split(',\n')
+        else:
+            file_pair_list = []
+        
         for file_pair in file_pair_list:
-            file, default_file = file_pair.split(" ", 1)
+            file, default_file = file_pair.split(" ", 1) + ['']
             try:
-                os.path.exists(default_file)
                 os.path.exists(file)
+                os.path.exists(default_file)
                 with open(default_file, 'r') as src_file, open(file, 'w') as dst_file:
                     default_config_content = src_file.read()
                     dst_file.write(default_config_content)
             except OSError as e:
-                logger.error(e)
+                logger.error('Failed to delete %s. Reason: %s' % (file, e))
             else:
                 logger.debug("%s restored to default" % (file))
         
         # remove content in a folder
-        folder_list = config.get('File Path', 'folders_to_clean').split(',\n')
+        if config['File Path']['folders_to_clean']:
+            folder_list = config.get('File Path', 'folders_to_clean').split(',\n')
+        else:
+            folder_list = []
+        
         for folder in folder_list:
             try:
                 for filename in os.listdir(folder):
@@ -86,11 +101,11 @@ class FactoryReset:
                             shutil.rmtree(file_path)
                             logger.debug("Successfully deleted sub-folder: " + file_path)
                     except Exception as e:
-                        logger.error('Failed to delete %s. Reason: %s' % (file_path, e))
+                        logger.error('Failed to delete: %s. Reason: %s' % (file_path, e))
             except OSError as e:
-                logger.error(e)
+                logger.error('Failed to clean %s. Reason: %s' % (folder, e))
             else:
-                logger.debug("folder %s cleaned successfully" % (folder))
+                logger.debug("Successfully cleaned folder %s" % (folder))
 
     def _terminate_other_process(self):
         if hasattr(self._main_instance, "close") and callable(getattr(self._main_instance, "close")):

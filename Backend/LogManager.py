@@ -31,7 +31,8 @@ def clear_log():
 def send_log_to_server():
         payloads = {'speaker_name': speaker_name}
         try:
-            response = requests.get(server_url, params=payloads, timeout=10)
+            with open('log/smartspeaker.log', 'rb') as f:
+                response = requests.post(server_url, files={'log/smartspeaker.log': f}, params=payloads)
             response.raise_for_status()
             logger.debug("Successfully sent log file to server")
         except requests.exceptions.HTTPError as errh:

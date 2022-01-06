@@ -1,17 +1,15 @@
 import os
 import queue
-
-import FactoryReset
-
 from Threading import Job
 from importlib import import_module
 from logger import logger
+
+import FactoryReset
 
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
 
 feature_path = './feature'
-
 
 class Main():
     def __init__(self) -> None:
