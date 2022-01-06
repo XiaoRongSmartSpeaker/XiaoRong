@@ -75,16 +75,15 @@ except ModuleNotFoundError:
     logger.setLevel(logging.DEBUG)
     ch = logging.StreamHandler(sys.stdout)
     ch.setLevel(logging.DEBUG)
-    formatter = logging.Formatter(
-        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
 class FactoryReset:
     def __init__(self):
-        self._default_config_path = os.getenv('DEFAULT_CONFIG_FILE')     # get factory default config file path
-        self._config_path = os.getenv('CONFIG_FILE')             # get current config file path
-        # self._speaker_name = os.getenv('SPEAKER_NAME')           # get speaker_name for server API request
+        self._default_config_path = os.getenv('DEFAULT_CONFIG_FILE')    # get factory default config file path
+        self._config_path = os.getenv('CONFIG_FILE')                    # get current config file path
+        # self._speaker_name = os.getenv('SPEAKER_NAME')                # get speaker_name for server API request
         # self._server_url = ''
     
     def listen_reset_button(self):
@@ -135,13 +134,15 @@ class FactoryReset:
         logger.debug("Config file restored to factory default")
 
     def factory_reset(self):
-        # delete user data
         # self._call_server_delete_speaker_data()
-        # self._call_db_delete_user_data()
-
+        
         # self._terminate_other_process()
 
-        # self._restore_config()
+        # self._call_db_delete_user_data()
+
+        # self._delete_device_user_data();
+
+        self._restore_config()
 
         logger.debug("Rebooting ...")
         # os.system('reboot')
@@ -149,5 +150,4 @@ class FactoryReset:
 # testing only
 if __name__ == "__main__":
     thread = FactoryReset()
-    resetGPIO = ResetGPIO()
-    print(resetGPIO._sw_1)
+    thread.factory_reset()

@@ -1,0 +1,2 @@
+black / white: GPIO 13
+black / red: reset connection

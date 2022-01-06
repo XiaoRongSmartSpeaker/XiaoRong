@@ -1,6 +1,8 @@
 import os
 import queue
 
+import FactoryReset
+
 from Threading import Job
 from importlib import import_module
 from logger import logger
@@ -19,7 +21,7 @@ class Main():
         self.__declare_class = []                   # declared class
         self.__pending_threads = queue.Queue()      # pending thread info
         self.__DAEMON_THREAD = [                    # define daemon work
-            'factory_reset'
+            
         ]
 
     def add_thread(self, func_info) -> None:
@@ -102,6 +104,9 @@ if __name__ == "__main__":
     # defination main process
     main = Main()
 
+    factory_reset = FactoryReset.FactoryReset(main)
+    factory_reset.factory_reset()
+
     # import feature class
     feature_list = os.listdir(feature_path)
     for file in feature_list:
@@ -131,15 +136,15 @@ if __name__ == "__main__":
                 print('import class instance error')
                 continue
         except BaseException:
-            print('import module python file error')
+            print('import module python file error ' + feature)
             continue
 
     # initial speaker feature
-    main.add_thread({
-        'class': 'FactoryReset',
-        'func': 'factory_reset',
-    })
-    main.open_thread()
+    # main.add_thread({
+    #     'class': 'FactoryReset',
+    #     'func': 'factory_reset',
+    # })
+    # main.open_thread()
     # main.add_thread({
     #     'class': 'monitering',
     #     'func': 'monitering',
