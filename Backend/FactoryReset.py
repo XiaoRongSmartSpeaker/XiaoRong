@@ -5,6 +5,9 @@ import requests
 import configparser
 import shutil
 
+import feature.TextToSpeech
+import gpiozero
+
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'config.ini')
 DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'default', 'default_config.ini')
 config = configparser.ConfigParser(allow_no_value=True)
@@ -141,7 +144,18 @@ class FactoryReset:
         logger.debug("Rebooting ...")
         # os.system('reboot')
 
+    def factory_reset_notification(self, LEDs = gpiozero.LED):
+        ttospeech = feature.TextToSpeech.TextToSpeech()
+        ttospeech.text_to_voice("音箱重置即將開始")
+        ttospeech.text_to_voice("繼續按住按鈕十秒以執行重置")
+        
+        if LEDs:
+            for LED in LEDs:
+                LED.value = 1
+
+
 # testing only
 if __name__ == "__main__":
     thread = FactoryReset()
+    thread.factory_reset_notification()
     thread.factory_reset()
