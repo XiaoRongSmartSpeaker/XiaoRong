@@ -1,7 +1,8 @@
 from logging import Manager
 import time
-import playsound
+from playsound import playsound
 import sys
+import multiprocessing
 try:
 	import logger
 	logger = logger.get_logger(__name__)
@@ -22,7 +23,8 @@ class Countdown():
 		self.totalSeconds = 0  
 		self.audioFile = 'sound.mp3'  
 		self.threadHandler = None  
-		self.isCounting = False                         
+		self.isCounting = False   
+		self.isPlayingAudio = False                      
 		return
 	def import_thread(self, thread):
 		self.threadHandler = thread
@@ -49,20 +51,27 @@ class Countdown():
 			time.sleep(1)
 			self.totalSeconds -= 1
 		if self.isCounting:
-			logger.debug('Time\'s up')
-			playsound.playsound(self.audio_file, True) 
-			time.sleep(150)
-			logger.debug('end of ring')
+			self.isPlayingAudio = True
+			self.play_ring()
+			while self.isPlayingAudio and self.audioSec:
+				self.audioSec -= 1
+				time.sleep(1)
+			self.audioSec = 150
+			self.isPlayingAudio = False
+			logger.info('end of ring')
+			self.playingAudio.terminate()
 		else:
-			logger.debug('Cancel countdown')
+			logger.info('Cancel countdown')
 		return True
 	def stop_countdown(self):
 		self.isCounting = False
 		return
 	def stop_ringing(self):
-		playsound.playsound(None, True)
+		self.isPlayingAudio = False
 		return
-		
+	def play_ring(self):
+		self.playingAudio = multiprocessing.Process(target=playsound, args=(self.audioFile,))
+		self.playingAudio.start()	
 if __name__ == "__main__":
     a = Countdown()
     h, m, s = map(int, input("輸入到計時時間（格式：hh:mm:ss）").split(":"))
