@@ -5,7 +5,6 @@ from playsound import playsound
 import sys
 import json
 
-import threading
 try:
 	import logger
 	logger = logger.get_logger(__name__)
@@ -44,7 +43,7 @@ class Alarm():
 		try:
 			self.alarmList = jsonContent["AlarmList"]  
 		except:
-			elf.alarmList = []
+			self.alarmList = []
 	def set_alarm(self, day: int, h: int, m: int):
 		if not 1 <= day <= 7:
 			logger.debug('Error day')
@@ -86,13 +85,10 @@ class Alarm():
 		self.playingAudio.start()
 	def main(self):
 		self.get_alarm_list()
-		# self.start_alarm()
-		t = threading.Thread(target=self.start_alarm)
-		t.start()
-		# self.threadHandler.add_thread({
-		# 	'class': 'Alarm',
-		# 	'func': 'start_alarm',
-		# })
+		self.threadHandler.add_thread({
+			'class': 'Alarm',
+			'func': 'start_alarm',
+		})
 	def stop_ringing(self):
 		self.isPlayingAudio = False
 		return
