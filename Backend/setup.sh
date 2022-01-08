@@ -1,4 +1,20 @@
 sudo apt update
+
+sudo apt install hostapd dnsmasq iptables -y
+sudo cp AP/hostapd.conf /etc/hostapd/
+sudo cp AP/hostapd /etc/default/
+sudo cp AP/dnsmasq.conf /etc/
+sudo cp AP/sysctl.conf /etc/
+sudo cp AP/dhcpcd.conf /etc/
+
+sudo sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
+sudo iptables -t nat -A POSTROUTING -o wlan1 -j MASQUERADE
+sudo iptables -A FORWARD -i wlan1 -o wlan0 -m state --state RELATED,ESTABLISHED -j ACCEPT
+sudo iptables -A FORWARD -i wlan0 -o wlan1 -j ACCEPT
+sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
+sudo mv AP/rc.local /etc/
+chmod +x /etc/rc.local
+
 sudo apt-get install -y build-essential tk-dev libncurses5-dev libnss3-dev libatlas-base-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
 if [-z "$(type -P python3.7)"] 
 then
