@@ -15,8 +15,8 @@ def hello():
 
 @app.route("/wifis")
 def wifis():
+    print(scan.scan_wifi())
     return json.dumps(scan.scan_wifi())
-    # print(scan_wifi())
     # return render_template('wifi.html')
 
 @app.route('/setting_wifi', methods=['PUT'])
@@ -27,7 +27,7 @@ def setting_wifi():
         response = {'isConnected':isConnected}
     return json.dumps(response)
 
-@app.route('/signin', methods=['POST'])
+@app.route('/user_info', methods=['POST'])
 def signin():
     print('hello')
     if request.method == 'POST':
@@ -37,7 +37,7 @@ def signin():
         response = {'Success': False}
     return json.dumps(response)
 
-@app.route('/setting', methods=['POST'])
+@app.route('/speaker_info', methods=['POST'])
 def setting():
     setup.setup(request.data)
     response = {'Success': True}

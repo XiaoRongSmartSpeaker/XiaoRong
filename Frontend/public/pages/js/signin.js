@@ -16,11 +16,7 @@ window.onload = function(){
 }
 function post_id(google_id)
 {
-<<<<<<< HEAD
-  fetch('http://localhost:5000/signin', {
-=======
-  fetch('http://localhost:3000/user_info', {
->>>>>>> origin/jhsu12
+  fetch('http://localhost:5000/user_info', {
     method: 'POST',
     body: JSON.stringify({
       user_id: google_id,
@@ -69,11 +65,6 @@ function attachSignin(element) {
       });
 }
 
-<<<<<<< HEAD
-// startApp();
-post_id('username')
-window.location.href = "setting.html";
-=======
 
 function get_lan()
 {
@@ -99,4 +90,3 @@ function get_lan()
 
 
 startApp();
->>>>>>> origin/jhsu12

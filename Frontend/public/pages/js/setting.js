@@ -60,11 +60,7 @@ function get_lan()
 //get_lan();
 function post_info(location, language, time, speaker_name)
 {
-<<<<<<< HEAD
-  fetch('http://localhost:5000/setting', {
-=======
-  fetch('http://localhost:3000/speaker_info', {
->>>>>>> origin/jhsu12
+  fetch('http://localhost:5000/speaker_info', {
     method: 'POST',
     body: JSON.stringify({
       location: location,

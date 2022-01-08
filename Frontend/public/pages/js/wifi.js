@@ -131,7 +131,7 @@ function fetch_show_wifi()
     .then(response => response.json())
     .then(networks => {
         
-        //console.log(networks);
+        console.log(networks);
         //console.log(networks.length);
         // Get numbers of wifis
         var total_networks = networks.length;
