@@ -1,5 +1,32 @@
 var wifi_name;
-let lan = 'ch';
+var lan = 'ch';
+var language = {
+    "en":{
+        'modal_wifi_name': 'Enter Password',
+        'error_mes': 'Incorrect Password',
+        'modal-title': 'Password',
+        'cancel_button': 'Cancel',
+        'connect_button': 'Connect',
+        'ok_button': 'Ok',
+        'header': 'Connect to Wi-Fi',
+        'sub_header': 'Choose the Wi-Fi network you\'d like to use with your XiaoRong',
+        'network': 'Networks'
+    },
+    "ch":{
+        'modal_wifi_name': '輸入密碼',
+        'error_mes': '密碼錯誤',
+        'modal-title': '密碼',
+        'cancel_button': '取消',
+        'connect_button': '連線',
+        'ok_button': '好',
+        'header': '連接網路',
+        'sub_header': '輸入密碼以連接 Wi-Fi',
+        'network': '可用的網路'
+    },
+}
+window.onload = function(){
+    get_lan();
+}
 
 function Show_spinner()
 {
@@ -14,6 +41,7 @@ function Show_spinner()
     
    //loading_spinner.hidden = false;
 }
+
 function Hide_spinner()
 {
     
@@ -27,6 +55,7 @@ function Hide_spinner()
     //loading_spinner.hidden = true;
 }
 
+//After the user clicks the wifi, input password's modal pops up
 function wifis_onclick()
 {
     var wifis = document.querySelectorAll('#wifi');
@@ -92,6 +121,7 @@ function wifis_onclick()
     });
 }
 
+//fetch wifi info and show image and wifi info
 function fetch_show_wifi()
 {
     Show_spinner();
@@ -114,8 +144,10 @@ function fetch_show_wifi()
             wifi_encry = networks[i].Encryption_key
             //console.log(wifi_signal, wifi_encry);
 
+            //wifi encryption == 'on
             if(wifi_encry == 'on')
             {
+                // different wifi_signals has different images
                 if(wifi_signal >= 75)
                 {
                     
@@ -246,7 +278,7 @@ function fetch_show_wifi()
             }
 
             
-            
+            // add to wifi lists
             wifi_lists.innerHTML += wifi;
         }
         Hide_spinner();
@@ -262,6 +294,7 @@ function fetch_show_wifi()
 
 }
 
+//post wifi info to api, wifi with password or without password depends on wifi encryption
 function input_password(wifi_name, pw, wifi_encry)
 {
     
@@ -335,7 +368,7 @@ function input_password(wifi_name, pw, wifi_encry)
 
 }
 
-
+// Get language and set language
 function get_lan()
 {
     const params = new URLSearchParams(window.location.search);
@@ -345,53 +378,23 @@ function get_lan()
     {
         lan = params.get('lan');
     }
-    
-
-    if(lan == 'en')
-    {
-        trans = {
-            'modal_wifi_name': 'Enter Password',
-            'error_mes': 'Incorrect Password',
-            'modal-title': 'Password',
-            'cancel_button': 'Cancel',
-            'connect_button': 'Connect',
-            'ok_button': 'Ok',
-            'header': 'Connect to Wi-Fi',
-            'sub_header': 'Choose the Wi-Fi network you\'d like to use with your XiaoRong',
-            'network': 'Networks'
-        };
-    }
-    else if(lan == 'ch')
-    {
-        trans = {
-            'modal_wifi_name': '輸入密碼',
-            'error_mes': '密碼錯誤',
-            'modal-title': '密碼',
-            'cancel_button': '取消',
-            'connect_button': '連線',
-            'ok_button': '好',
-            'header': '連接網路',
-            'sub_header': '輸入密碼以連接 Wi-Fi',
-            'network': '可用的網路'
-        };
-    }
-    
-
+    trans = language[lan];
+   
     // Set language
-    for(var key in trans)
+    for(let key in trans)
     {
         document.getElementById(key).innerHTML = trans[key];
     }
 
-    //console.log(params.has('lan'));
+    
 
 }
 
-get_lan();
+//get_lan();
 document.addEventListener('DOMContentLoaded', function(){
     fetch_show_wifi();
     
-    // Refresh button onclick (Not showing spinner?)
+    // Refresh button onclick then fetch again
     document.querySelector('#refresh_button').addEventListener('click', () => {
 
         // Clear wifi_lists innerHTMl
@@ -406,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function(){
     });
 })
 
-//Connect button onclick
+//Connect button onclick then post wifi info to api
 document.querySelector('#connect_button').addEventListener('click', () => {
                 
     // Get the password

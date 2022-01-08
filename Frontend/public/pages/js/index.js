@@ -1,4 +1,16 @@
-console.log("innn");
+var language = {
+    "en":{
+        'start_button':'Start',
+        'language': '<a href="?lan=ch">中文</a>'
+    },
+    "ch":{
+        'start_button':'開始使用',
+        'language': '<a href="?lan=en">English</a>'
+    },
+}
+window.onload = function(){
+    get_lan();
+}
 let lan = 'ch';
 function get_lan()
 {
@@ -10,24 +22,10 @@ function get_lan()
         lan = params.get('lan');
     }
     
-
-    if(lan == 'en')
-    {
-        trans = {
-            'start_button':'Start',
-            'language': '<a href="?lan=ch">中文</a>'
-        };
-    }
-    else if(lan == 'ch')
-    {
-        trans = {
-            'start_button':'開始使用',
-            'language': '<a href="?lan=en">English</a>'
-        };
-    }
+    trans = language[lan];
 
     // Set language
-    for(var key in trans)
+    for(let key in trans)
     {
         document.getElementById(key).innerHTML = trans[key];
     }
@@ -36,9 +34,9 @@ function get_lan()
 
 }
 
-get_lan();
+
 document.getElementById('start_button').addEventListener('click', () => {
-    console.log(lan);
+   
     
     window.location.href = `wifi.html?lan=${lan}`;
 });
