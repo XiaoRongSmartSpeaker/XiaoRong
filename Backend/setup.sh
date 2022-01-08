@@ -17,6 +17,7 @@ fi
 sudo apt-get install -y python3-gst-1.0
 sudo apt-get install -y alsa-utils
 sudo apt-get install -y ofono
+sudo apt-get install -y vlc
 sudo apt-get install -y flac
 sudo apt-get install -y libasound-dev
 sudo apt-get install -y portaudio19-dev
