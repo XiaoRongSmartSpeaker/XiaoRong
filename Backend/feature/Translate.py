@@ -5,6 +5,7 @@ import os
 from pygame import mixer
 import time
 import librosa
+from TextToSpeech import TextToSpeech
 
 class Translate:
     def translate(fromLanguage='zh-TW', toLanguage='en'):
@@ -23,14 +24,7 @@ class Translate:
                 cmd = r.recognize_google(audio, language='zh-TW')
                 print(sttTXT_org)
                 if '結束翻譯' in cmd:
-                    end_message = gTTS('翻譯已結束', lang='zh-TW')
-                    end_message.save('temp.mp3')
-                    s=librosa.get_duration(filename='./temp.mp3')
-                    mixer.init()
-                    mixer.music.load('./temp.mp3')
-                    mixer.music.play(1)
-                    time.sleep(s)
-                    os.system('rm temp.mp3')
+                    TextToSpeech.text_to_voice('翻譯已結束', 'zh-TW')
                     break
                 
                 sttTXT_tblob = TextBlob(sttTXT_org)
@@ -41,15 +35,7 @@ class Translate:
                     continue
                 print('Translated: ' + blobTranslated.raw)
 
-                tts = gTTS(blobTranslated.raw, lang=toLanguage)
-                tts.save('temp.mp3')
-                
-                s=librosa.get_duration(filename='./temp.mp3')
-                mixer.init()
-                mixer.music.load('./temp.mp3')
-                mixer.music.play(1)
-                time.sleep(s)
-                os.system('rm temp.mp3')
+                TextToSpeech.text_to_voice(blobTranslated.raw,toLanguage)
                 
             except sr.UnknownValueError:
                 mixer.init()
