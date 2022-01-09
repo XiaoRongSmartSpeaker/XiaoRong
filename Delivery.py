@@ -1,20 +1,19 @@
-#import numpy as np
 import wave
-#import sys
 import pyaudio
 import requests
 import time
 import struct
 import math
 
-# server的東東
-ServerPath = "https://09a9-140-122-136-85.ngrok.io/"
+# server的id
 
-# 看server那邊的json檔要放哪裡
+ServerPath = "https://2c9c-140-122-136-85.ngrok.io/"
+
 # 假設搜尋結果長這樣
 searchResultURL = 'https://www.google.com/search?q=%E5%BE%AE%E7%A9%8D%E5%88%86&oq=%E5%BE%AE%E7%A9%8D%E5%88%86&aqs=chrome..69i57j0i131i433i512j0i512l8.1211j0j7&sourceid=chrome&ie=UTF-8'
-userLINEID = 'Uc6e3d440bfe6da66232ce9005b34b375'
 searchKeyWord = '微積分'
+# 從DB拿userLINEID
+userLINEID = 'Uc6e3d440bfe6da66232ce9005b34b375'
 
 
 class Delivery:
@@ -24,21 +23,16 @@ class Delivery:
         # userId如果沒有，就是空字串
         r = requests.post(
             ServerPath+"delivery", data={'data': resultURL + ' ' + keyWord + ' ' + userId})
-    # fin
 
 
-"""
-CHUNK = 512
-FORMAT = pyaudio.paInt16
-CHANNELS = 1
-RATE = 16000
-RECORD_SECONDS = 3
-"""
+# 要測過才能確定INPUT_DEVICE
 INPUT_DEVICE = 9
 WAVE_OUTPUT_FILENAME = "memorandum.m4a"
-# 计算当前音频声音
+
 swidth = 2
 SHORT_NORMALIZE = (1.0/32768.0)
+
+# 回傳音量
 
 
 def rms(frame):
@@ -60,38 +54,26 @@ class Memorandum:
         if userId == "":
             return 0
         Time = time.localtime()
-        request_time = str(Time.tm_year) + " 年 " + str(Time.tm_mon) + " 月 " + str(Time.tm_mday) + \
-            " 日 " + str(Time.tm_hour) + " 時 " + str(Time.tm_min) + \
-            " 分 " + str(Time.tm_sec) + " 秒 "
-        #print("reauest_time:", request_time)
-        # print("re:",type(request_time))
-        # print("data:",type(request_data))
-        #print("request_data:", request_data)
+        request_time = "語音備忘錄\n時間: " + str(Time.tm_mon) + "/" + str(Time.tm_mday) + \
+            " " + str(Time.tm_hour) + ":" + str(Time.tm_min)
         """
         把東西給server
         userId如果沒有，就是空字串
         如果file不在當前目錄，就要再改
         """
-        #files = {'upload_file': open('file.txt','rb')}
         files = {WAVE_OUTPUT_FILENAME: (file_name, open(file_name, 'rb'))}
-        #files = {'file':(file_name, open(file_name, 'rb'))}
         values = [('time', request_time),
                   ('name', file_name), ('len', timeLen)]
-        #file = open(file_name, 'rb')
-        # print(file.read())
-        #print("file type: ", type(files['file']))
         r = requests.post(
             ServerPath+"memorandum", data=values, files=files)
-        # print(r.text)
-    # fin
 
     def memorandum(self, file_name):
         CHUNK = 512
         FORMAT = pyaudio.paInt16
         CHANNELS = 2
         RATE = 16000
-        MAX_RECORD_SECONDS = 3
-        TIMEOUT_LENGTH = 2  # 音量小于一定时间后停止录音
+        MAX_RECORD_SECONDS = 300
+        TIMEOUT_LENGTH = 3  # 不說話多久停止錄音
 
         p = pyaudio.PyAudio()
 
@@ -100,14 +82,16 @@ class Memorandum:
                         rate=RATE,
                         input=True,
                         frames_per_buffer=CHUNK)
-
-        print("开始录音...")
+        # 告訴使用者錄音開始
+        # print("开始錄音")
 
         frames = []
+        frames_rms = []
 
-        endTime = time.time() + MAX_RECORD_SECONDS  # 超过此时间自动停止
+        endTime = time.time() + MAX_RECORD_SECONDS
         lastTime = time.time()
         startTime = time.time()
+        max_value = 4
 
         while True:
             if lastTime < endTime:
@@ -115,20 +99,25 @@ class Memorandum:
                 input = stream.read(CHUNK)
                 frames.append(input)
 
-                # 声音大小，小于音量后超过多少秒停止 / 超过多长时间停止
-                rms_val = rms(input)  # 当前音量
-                # print(rms_val)
-                if rms_val > 15:  # 如果说话了（音量大于 1）就更新时间
+                rms_val = rms(input)
+                frames_rms.append(rms_val)
+                if rms_val > max_value:
                     lastTime = time.time()
 
-                if time.time() - lastTime > TIMEOUT_LENGTH:     # 超过一定时间不说话，停止录音
+                if time.time() - lastTime > TIMEOUT_LENGTH:
                     break
 
-            else:   # 超时停止
+            else:
                 break
 
-        print("录音结束")
+        # 告訴使用者錄音結束
+        # print("錄音結束")
         timeLen = time.time() - startTime
+
+        while len(frames_rms) and frames_rms[-1] <= max_value/2:
+            frames.pop()
+            frames_rms.pop()
+            timeLen -= 1/RATE
 
         stream.stop_stream()
         stream.close()
@@ -140,7 +129,8 @@ class Memorandum:
         wf.setframerate(RATE)
         wf.writeframes(b''.join(frames))
         wf.close()
-        print("保存文件成功")
+
+        # print("保存文件成功")
         # 傳給使用者，但我要怎麼拿到userId
         memorandum.deliver_memorandum(file_name, userLINEID, timeLen)
         # return 0
@@ -149,33 +139,24 @@ class Memorandum:
 if __name__ == "__main__":
     delivery = Delivery()
     memorandum = Memorandum()
-    print("start")
+    memorandum.memorandum(WAVE_OUTPUT_FILENAME)
     """
+    print("start")
     p = pyaudio.PyAudio()
     info = p.get_host_api_info_by_index(0)
     numdevices = info.get('deviceCount')
-    for i in range(0, numdevices):
-        if (p.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
-            print("Input Device id ", i, " - ", p.get_device_info_by_host_api_device_index(0, i).get('name'))
-    """
-    """
-    pa = pyaudio.PyAudio()
-    for i in range (0,pa.get_device_count()-1):
-        print("id:" + str(i))
-        print(pa.get_device_info_by_index(i))
-    """
+        for i in range(0, numdevices):
+            if (p.get_device_info_by_host_api_device_index(0, i).get('maxInputChannels')) > 0:
+                print("Input Device id ", i, " - ",
+                    p.get_device_info_by_host_api_device_index(0, i).get('name'))
+        pa = pyaudio.PyAudio()
+        for i in range(0, pa.get_device_count()-1):
+            print("id:" + str(i))
+            print(pa.get_device_info_by_index(i))
 
-    #delivery.deliver_to_cellphone(searchResultURL, searchKeyWord, userLINEID)
-    memorandum.memorandum(WAVE_OUTPUT_FILENAME)
+    # delivery.deliver_to_cellphone(searchResultURL, searchKeyWord, userLINEID)
+    memorandum.deliver_memorandum(WAVE_OUTPUT_FILENAME, userLINEID, 4000)
+    # memorandum.memorandum(WAVE_OUTPUT_FILENAME)
     # app.run()
 # /usr/include/portaudio.h
-"""
-pip install --global-option='build_ext' --global-option='-I/usr/include' --global-option='-L/usr/lib' pyaudio
-
-pyaudio.pa.__file__
-'/home/wago/.local/lib/python3.8/site-packages/_portaudio.cpython-38-x86_64-linux-gnu.so'
-
-sudo find / -name "_portaudio.so"
-
-
 """
