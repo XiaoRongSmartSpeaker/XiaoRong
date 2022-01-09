@@ -40,6 +40,7 @@ class WorldTime():
                     'args': place + '的現在時間是' + tzTime,
                     })
                 return
+        logger.debug('worldTime call QA')
         self.threadHandler.add_thread({
             'class': 'class QuestionAnswering',
             'func': 'class QuestionAnswering',
