@@ -5,9 +5,9 @@ import librosa
 import os
 
 
-class TextToSpeech:
-    def text_to_voice(sentence):
-        tts = gTTS(text=sentence, lang='zh-TW')
+class TextToSpeech():
+    def text_to_voice(sentence,language='zh-TW'):
+        tts = gTTS(text=sentence, lang=language)
         tts.save('temp.mp3')
         s = librosa.get_duration(filename='./temp.mp3')
         # print(s)
