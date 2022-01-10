@@ -5,12 +5,17 @@ import pandas as pd
 import datetime
 import os
 from dotenv import load_dotenv
+import threading
 
 class Weather:
 
     def __init__(self):
         load_dotenv()
         self.__weather_api_key = os.getenv('WEATHER_API_KEY')
+        self.thread = None
+
+    def import_thread(self, thread):
+        self.thread = thread
 
     def weather_forecast(self, time, place):
 
@@ -48,7 +53,15 @@ class Weather:
             timeEnd = data["weatherElement"][10]['time'][0]["endTime"]
             if time < timeStart:
                 message = "時間已過期，無法查詢"
-                return message
+
+                self.thread.add_thread({
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args':(message,),
+                })
+
+                return
+
             elif time < timeEnd:
                 description = data["weatherElement"][10]['time'][0]["elementValue"][0]["value"]
             else:
@@ -61,9 +74,22 @@ class Weather:
                         timeEnd = data["weatherElement"][10]['time'][i]["endTime"]
                         if time > timeEnd:
                             message = "時間超過一週，無法查詢"
-                            return message
 
-            return description
+                            self.thread.add_thread({
+                            'class': 'TextToSpeech',
+                            'func': 'text_to_voice',
+                            'args':(message,),
+                            })
+
+                            return
+
+            self.thread.add_thread({
+            'class': 'TextToSpeech',
+            'func': 'text_to_voice',
+            'args':(description,),
+            })
+
+            return
 
         elif place in listWorld:
             index = listWorld.index(place)
@@ -79,7 +105,15 @@ class Weather:
 
             if time[0] < timeStart[0]:
                 message = "時間已過期，無法查詢"
-                return message
+
+                self.thread.add_thread({
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args':(message,),
+                })
+
+                return
+
             elif time[0] == timeStart[0]:
                 Wx = data["weatherElement"][0]['time'][0]["elementValue"][0]["value"]
                 Tmax = data["weatherElement"][1]['time'][0]["elementValue"]["value"]
@@ -100,9 +134,22 @@ class Weather:
                         timeStart = timeStart.split('T')
                         if time[0] > timeStart[0]:
                             message = "時間超過一週，無法查詢"
-                            return message
 
-            return description
+                            self.thread.add_thread({
+                            'class': 'TextToSpeech',
+                            'func': 'text_to_voice',
+                            'args':(message,),
+                            })
+
+                            return
+
+            self.thread.add_thread({
+            'class': 'TextToSpeech',
+            'func': 'text_to_voice',
+            'args':(description,),
+            })
+
+            return
 
         elif place == '':
             tmp = self.find_place()
@@ -118,7 +165,14 @@ class Weather:
                 timeEnd = data["weatherElement"][10]['time'][0]["endTime"]
                 if time < timeStart:
                     message = "時間已過期，無法查詢"
-                    return message
+                    self.thread.add_thread({
+                    'class': 'TextToSpeech',
+                    'func': 'text_to_voice',
+                    'args':(message,),
+                    })
+
+                    return
+                    
                 elif time < timeEnd:
                     description = data["weatherElement"][10]['time'][0]["elementValue"][0]["value"]
                 else:
@@ -131,16 +185,41 @@ class Weather:
                             timeEnd = data["weatherElement"][10]['time'][i]["endTime"]
                             if time > timeEnd:
                                 message = "時間超過一週，無法查詢"
-                                return message
+                                
+                                self.thread.add_thread({
+                                'class': 'TextToSpeech',
+                                'func': 'text_to_voice',
+                                'args':(message,),
+                                })
 
-                return description
+                                return
+                
+                self.thread.add_thread({
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args':(description,),
+                })
+
+                return
 
             else:
                 message = "查無此地點"
-                print(message)
+                self.thread.add_thread({
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args':(message,),
+                })
+
+                return
         else:
             message = "查無此地點"
-            print(message)
+            self.thread.add_thread({
+            'class': 'TextToSpeech',
+            'func': 'text_to_voice',
+            'args':(message,),
+            })
+
+            return
 
     def find_place(self):
         with urllib.request.urlopen("https://geolocation-db.com/json") as url:
@@ -149,7 +228,7 @@ class Weather:
 
 
 if __name__ == "__main__":
-    time = "2022-01-10 12:00"
+    time = "2022-01-15 12:00"
     place = "臺北市"
     weather = Weather()
     situation = weather.weather_forecast(time, place)
