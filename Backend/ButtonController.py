@@ -37,8 +37,8 @@ class Worker(threading.Thread):
             try:
                 todo = getattr(self.cls, self.func)
                 self.device.when_pressed = todo
-            except:
-                print("Exiting...")
+            except AttributeError:
+                print("Attribute Error... Cannot find function from class")
                 exit()
     
     def listen(self): 
@@ -113,17 +113,12 @@ class ButtonController():
 if __name__=='__main__':
     check = True
     T = Test()
-    BC = ButtonController({14:{'BUTTON':[T,'listen']},15:{'BUTTON':[T,'listen']}})
+    ff = FactoryReset(T)
+    BC = ButtonController({13:{'BUTTON':[ff,'factory_reset']},15:{'BUTTON':[T,'listen']}})
     # BC = ButtonController({27:{'BUTTON':'Worker,listen'},24:{'BUTTON':'Worker,listen'},12:{'LED':'Worker,light'},16:{'LED':'Worker,light'},20:{'LED':'Worker,light'}})
     try:
         print("Starting Threads...")
         BC.start()
-        print(BC._sw_threads)
-        sleep(10)
-        BC.modify_button_function(0,'Test,listen')
-        print(BC._sw_threads)
-        sleep(10)
-        BC.modify_button_function(0,'Worker,listen')
         print(BC._sw_threads)
         BC.wait_until_finish()
     except:
