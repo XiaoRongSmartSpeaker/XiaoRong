@@ -1,3 +1,4 @@
+from logging import FATAL
 import os
 import time
 import sys
@@ -137,16 +138,16 @@ if __name__ == "__main__":
             print('import class instance failed')
 
     # initial speaker feature
-    main.add_thread({
-        'class': 'SpeechToText',
-        'func': 'voice_to_text',
-    })
-    main.open_thread()
-    main.add_thread({
-        'class': 'monitering',
-        'func': 'monitering',
-    })
-    main.open_thread()
+    # main.add_thread({
+    #     'class': 'SpeechToText',
+    #     'func': 'voice_to_text',
+    # })
+    # main.open_thread()
+    # main.add_thread({
+    #     'class': 'monitering',
+    #     'func': 'monitering',
+    # })
+    # main.open_thread()
 
     while True:
         # check every second
@@ -154,9 +155,11 @@ if __name__ == "__main__":
 
         # clear that completed threading
         # because newer threads are at the back of list
+        threading_running = False
         main.threads.reverse()
         for thread in main.threads:
             if not thread.is_alive():
+                threading_running = True
                 # discard the last one thread on a feature instance
                 main.instance_thread_correspond[thread.name].pop()
 
@@ -182,6 +185,12 @@ if __name__ == "__main__":
 
         main.threads.reverse()
 
+        # if there is no thread alive, open voice to text feature
+        if not threading_running:
+            main.instance_thread_correspond["SpeechToText"][-1].resume()
+
         # if there are pending thread data
         if not main.threading_empty():
+            # open feature and pause voice to text
+            main.instance_thread_correspond["SpeechToText"][-1].pause()
             main.open_thread()
