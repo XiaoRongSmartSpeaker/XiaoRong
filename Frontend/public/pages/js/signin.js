@@ -26,7 +26,9 @@ function post_id(google_id)
   .then(response => response.json())
   .then(data => {
     console.log('Success:', data);
-
+    // Redirect to setting.html
+    window.location.href = `setting.html?lan=${lan}`;
+    
   })
   .catch((error) => {
     console.error('Error:', error);
@@ -56,9 +58,7 @@ function attachSignin(element) {
         // POST user's ID to backend 
         post_id(profile.getId());
 
-        // Redirect to setting.html
-          
-        window.location.href = `setting.html?lan=${lan}`;
+        
         
       }, function(error) {
         alert(JSON.stringify(error, undefined, 2));
