@@ -50,9 +50,10 @@ then
     echo "Not a raspberrypi, stop installing seeed-voicecard package & stop installing pip packages."
 else
     python3.7 -m pip install --user -r requirements.txt
-    sudo apt-get update
     git clone https://github.com/respeaker/seeed-voicecard.git
-    sudo ./seeed-voicecard/install.sh
+    cd ./seeed-voicecard
+    sudo ./install.sh
+    cd ..
     sudo rm -r ./seeed-voicecard
     sudo reboot
 fi
