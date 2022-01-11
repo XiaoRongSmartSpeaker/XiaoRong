@@ -1,7 +1,8 @@
 from flask import Flask, request, render_template, redirect
 # from flask.wrappers import Request
-import os
-from ..WiFi import wifi_connect, wifi_scan
+import sys
+sys.path.append("..")
+from WiFi import wifi_connect, wifi_scan
 # import test.scan as scan
 # import test.connect as connect
 import test.signin as sign
