@@ -2,7 +2,7 @@ from flask import Flask, request, render_template, redirect
 # from flask.wrappers import Request
 import sys
 sys.path.append("..")
-from WiFi import wifi_connect, wifi_scan
+from wifi import wifi_connect, wifi_scan
 # import test.scan as scan
 # import test.connect as connect
 import test.signin as sign
@@ -18,7 +18,7 @@ def hello():
 
 @app.route("/wifis")
 def wifis():
-    result = wifi_scan.WiFi.scan()
+    result = wifi_scan.WiFi().scan()
     print(result)
     return result
     # return render_template('wifi.html')

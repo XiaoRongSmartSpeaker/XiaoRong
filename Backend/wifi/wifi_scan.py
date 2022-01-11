@@ -33,3 +33,4 @@ class WiFi:
 
                 result = json.dumps(list_result, indent = 4)
                 return result
+

@@ -140,7 +140,9 @@ function fetch_show_wifi()
         for(let i=0; i<total_networks; i++)
         {
             //wifi signal 
-            wifi_signal = Number(networks[i].Signal_level.split('/')[0]);
+            // wifi_signal = Number(networks[i].Signal_level.split('/')[0]);
+            wifi_signal = networks[i].Signal_level.match(/[-]\d+/g);
+            console.log(wifi_signal)
             wifi_encry = networks[i].Encryption_key
             //console.log(wifi_signal, wifi_encry);
 
@@ -148,7 +150,8 @@ function fetch_show_wifi()
             if(wifi_encry == 'on')
             {
                 // different wifi_signals has different images
-                if(wifi_signal >= 75)
+                // if(wifi_signal >= 75)
+                if(wifi_signal >= -75)
                 {
                     
                     wifi = `<div id="wifi" class="flex items-center">
@@ -163,7 +166,8 @@ function fetch_show_wifi()
                             </div>`;
                 }
                 
-                else if(wifi_signal >= 50)
+                // else if(wifi_signal >= 50)
+                else if(wifi_signal >= -85)
                 {
                     wifi = `<div id="wifi" class="flex items-center">
                                 <div class="p-3">
@@ -178,7 +182,8 @@ function fetch_show_wifi()
                     
 
                 }
-                else if(wifi_signal >= 25)
+                // else if(wifi_signal >= 25)
+                else if(wifi_signal >= -100)
                 {
                     wifi = `<div id="wifi" class="flex items-center">
                                 <div class="p-3">
@@ -209,7 +214,8 @@ function fetch_show_wifi()
             }
             else //wifi_encry == 'off'
             {
-                if(wifi_signal >= 75)
+                // if(wifi_signal >= 75)
+                if(wifi_signal >= -75)
                 {
                     
                     wifi = `<div id="wifi" class="flex items-center">
@@ -225,7 +231,8 @@ function fetch_show_wifi()
                             </div>`;
                 }
                 
-                else if(wifi_signal >= 50)
+                // else if(wifi_signal >= 50)
+                else if(wifi_signal >= -85)
                 {
                     wifi = `<div id="wifi" class="flex items-center">
                                 <div class="p-3">
@@ -243,7 +250,8 @@ function fetch_show_wifi()
                     
 
                 }
-                else if(wifi_signal >= 25)
+                // else if(wifi_signal >= 25)
+                else if(wifi_signal >= -100)
                 {
                     wifi = `<div id="wifi" class="flex items-center">
                                 <div class="p-3">
