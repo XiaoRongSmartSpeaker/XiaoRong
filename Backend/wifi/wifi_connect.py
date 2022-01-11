@@ -18,3 +18,7 @@ def CreateWifiConfig(SSID, password):
 
         print("Wifi config added")
         os.system("wpa_cli -i wlan1 reconfigure")
+
+def WiFiConnect(SSID, password):
+    connect = os.system("sudo iw wlan0 " + SSID + " keys d:0:" + password)
+    return connect

@@ -1,7 +1,9 @@
-from flask import Flask, request, render_template
+from flask import Flask, request, render_template, redirect
 # from flask.wrappers import Request
-import test.scan as scan
-import test.connect as connect
+import os
+from ..WiFi import wifi_connect, wifi_scan
+# import test.scan as scan
+# import test.connect as connect
 import test.signin as sign
 import test.setting as setup
 import json
@@ -11,18 +13,20 @@ frontend_path = "../../Frontend/public/pages"
 app = Flask(__name__, static_url_path='', static_folder=frontend_path ,template_folder=frontend_path)
 @app.route("/")
 def hello():
-    return "Hello, World!"
+    return redirect("index.html")
 
 @app.route("/wifis")
 def wifis():
-    print(scan.scan_wifi())
-    return json.dumps(scan.scan_wifi())
+    result = wifi_scan.WiFi.scan()
+    print(result)
+    return result
     # return render_template('wifi.html')
 
 @app.route('/setting_wifi', methods=['PUT'])
 def setting_wifi():
     if request.method == 'PUT':
-        isConnected = connect.connect_wifi(request.data)
+        wifi = json.loads(request.data)
+        isConnected = wifi_connect.WiFiConnect(wifi["SSID"], wifi["password"])
         # print(json.loads(request.data))
         response = {'isConnected':isConnected}
     return json.dumps(response)

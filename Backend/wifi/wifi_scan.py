@@ -10,7 +10,8 @@ class WiFi:
         def scan(self):
                 list_result = []
 
-                scan = os.popen("sudo iwlist wlan1 scan","r",-1).read()
+                # scan = os.popen("sudo iwlist wlan1 scan","r",-1).read()
+                scan = os.popen("sudo iwlist wlan0 scan","r",-1).read()
 
                 mac = re.findall('Address: ([A-Z0-9]{2}:[A-Z0-9]{2}:[A-Z0-9]{2}:[A-Z0-9]{2}:[A-Z0-9]{2}:[A-Z0-9]{2})\s',scan)
                 ssid = re.findall('ESSID:\"(.*?)\"',scan)
