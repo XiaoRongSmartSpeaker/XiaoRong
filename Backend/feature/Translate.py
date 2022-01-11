@@ -69,4 +69,5 @@ class Translate:
                 print('No voice')
                 continue
 
-Translate.translate() 
+if __name__=="__main__":
+    Translate.translate() 
