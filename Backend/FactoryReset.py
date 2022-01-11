@@ -1,6 +1,6 @@
+from logging import INFO
 import os
 import sys
-import logging
 import requests
 import configparser
 import shutil
@@ -16,8 +16,9 @@ config.read(CONFIG_PATH)
 # set up logger
 try:
     import logger
-    logger = logger.get_logger(__name__)
-except ModuleNotFoundError:
+    logger = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
+except ModuleNotFoundError as e:
+    print(e)
     import logging
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -28,12 +29,13 @@ except ModuleNotFoundError:
     logger.addHandler(ch)
 
 class FactoryReset:
-    def __init__(self, main_instance):
+    def __init__(self):
+        logger.debug("initializing")
         self._default_config_path = DEFAULT_CONFIG_PATH     # get factory default config file path
         self._config_path = CONFIG_PATH                     # get current config file path
         # self._speaker_name = os.getenv('SPEAKER_NAME')    # get speaker_name for server API request
         self._server_url = ''
-        self._main_instance = main_instance
+        # self._main_instance = main_instance
     
     def _call_server_delete_speaker_data(self):
         payloads = {'speaker_name': self._speaker_name}
@@ -116,6 +118,7 @@ class FactoryReset:
             self._main_instance.close()     # main.close()
         else:
             logger.error("Method to close all thread is not correctly implemented")
+        pass
 
     def _restore_config(self):
         if not os.path.exists(self._default_config_path):
@@ -135,13 +138,13 @@ class FactoryReset:
     def factory_reset(self):
         # self._call_server_delete_speaker_data()
         
-        self._terminate_other_process()
+        # self._terminate_other_process()
 
         self._delete_device_user_data();
 
         self._restore_config()
 
-        logger.debug("Rebooting ...")
+        logger.error("Rebooting ...")
         # os.system('reboot')
 
     def factory_reset_notification(self, LEDs = gpiozero.LED):
@@ -156,6 +159,6 @@ class FactoryReset:
 
 # testing only
 if __name__ == "__main__":
-    thread = FactoryReset()
-    thread.factory_reset_notification()
-    thread.factory_reset()
+    ff = FactoryReset()
+    ff.factory_reset_notification()
+    ff.factory_reset()
