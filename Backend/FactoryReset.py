@@ -3,10 +3,14 @@ import sys
 import logging
 import requests
 import configparser
+import shutil
+
+import feature.TextToSpeech
+import gpiozero
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'config.ini')
 DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'default', 'default_config.ini')
-config = configparser.ConfigParser()
+config = configparser.ConfigParser(allow_no_value=True)
 config.read(CONFIG_PATH)
 
 # set up logger
@@ -16,15 +20,12 @@ try:
 except ModuleNotFoundError:
     import logging
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.INFO)
     ch = logging.StreamHandler(sys.stdout)
-    ch.setLevel(logging.DEBUG)
+    ch.setLevel(logging.INFO)
     formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
-    fhandle = logging.FileHandler('../log/smartspeaker.log')
-    fhandle.setFormatter(formatter)
     logger.addHandler(ch)
-    logger.addHandler(fhandle)
 
 class FactoryReset:
     def __init__(self, main_instance):
@@ -47,26 +48,83 @@ class FactoryReset:
             logger.error(errt)
         except requests.exceptions.RequestException as err:
             logger.error(err)
+        else:
+            logger.info("Successfully sent request to delete speaker data")
+            # print response
 
     def _delete_device_user_data(self):
-        file_list = config.get('File Path', 'files_to_delete').split(',\n')
+        # delete specific files
+        if config['File Path']['files_to_delete']:
+            file_list = config.get('File Path', 'files_to_delete').split(',\n')
+        else:
+            file_list = []
+        
         for file in file_list:
             try:
                 os.remove(file)
             except OSError as e:
-                logger.error(e)
+                logger.error('Failed to delete %s. Reason: %s' % (file, e))
             else:
                 logger.info("File successfully deleted: " + file)
 
+        # restore specific files
+        if config['File Path']['files_to_restore']:
+            file_pair_list = config.get('File Path', 'files_to_restore').split(',\n')
+        else:
+            file_pair_list = []
+        
+        for file_pair in file_pair_list:
+            file, default_file = file_pair.split(" ", 1) + ['']
+            try:
+                os.path.exists(file)
+                os.path.exists(default_file)
+                with open(default_file, 'r') as src_file, open(file, 'w') as dst_file:
+                    default_config_content = src_file.read()
+                    dst_file.write(default_config_content)
+            except OSError as e:
+                logger.error('Failed to delete %s. Reason: %s' % (file, e))
+            else:
+                logger.debug("%s restored to default" % (file))
+        
+        # remove content in a folder
+        if config['File Path']['folders_to_clean']:
+            folder_list = config.get('File Path', 'folders_to_clean').split(',\n')
+        else:
+            folder_list = []
+        
+        for folder in folder_list:
+            try:
+                for filename in os.listdir(folder):
+                    file_path = os.path.join(folder, filename)
+                    try:
+                        if os.path.isfile(file_path) or os.path.islink(file_path):
+                            os.unlink(file_path)
+                            logger.debug("Successfully deleted file: " + file_path)
+                        elif os.path.isdir(file_path):
+                            shutil.rmtree(file_path)
+                            logger.debug("Successfully deleted sub-folder: " + file_path)
+                    except Exception as e:
+                        logger.error('Failed to delete: %s. Reason: %s' % (file_path, e))
+            except OSError as e:
+                logger.error('Failed to clean %s. Reason: %s' % (folder, e))
+            else:
+                logger.debug("Successfully cleaned folder %s" % (folder))
+
     def _terminate_other_process(self):
-        self._main_instance.close()     # main.close()
+        if hasattr(self._main_instance, "close") and callable(getattr(self._main_instance, "close")):
+            logger.info("Closing all thread ...")
+            self._main_instance.close()     # main.close()
+        else:
+            logger.error("Method to close all thread is not correctly implemented")
 
     def _restore_config(self):
         if not os.path.exists(self._default_config_path):
             logger.error("Default config file does not exist")
+            return
         
         if not os.path.exists(self._config_path):
             logger.error("Current config file does not exist")
+            return
 
         with open(self._default_config_path, 'r') as src_file, open(self._config_path, 'w') as dst_file:
             default_config_content = src_file.read()
@@ -76,16 +134,28 @@ class FactoryReset:
 
     def factory_reset(self):
         # self._call_server_delete_speaker_data()
-        self._terminate_other_process()
+        
+        #self._terminate_other_process()
 
-        # self._delete_device_user_data();
+        self._delete_device_user_data();
 
-        # self._restore_config()
+        self._restore_config()
 
         logger.debug("Rebooting ...")
         # os.system('reboot')
 
+    def factory_reset_notification(self, LEDs = gpiozero.LED):
+        ttospeech = feature.TextToSpeech.TextToSpeech()
+        ttospeech.text_to_voice("音箱重置即將開始")
+        ttospeech.text_to_voice("繼續按住按鈕十秒以執行重置")
+        
+        if LEDs:
+            for LED in LEDs:
+                LED.value = 1
+
+
 # testing only
 if __name__ == "__main__":
     thread = FactoryReset()
+    thread.factory_reset_notification()
     thread.factory_reset()
