@@ -17,9 +17,9 @@ class WiFi:
                 ssid = re.findall('ESSID:\"(.*?)\"',scan)
                 freq = re.findall('Frequency:(.*?)\n',scan)
                 Encryption = re.findall('key:(.*?)\s',scan)
-                Security = re.findall('',scan)
-                Quality = re.findall('Quality=(\d{1,3}/100)',scan)
-                Signal = re.findall('Signal level=(\d{1,3}/100)',scan)
+                #Security = re.findall('',scan)
+                Quality = re.findall('Quality=(.*?)\s',scan)
+                Signal = re.findall('Signal level=(.*?)\n',scan)
 
                 for i in range(0,len(mac)):
                         dict_result = {}
