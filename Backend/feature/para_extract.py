@@ -352,8 +352,8 @@ def target_language(inputSTR):
         toLanguage = inputSTR[inputSTR.index('翻') + 1:]
         toLanguage.lstrip()
         if(len(fromLanguage) == 0 or len(toLanguage) == 0 or (fromLanguage not in language_dict) or (toLanguage not in language_dict)):
-            return [None, None]
+            return []
         else:
             return (language_dict[fromLanguage], language_dict[toLanguage])
     else:
-        return [None, None]
+        return []
