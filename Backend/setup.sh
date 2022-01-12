@@ -5,6 +5,8 @@ cd ..
 
 sudo apt update
 
+sudo timedatectl set-timezone Asia/Taipei
+
 sudo apt install hostapd dnsmasq iptables -y
 sudo cp AP/hostapd.conf /etc/hostapd/
 sudo cp AP/hostapd /etc/default/
@@ -21,7 +23,7 @@ sudo mv AP/rc.local /etc/
 chmod +x /etc/rc.local
 
 sudo apt-get install -y build-essential tk-dev libncurses5-dev libnss3-dev libatlas-base-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev libffi6-dev
-if [-z "$(type -P python3.7)"] 
+if [ -z "$(type -P python3.7)" ] 
 then
     curl -O https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
     tar -xf Python-3.7.3.tar.xz
