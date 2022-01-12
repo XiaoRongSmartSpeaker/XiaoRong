@@ -70,6 +70,7 @@ stop_run_continuously = run_continuously()
 # for production, uncomment this line
 # schedule.every().hour.do(clear_log)
 
+# for test only
 schedule.every(30).seconds.do(clear_log)
 
 # for test only
