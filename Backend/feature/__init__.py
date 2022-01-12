@@ -8,3 +8,4 @@ from .Extract import Extract
 from .Bluetooth import Bluetooth
 from .Volume import Volume
 from .Translate import Translate
+from .ButtonController import ButtonController
