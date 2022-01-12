@@ -47,7 +47,7 @@ class SpeechToText:
                     continue
                 else:
                     self.thread.add_thread({
-                        "name": "Extract",
+                        "class": "Extract",
                         "func": "main",
                         "args": (zh_text,)
                     })
