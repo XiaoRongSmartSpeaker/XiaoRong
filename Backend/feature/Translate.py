@@ -1,3 +1,4 @@
+from typing import Text
 import speech_recognition as sr
 from textblob import TextBlob
 from gtts import gTTS
@@ -8,7 +9,10 @@ import librosa
 from TextToSpeech import TextToSpeech
 
 class Translate:
-    def translate(fromLanguage='zh-TW', toLanguage='en'):
+    def __init__(self):
+        pass
+
+    def translate(self, fromLanguage='zh-TW', toLanguage='en'):
         while True:
             try:
                 r = sr.Recognizer()
@@ -35,7 +39,7 @@ class Translate:
                     print('not translated')
                     continue
                 print('Translated: ' + blobTranslated.raw)
-                TextToSpeech.text_to_voice(blobTranslated.raw,toLanguage)
+                TextToSpeech.text_to_voice(blobTranslated.raw, toLanguage)
                 
             except sr.UnknownValueError:
                 mixer.init()
