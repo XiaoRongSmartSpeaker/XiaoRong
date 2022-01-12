@@ -77,7 +77,7 @@ class Volume:
             value = 5
         if 10 <= value <= 100:
             self.systemVolume = value
-            self.set_amixer()
+            self.set_amixer('system')
         return True
 
     def louder_system_volume(self, value=5):
