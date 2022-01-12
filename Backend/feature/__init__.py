@@ -10,3 +10,4 @@ from .Volume import Volume
 from .Translate import Translate
 from .MusicStreaming import MusicStreaming
 from .QuestionAnswering import QuestionAnswering
+from .Weather import Weather
