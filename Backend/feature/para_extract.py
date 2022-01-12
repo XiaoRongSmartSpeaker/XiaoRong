@@ -37,7 +37,7 @@ def _trans(s):
 
 
 def isPhoneNumber(str):
-    return re.match(r'\d(-\d)*', str)
+    return re.match(r'(\+|加)?\d(-\d)*', str)
 
 
 # ================================================================================================================
@@ -50,6 +50,7 @@ def target_call(input_str):
         return [0, None]
     else:
         if(isPhoneNumber(input_str)):
+            input_str = input_str.replace("加", "+")
             return [0, input_str]
         else:
             return [1, pinyin(input_str, heteronym=True)]
