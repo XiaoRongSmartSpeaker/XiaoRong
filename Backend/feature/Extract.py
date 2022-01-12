@@ -177,6 +177,7 @@ class Extract:
 
     def main(self, input_str):
         print(input_str)
+        input_str = input_str.replace('台', '臺')
         which = self.text2func(input_str)
         ret = self.para_extract(input_str, which)
         # open thread and call the function
