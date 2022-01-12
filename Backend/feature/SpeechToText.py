@@ -56,13 +56,11 @@ class SpeechToText:
                     cmd = False
 
             except sr.RequestError:
-                if cmd:
-                    mixer.init()
-                    mixer.music.load(f'{os.path.dirname(__file__)}/Audio/noInternet.mp3')
-                    mixer.music.play()
-                    time.sleep(2)
-                else:
-                    print('no Internet')
+                mixer.init()
+                mixer.music.load(f'{os.path.dirname(__file__)}/Audio/noInternet.mp3')
+                mixer.music.play()
+                time.sleep(2)
+                print('no Internet')
             except sr.UnknownValueError:
                 if cmd:
                     mixer.init()
