@@ -160,8 +160,9 @@ if __name__ == "__main__":
         for thread in main.threads:
             if not thread.is_alive():
                 threading_running = True
-                # discard the last one thread on a feature instance
-                main.instance_thread_correspond[thread.name].pop()
+                if len(main.instance_thread_correspond[thread.name]) != 0:
+                    # discard the last one thread on a feature instance
+                    main.instance_thread_correspond[thread.name].pop()
 
                 # get the previous one thread on a feature instance
                 try:
