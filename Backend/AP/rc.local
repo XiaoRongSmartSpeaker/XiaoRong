@@ -11,6 +11,8 @@
 #
 # By default this script does nothing.
 
+WORK_DIR=/home/pi/XiaoRong
+
 # Print the IP address
 _IP=$(hostname -I) || true
 if [ "$_IP" ]; then
@@ -19,4 +21,6 @@ fi
 
 sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
 iptables-restore < /etc/iptables.ipv4.nat
+sudo ntpdate time.stdtime.gov.tw
+python3.7 $WORK_DIR/Backend/main.py
 exit 0
