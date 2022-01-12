@@ -87,13 +87,13 @@ def zh2cnnum(input_str):
     return input_str
 
 
-def target_time(input_str, mode):  # return the target time and the place to look later
+def target_time(input_str, mode):  # return the target time and the place to look later mode1 for time interval
     date = re.compile(
         r'((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)月((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(日|號)')
     time = re.compile(
         r'((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|兩|三|四|五|六|七|八|九)?)(\.|點|時)(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?))?')
     later = re.compile(
-        r'((明|後|大後)天)|(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(週|天|個?小時|分鐘)後)|下週(一|二|三|四|五|六|日|天)?')
+        r'((今|明|後|大後)天)|(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(週|天|個?小時|分鐘)後)|下週(一|二|三|四|五|六|日|天)?')
     one_99 = re.compile(r'(\d+)|((二|三|四|五|六|七|八|九)?十?(一|二|兩|三|四|五|六|七|八|九)?)')
     target_obj = None
     # target_str = ''
@@ -117,6 +117,8 @@ def target_time(input_str, mode):  # return the target time and the place to loo
             time_str = shift_time(2, 0, 0)
         elif (target_str == '大後天'):
             time_str = shift_time(3, 0, 0)
+        elif (target_str == '今天'):
+            time_str = shift_time(0, 0, 0)
         input_str = input_str[target_obj.end():]
         if(time.search(input_str)):
             ntarget_obj = time.search(input_str)
@@ -140,7 +142,7 @@ def target_time(input_str, mode):  # return the target time and the place to loo
                 result.append(time_str[0:11] + '00:00')
             else:
                 result.append(time_str[0:11] + '06:00')
-        if(input_str[0] == '到' and time.search(input_str) and mode == 0):
+        if(mode == 0 and input_str[0] == '到' and time.search(input_str)):
             if(time.search(input_str)):
                 ntarget_obj = time.search(input_str)
                 ntarget_str = ntarget_obj.group()
