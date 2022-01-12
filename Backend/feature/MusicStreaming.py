@@ -80,7 +80,7 @@ class MusicStreaming():
             print('Stream is working. Current state = {}'.format(self.player.get_state()))
 
         print('Stream is not working. Current state = {}'.format(self.player.get_state()))
-        self.set_stop()
+        self.stop_music()
 
     def pafy_video(self, videoId):
         url = 'https://www.youtube.com/watch?v={0}'.format(videoId)
