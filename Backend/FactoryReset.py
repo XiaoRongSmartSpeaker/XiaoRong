@@ -1,12 +1,12 @@
 from logging import INFO
 import os
 import sys
+from time import sleep
 import requests
 import configparser
 import shutil
 
-import feature.TextToSpeech
-import gpiozero
+import feature.TextToSpeech as TextToSpeech
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'config.ini')
 DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'default', 'default_config.ini')
@@ -29,18 +29,21 @@ except ModuleNotFoundError as e:
     logger.addHandler(ch)
 
 class FactoryReset:
-    def __init__(self):
+    def __init__(self, main_instance = None):
         logger.debug("initializing")
         self._default_config_path = DEFAULT_CONFIG_PATH     # get factory default config file path
         self._config_path = CONFIG_PATH                     # get current config file path
         # self._speaker_name = os.getenv('SPEAKER_NAME')    # get speaker_name for server API request
-        self._server_url = ''
-        # self._main_instance = main_instance
+        self._server_url = 'https://httpbin.org/delay/10'
+        if main_instance:
+            self._main_instance = main_instance
     
     def _call_server_delete_speaker_data(self):
-        payloads = {'speaker_name': self._speaker_name}
+        # payloads = {'speaker_name': self._speaker_name}
+        my_headers = {'user-agent': 'smartspeaker'}
         try:
-            response = requests.get(self._server_url, params=payloads, timeout=10)
+            # response = requests.get(self._server_url, params=payloads, timeout=10)
+            response = requests.get(self._server_url, headers=my_headers, timeout=10)
             response.raise_for_status()
         except requests.exceptions.HTTPError as errh:
             logger.error(errh)
@@ -48,11 +51,16 @@ class FactoryReset:
             logger.error(errc)
         except requests.exceptions.Timeout as errt:
             logger.error(errt)
+            config.set("Status", "serverPairRemoveCompleted", "False")
         except requests.exceptions.RequestException as err:
             logger.error(err)
         else:
             logger.info("Successfully sent request to delete speaker data")
+            print(response.text)
             # print response
+        
+        with open(CONFIG_PATH, 'w') as configfile:
+            config.write(configfile)
 
     def _delete_device_user_data(self):
         # delete specific files
@@ -136,29 +144,26 @@ class FactoryReset:
         logger.debug("Config file restored to factory default")
 
     def factory_reset(self):
-        # self._call_server_delete_speaker_data()
-        
-        # self._terminate_other_process()
+        self._delete_device_user_data()
 
-        self._delete_device_user_data();
+        self._call_server_delete_speaker_data()
 
         self._restore_config()
 
-        logger.error("Rebooting ...")
+        # self._terminate_other_process()
+
+        for i in range(3):
+            logger.info("Rebooting in " + str(3 - i))
+            sleep(1)
+
         # os.system('reboot')
 
-    def factory_reset_notification(self, LEDs = gpiozero.LED):
-        ttospeech = feature.TextToSpeech.TextToSpeech()
-        ttospeech.text_to_voice("音箱重置即將開始")
-        ttospeech.text_to_voice("繼續按住按鈕十秒以執行重置")
-        
-        if LEDs:
-            for LED in LEDs:
-                LED.value = 1
-
+    def factory_reset_notification(self):
+        TextToSpeech.text_to_voice("音箱重置即將開始")
+        TextToSpeech.text_to_voice("繼續按住按鈕十秒以執行重置")
 
 # testing only
 if __name__ == "__main__":
     ff = FactoryReset()
-    ff.factory_reset_notification()
+    # ff.factory_reset_notification()
     ff.factory_reset()

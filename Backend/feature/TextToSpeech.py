@@ -7,10 +7,10 @@ import os
 
 class TextToSpeech:
     def text_to_voice(sentence):
-        tts = gTTS(text=sentence, lang='zh-TW')
+        tts = gTTS(text=sentence, lang='zh-TW', tld="com")
         tts.save('temp.mp3')
         s = librosa.get_duration(filename='./temp.mp3')
-        # print(s)
+        print(s)
         mixer.init()
         mixer.music.load('./temp.mp3')
         mixer.music.play(1)
