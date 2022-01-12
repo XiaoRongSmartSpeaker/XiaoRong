@@ -66,7 +66,7 @@ class Extract:
             target = input_str[location + len(func_key[2]):]
             target = target.lstrip()
         else:
-            return{"name": 'question', "func": 'question_answering', "args": tuple(para)}
+            return{"class": 'question', "func": 'question_answering', "args": tuple(para)}
         # ==================================================CALL=======================================V
         if(function_name == 'make_call'):
             para = para_extract.target_call(target)
@@ -167,8 +167,8 @@ class Extract:
             para = ()
         else:
             para = [input_str]
-            return{"name": 'question', "func": 'question_answering', "args": tuple(para)}
-        return{"name": class_name, "func": function_name, "args": tuple(para)}
+            return{"class": 'question', "func": 'question_answering', "args": tuple(para)}
+        return{"class": class_name, "func": function_name, "args": tuple(para)}
 
     def import_thread(self, thread):  # function to implement threading
         self.thread = thread

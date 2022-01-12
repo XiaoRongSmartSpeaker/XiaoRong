@@ -1,11 +1,12 @@
-import os
-import queue
-from FactoryReset import FactoryReset
+import time
+import sys
+import inspect
+from queue import Queue
 
 from Threading import Job
-from importlib import import_module
 from logger import logger
 
+import FactoryReset as FactoryReset
 import LogManager
 
 # log setting
@@ -26,6 +27,9 @@ class Main():
         ]
 
     def add_thread(self, func_info) -> None:
+        if not isinstance(func_info['args'], tuple):
+            func_info['args'] = (func_info['args'],)
+        
         self.__pending_threads.put(func_info)
 
     def open_thread(self) -> None:
@@ -154,10 +158,43 @@ if __name__ == "__main__":
 
     while True:
         # clear that completed threading
+        # because newer threads are at the back of list
+        threading_running = False
+        main.threads.reverse()
         for thread in main.threads:
             if not thread.is_alive():
-                del thread
+                threading_running = True
+                # discard the last one thread on a feature instance
+                main.instance_thread_correspond[thread.name].pop()
+
+                # get the previous one thread on a feature instance
+                try:
+                    last_thread = main.instance_thread_correspond[thread.name][-1]
+                except BaseException:
+                    last_thread = None
+
+                # search instance and update thread pointer
+                for dec_class in main.declare_class:
+                    if dec_class['name'] == thread.name:
+                        if getattr(
+                            dec_class['name'],
+                            'import_thread',
+                                None) is not None:
+                            dec_class['name'].import_thread(last_thread)
+                        break
+
+                # delete thread
+                print('delete thread', thread)
+                main.threads.remove(thread)
+
+        main.threads.reverse()
+
+        # if there is no thread alive, open voice to text feature
+        if not threading_running:
+            main.instance_thread_correspond["SpeechToText"][-1].resume()
 
         # if there are pending thread data
         if not main.threading_empty():
+            # open feature and pause voice to text
+            main.instance_thread_correspond["SpeechToText"][-1].pause()
             main.open_thread()
