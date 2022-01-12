@@ -47,17 +47,23 @@ class Volume:
             return self.get_music_volume()
         return self.get_system_volume()
 
-    def set_volume(self, value):
+    def set_volume(self, value=5):
+        if value == None:
+            value = 5
         if playing:
             return self.set_music_volume(value)
         return self.set_system_volume(value)
 
-    def louder_volume(self, value):
+    def louder_volume(self, value=5):
+        if value == None:
+            value = 5
         if playing:
             return self.louder_music_volume(value)
         return self.louder_system_volume(value)
 
-    def quieter_volume(self, value):
+    def quieter_volume(self, value=5):
+        if value == None:
+            value = 5
         if playing:
             return self.quieter_music_volume(value)
         return self.quieter_system_volume(value)
@@ -67,17 +73,23 @@ class Volume:
         return self.systemVolume
 
     def set_system_volume(self, value=5):
+        if value == None:
+            value = 5
         if 10 <= value <= 100:
             self.systemVolume = value
             self.set_amixer()
         return True
 
     def louder_system_volume(self, value=5):
+        if value == None:
+            value = 5
         if 10 <= self.systemVolume + value <= 100:
             self.systemVolume += value
             self.set_amixer()
 
     def quieter_system_volume(self, value=5):
+        if value == None:
+            value = 5
         if 10 <= self.systemVolume - value <= 100:
             self.systemVolume -= value
             self.set_amixer()
@@ -87,44 +99,51 @@ class Volume:
         return self.musicVolume
 
     def set_music_volume(self, value=5):
+        if value == None:
+            value = 5
         if 0 <= value <= 100:
             self.musicVolume = value
             self.set_amixer()
         return True
 
     def louder_music_volume(self, value=5):
+        if value == None:
+            value = 5
         if 0 <= self.musicVolume + value <= 100:
             self.musicVolume += value
             self.set_amixer()
 
     def quieter_music_volume(self, value=5):
+        if value == None:
+            value = 5
         if 0 <= self.musicVolume - value <= 100:
             self.musicVolume -= value
             self.set_amixer()
 
 
-if __name__ == '__main__':
-    def get_all_volume():
-        print("System:", a.get_system_volume())
-        print("Music:", a.get_music_volume())
-    a = Volume()
-    a.set_music_volume(50)
-    get_all_volume()
-    time.sleep(10)
-    a.louder_music_volume()
-    get_all_volume()
-    time.sleep(10)
-    a.quieter_music_volume()
-    get_all_volume()
-    time.sleep(10)
-    a.louder_music_volume(10)
-    get_all_volume()
-    time.sleep(10)
-    a.louder_music_volume(30)
-    get_all_volume()
-    time.sleep(10)
-    a.quieter_music_volume(30)
-    get_all_volume()
-    time.sleep(10)
-    a.quieter_music_volume(10)
-    get_all_volume()
+#if __name__ == '__main__':
+#    def get_all_volume():
+#        print("System:", a.get_system_volume())
+#        print("Music:", a.get_music_volume())
+#    a = Volume()
+#    a.set_music_volume(50)
+#    get_all_volume()
+#    time.sleep(10)
+#    a.louder_music_volume()
+#    get_all_volume()
+#    time.sleep(10)
+#    a.quieter_music_volume()
+#    get_all_volume()
+#    time.sleep(10)
+#    a.louder_music_volume(10)
+#    get_all_volume()
+#    time.sleep(10)
+#    a.louder_music_volume(30)
+#    get_all_volume()
+#    time.sleep(10)
+#    a.quieter_music_volume(30)
+#    get_all_volume()
+#    time.sleep(10)
+#    a.quieter_music_volume(10)
+#    get_all_volume()
+
