@@ -6,9 +6,6 @@ from queue import Queue
 from Threading import Job
 from logger import logger
 
-import FactoryReset as FactoryReset
-import LogManager
-
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
 
@@ -18,10 +15,11 @@ feature_path = './feature'
 class Main():
     def __init__(self) -> None:
         self.threads = []                           # current running thread
-        self.__data_que = queue.Queue()             # pending data
-        self.feature_list = []                      # imported class
-        self.__declare_class = []                   # declared class
-        self.__pending_threads = queue.Queue()      # pending thread info
+        self.__data_que = Queue()                   # pending data
+        self.feature_list = []                      # imported classes
+        self.declare_class = []                     # declared classes
+        self.instance_thread_correspond = {}        # instance corresponding thread
+        self.__pending_threads = Queue()            # pending thread info
         self.__DAEMON_THREAD = [                    # define daemon work
             'voice_to_text'
         ]
@@ -35,7 +33,7 @@ class Main():
     def open_thread(self) -> None:
         func_info = self.__pending_threads.get()
 
-        for dec_class in self.__declare_class:
+        for dec_class in self.declare_class:
             if dec_class['name'] == func_info['class']:
                 try:
                     func = getattr(dec_class['instance'], func_info['func'])
@@ -48,6 +46,16 @@ class Main():
                     else:
                         new_job = Job(self, func_info['class'], func, args)
 
+                    if getattr(
+                        dec_class['instance'],
+                        'import_thread',
+                            None) is not None:
+                        dec_class['instance'].import_thread(new_job)
+                        print(
+                            self.instance_thread_correspond[func_info['class']])
+                        self.instance_thread_correspond[func_info['class']].append(
+                            new_job)
+
                     self.threads.append(new_job)
                     self.threads[-1].start()
                     return
@@ -59,7 +67,7 @@ class Main():
             if feature['name'] == func_info['class']:
                 # initial class instance
                 class_entity = feature['class']()
-                self.__declare_class.append({
+                self.declare_class.append({
                     'name': func_info['class'],
                     'instance': class_entity
                 })
@@ -80,11 +88,14 @@ class Main():
                         'import_thread',
                             None) is not None:
                         class_entity.import_thread(new_job)
+                        self.instance_thread_correspond[func_info['class']].append(
+                            new_job)
 
                     self.threads.append(new_job)
                     self.threads[-1].start()
                     return
-                except BaseException:
+                except BaseException as e:
+                    print(e)
                     print('Could not find method', func_info['func'])
                     return
 
@@ -108,55 +119,40 @@ class Main():
 if __name__ == "__main__":
     # defination main process
     main = Main()
-    ff = FactoryReset(main_instance=main)
 
     # import feature class
-    feature_list = os.listdir(feature_path)
-    for file in feature_list:
-        full_filename = os.path.basename(feature_path + '/' + file)
-        filename = os.path.splitext(full_filename)
-
-        # if not a python file skip
-        if filename[1] != '.py':
-            continue
-        else:
-            feature = filename[0]
-
+    import feature
+    featureClasses = inspect.getmembers(
+        sys.modules[feature.__name__], inspect.isclass)
+    for featureClass in featureClasses:
         try:
-            # import feature module
-            module = import_module(
-                feature_path.replace(
-                    './', '') + '.' + feature)
-            try:
-                # from feature module get class object
-                class_entity = getattr(module, feature)
-                feature_obj = {
-                    'class': class_entity,
-                    'name': feature
-                }
-                main.feature_list.append(feature_obj)
-            except BaseException:
-                print('import class instance error')
-                continue
+            feature_obj = {
+                'class': featureClass[1],
+                'name': featureClass[0]
+            }
+            print('import class instance successfully')
+            main.feature_list.append(feature_obj)
+            # initialize instance corresponding thread
+            main.instance_thread_correspond[feature_obj['name']] = []
         except BaseException:
-            print('import module python file error')
-            continue
+            print('import class instance failed')
 
     # initial speaker feature
     main.add_thread({
-        'class': 'voice_to_text',
+        'class': 'SpeechToText',
         'func': 'voice_to_text',
     })
     main.open_thread()
-    # main.add_thread({
-    #     'class': 'monitering',
-    #     'func': 'monitering',
-    # })
-    # main.open_thread()
-
-    ff.factory_reset()
+    main.add_thread({
+        'class': 'monitering',
+        'func': 'monitering',
+    })
+    main.open_thread()
 
     while True:
+        # check every second
+        time.sleep(1)
+
         # clear that completed threading
         # because newer threads are at the back of list
         threading_running = False
