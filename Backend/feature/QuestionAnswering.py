@@ -1,6 +1,21 @@
+import sys
 import requests, urllib
 from requests_html import HTML
 from requests_html  import HTMLSession
+
+try:
+    import logger
+    logger = logger.get_logger(__name__)
+except ModuleNotFoundError:
+    import logging
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
 
 class ConnectoinError():
     pass
@@ -9,6 +24,10 @@ class QuestionAnswering():
     def __init__(self):
         self.query = ""
         self.url = "https://www.google.com/search?q="
+        self.thread = None
+
+    def import_thread(self, thread):
+        self.thread = thread
 
     def get_source(self, url):
         """
@@ -26,6 +45,7 @@ class QuestionAnswering():
 
         except requests.exceptions.RequestException as e:
             raise ConnectoinError
+            logger.error(e)
             return None
 
 
@@ -194,7 +214,13 @@ class QuestionAnswering():
             ans = f"沒有查到「{search.query}」的相關資料"
             return ans
         results =  self.parse_results(response)
-        return self.get_answer(results)
+        ans = self.get_answer(results)
+        self.thread.add_thread({
+        "class": "TextToSpeech",
+        "func": "text_to_voice",
+        "args": [ans],
+        })
+        return ans
 
 if __name__ == '__main__':  
     search = QuestionAnswering()
