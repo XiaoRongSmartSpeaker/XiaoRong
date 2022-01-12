@@ -2,6 +2,7 @@ import pytz
 from datetime import datetime
 import sys
 import json
+import os
 try:
     import logger
     logger = logger.get_logger(__name__)
@@ -25,7 +26,7 @@ class WorldTime():
         return
     def get_time_zone_list(self) -> None:
         if self.tzList == []:
-            with open( 'feature/timeZone.json', encoding="utf-8") as f:
+            with open( f'{os.path.dirname(__file__)}/timeZone.json', encoding="utf-8") as f:
                 jsonContent = f.read()
             jsonContent = json.loads(jsonContent)
             # 取得 json "BODY" 欄位
@@ -37,7 +38,7 @@ class WorldTime():
         for tz in self.tzList:
             if place.casefold() in tz["tzid"].casefold() or  place.casefold() in tz["cityNames"]:
                 tzId = pytz.timezone(tz["tzid"])
-                tzTime = datetime.now(tzId).strftime('%Y:%m:%d %H:%M:%S %Z %z')
+                tzTime = datetime.now(tzId).strftime('%Y年%m月%d日 %H點%M分%S秒 %Z %z')
                 sentence = place + '，現在時間是' + tzTime
                 logger.debug(sentence)
                 self.threadHandler.add_thread({
