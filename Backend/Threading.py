@@ -65,6 +65,9 @@ class Job(Thread):
             True if self.__pause.is_set() else False,
             sep='')
         return True if self.__running.is_set() else False
+        
+    def is_run(self) -> bool:
+        return True if self.__running.is_set() else False
 
     def is_pause(self) -> bool:
         return False if self.__resume.is_set() else True
