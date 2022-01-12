@@ -161,6 +161,10 @@ class Extract:
             para = [target]
         elif(function_name == 'set_timer'):
             para = para_extract.target_countdown(input_str)
+        elif(function_name == 'stop_ringing'):
+            para = ()
+        elif(function_name == 'stop_countdown'):
+            para = ()
         elif(function_name == 'set_alert'):
             para = para_extract.target_alert(target)
         elif(function_name == 'memorandum'):

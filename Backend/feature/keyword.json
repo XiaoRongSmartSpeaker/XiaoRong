@@ -25,6 +25,8 @@
     "set_volume"           :{"class":"Volume"           , "keywords":["音量調成", "音量設成"]},
     "translate"            :{"class":"Translate"        , "keywords":["啟動即時翻譯"]},
     "set_timer"            :{"class":"Countdown"        , "keywords":["計時"]}, 
+    "stop_ringing"         :{"class":"Countdown"        , "keywords":["停止鈴聲"]}, 
+    "stop_countdown"       :{"class":"Countdown"        , "keywords":["取消計時"]}, 
     "get_time_at_place"    :{"class":"WorldTime"        , "keywords":["查詢"]},
     "set_alert"            :{"class":"Alert"            , "keywords":["設定"]},
     "memorandum"           :{"class":"Memorandum"       , "keywords":["我要錄音"]},
