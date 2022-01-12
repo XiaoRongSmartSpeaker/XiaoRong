@@ -1,3 +1,8 @@
+cd ./wifi_driver
+chmod +x install.sh
+sudo ./install.sh
+cd ..
+
 sudo apt update
 
 sudo apt install hostapd dnsmasq iptables -y
