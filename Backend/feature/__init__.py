@@ -11,3 +11,4 @@ from .Translate import Translate
 from .MusicStreaming import MusicStreaming
 from .QuestionAnswering import QuestionAnswering
 from .Weather import Weather
+from .WorldTime import WorldTime
