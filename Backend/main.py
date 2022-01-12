@@ -1,12 +1,9 @@
-from logging import FATAL
-import os
 import time
 import sys
 import inspect
 from queue import Queue
 
 from Threading import Job
-from importlib import import_module
 from logger import logger
 
 # log setting
@@ -141,16 +138,16 @@ if __name__ == "__main__":
             print('import class instance failed')
 
     # initial speaker feature
-    # main.add_thread({
-    #     'class': 'SpeechToText',
-    #     'func': 'voice_to_text',
-    # })
-    # main.open_thread()
-    # main.add_thread({
-    #     'class': 'monitering',
-    #     'func': 'monitering',
-    # })
-    # main.open_thread()
+    main.add_thread({
+        'class': 'SpeechToText',
+        'func': 'voice_to_text',
+    })
+    main.open_thread()
+    main.add_thread({
+        'class': 'monitering',
+        'func': 'monitering',
+    })
+    main.open_thread()
 
     while True:
         # check every second
