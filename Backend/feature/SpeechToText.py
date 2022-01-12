@@ -2,7 +2,7 @@ import speech_recognition as sr
 from pygame import mixer
 import time
 from pypinyin import pinyin, Style
-
+import os
 
 class SpeechToText:
     def __init__(self):
@@ -38,7 +38,7 @@ class SpeechToText:
                 # print(s)
                 if s == 'ㄋㄧˇㄏㄠˇApple':
                     mixer.init()
-                    mixer.music.load('./Audio/what.mp3')
+                    mixer.music.load(f'{os.path.dirname(__file__)}/Audio/what.mp3')
                     mixer.music.play()
                     time.sleep(1)
                     cmd = True
@@ -58,7 +58,7 @@ class SpeechToText:
             except sr.RequestError:
                 if cmd:
                     mixer.init()
-                    mixer.music.load('./Audio/noInternet.mp3')
+                    mixer.music.load(f'{os.path.dirname(__file__)}/Audio/noInternet.mp3')
                     mixer.music.play()
                     time.sleep(2)
                 else:
@@ -66,7 +66,7 @@ class SpeechToText:
             except sr.UnknownValueError:
                 if cmd:
                     mixer.init()
-                    mixer.music.load('./Audio/dontKnow.mp3')
+                    mixer.music.load(f'{os.path.dirname(__file__)}/Audio/dontKnow.mp3')
                     mixer.music.play()
                     time.sleep(3)
                     cnt += 1
@@ -74,7 +74,7 @@ class SpeechToText:
                         cnt = 0
                         cmd = False
                         continue
-                    mixer.music.load('./Audio/again.mp3')
+                    mixer.music.load(f'{os.path.dirname(__file__)}/Audio/again.mp3')
                     mixer.music.play()
                     time.sleep(2)
                 else:

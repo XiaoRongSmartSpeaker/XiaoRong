@@ -24,13 +24,13 @@ class Translate:
                 print(sttTXT_org)
                 if '結束翻譯' in cmd:
                     end_message = gTTS('翻譯已結束', lang='zh-TW')
-                    end_message.save('temp.mp3')
-                    s=librosa.get_duration(filename='./temp.mp3')
+                    end_message.save(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
+                    s=librosa.get_duration(filename=f'{os.path.dirname(__file__)}/Audio/temp.mp3')
                     mixer.init()
-                    mixer.music.load('./temp.mp3')
+                    mixer.music.load(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
                     mixer.music.play(1)
                     time.sleep(s)
-                    os.system('rm temp.mp3')
+                    os.system(f'rm {os.path.dirname(__file__)}/Audio/temp.mp3')
                     break
                 
                 sttTXT_tblob = TextBlob(sttTXT_org)
@@ -42,25 +42,25 @@ class Translate:
                 print('Translated: ' + blobTranslated.raw)
 
                 tts = gTTS(blobTranslated.raw, lang=toLanguage)
-                tts.save('temp.mp3')
+                tts.save(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
                 
-                s=librosa.get_duration(filename='./temp.mp3')
+                s=librosa.get_duration(filename=f'{os.path.dirname(__file__)}/Audio/temp.mp3')
                 mixer.init()
-                mixer.music.load('./temp.mp3')
+                mixer.music.load(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
                 mixer.music.play(1)
                 time.sleep(s)
-                os.system('rm temp.mp3')
+                os.system(f'rm {os.path.dirname(__file__)}/Audio/temp.mp3')
                 
             except sr.UnknownValueError:
                 mixer.init()
-                mixer.music.load('./Audio/dontKnow.mp3')
+                mixer.music.load(f'{os.path.dirname(__file__)}/Audio/dontKnow.mp3')
                 mixer.music.play()
                 time.sleep(3)
                 pass
 
             except sr.RequestError:
                 mixer.init()
-                mixer.music.load('./Audio/noInternet.mp3')
+                mixer.music.load(f'{os.path.dirname(__file__)}/Audio/noInternet.mp3')
                 mixer.music.play()
                 time.sleep(2)
                 break
