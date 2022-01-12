@@ -139,19 +139,19 @@ class Extract:
             para = ()
         elif(function_name == 'louder_system_volume'):
             para = para_extract.target_volume(target)
-        elif(function_name == 'quiter_system_volume'):
+        elif(function_name == 'quieter_system_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'set_system_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'louder_music_volume'):
             para = para_extract.target_volume(target)
-        elif(function_name == 'quiter_music_volume'):
+        elif(function_name == 'quieter_music_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'set_music_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'louder_volume'):
             para = para_extract.target_volume(target)
-        elif(function_name == 'quiter_volume'):
+        elif(function_name == 'quieter_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'set_volume'):
             para = para_extract.target_volume(target)
