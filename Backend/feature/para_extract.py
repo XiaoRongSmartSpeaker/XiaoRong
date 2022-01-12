@@ -330,19 +330,17 @@ def target_volume(input_str):
         target_num *= -1
     return [target_num]
 
-
-def target_place(full_input_str):
-    input_str = full_input_str
+def target_place(input_str):
     place = None
-    place_re = re.compile(r'(查詢(.*)時間|(.*)時區)')
-    place_obj = place_re.match(input_str)
+    place_re = re.compile(r'((.*)時間)|((.*)時區)')
+    place_obj = place_re.search(input_str)
     if(place_obj):
         if('時間' in input_str):
-            place = place_obj.group(2)
+            place = [place_obj.group(2)]
         elif('時區' in input_str):
-            place = place_obj.group(3)
+            place = [place_obj.group(4)]
     else:
-        return '台北'
+        return [input_str]
     return place
 
 

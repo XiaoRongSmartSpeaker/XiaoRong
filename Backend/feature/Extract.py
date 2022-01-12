@@ -53,7 +53,7 @@ class Extract:
                 if(keyword == keyword_str):
                     keyword_str = keyword
                     classname = self.func_dict[func_name]["class"]
-                    return [classname, func_name, keyword]
+                    return [classname, func_name, keyword]     
         return [classname, func_name, 'None']
 
     def para_extract(self, input_str, func_key):
@@ -165,6 +165,8 @@ class Extract:
             para = para_extract.target_alert(target)
         elif(function_name == 'memorandum'):
             para = ()
+        elif(function_name == 'get_time_at_place'):
+            para = para_extract.target_place(target)
         else:
             para = [input_str]
             return{"class": 'QuestionAnswering', "func": 'google_search', "args": tuple(para)}
