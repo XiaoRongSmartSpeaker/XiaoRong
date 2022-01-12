@@ -1,6 +1,7 @@
 import os
 import time
 import sys
+import signal
 import inspect
 from queue import Queue
 
@@ -9,7 +10,7 @@ from importlib import import_module
 from logger import logger
 
 import FactoryReset
-import ButtonController
+
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
 
@@ -111,6 +112,7 @@ class Main():
         self.__data_que.put(data)
 
     def close(self) -> None:
+        print("Receive kill signal")
         for thread in self.threads:
             if not thread.isDaemon():
                 thread.join()
@@ -121,6 +123,9 @@ if __name__ == "__main__":
     main = Main()
     factory_reset = FactoryReset.FactoryReset(main)
     # factory_reset.factory_reset()
+    
+    print("Open signal listener")
+    signal.signal(10, main.close)
 
     # import feature class
     import feature
@@ -138,26 +143,26 @@ if __name__ == "__main__":
             main.instance_thread_correspond[feature_obj['name']] = []
         except BaseException:
             print('import class instance failed')
-
-    BC = ButtonController.ButtonController({14:{'BUTTON':[factory_reset,'factory_reset']},15:{'BUTTON':[factory_reset,'listen']}})
-    try:
-        print("Starting Threads...")
-        BC.start()
-        BC.wait_until_finish()
-    except:
-        print("Shutting down...")
-        BC.kill()
-    # initial speaker feature
+            
     main.add_thread({
         'class': 'SpeechToText',
         'func': 'voice_to_text',
     })
     main.open_thread()
+    
     main.add_thread({
         'class': 'monitering',
         'func': 'monitering',
     })
     main.open_thread()
+    
+    main.add_thread({
+        'class': 'ButtonController',
+        'func': 'start',
+        'args': [{13:{'BUTTON':[factory_reset,'reset',[]]}}],
+    })
+    main.open_thread()
+    
 
     while True:
         # check every second
