@@ -1,9 +1,12 @@
 import os
 import queue
+from FactoryReset import FactoryReset
 
 from Threading import Job
 from importlib import import_module
 from logger import logger
+
+import LogManager
 
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
@@ -101,6 +104,7 @@ class Main():
 if __name__ == "__main__":
     # defination main process
     main = Main()
+    ff = FactoryReset(main_instance=main)
 
     # import feature class
     feature_list = os.listdir(feature_path)
@@ -140,11 +144,13 @@ if __name__ == "__main__":
         'func': 'voice_to_text',
     })
     main.open_thread()
-    main.add_thread({
-        'class': 'monitering',
-        'func': 'monitering',
-    })
-    main.open_thread()
+    # main.add_thread({
+    #     'class': 'monitering',
+    #     'func': 'monitering',
+    # })
+    # main.open_thread()
+
+    ff.factory_reset()
 
     while True:
         # clear that completed threading

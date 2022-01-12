@@ -30,6 +30,7 @@ except ModuleNotFoundError as e:
 
 class FactoryReset:
     def __init__(self, main_instance = None):
+        # self.state = 0
         logger.debug("initializing")
         self._default_config_path = DEFAULT_CONFIG_PATH     # get factory default config file path
         self._config_path = CONFIG_PATH                     # get current config file path

@@ -55,6 +55,7 @@ def run_continuously(interval=1):
                 time.sleep(interval)
 
     continuous_thread = ScheduleThread()
+    continuous_thread.setDaemon(True)
     continuous_thread.start()
     return cease_continuous_run
 
@@ -68,6 +69,8 @@ stop_run_continuously = run_continuously()
 
 # for production, uncomment this line
 # schedule.every().hour.do(clear_log)
+
+schedule.every(30).seconds.do(clear_log)
 
 # for test only
 if __name__ == '__main__':
