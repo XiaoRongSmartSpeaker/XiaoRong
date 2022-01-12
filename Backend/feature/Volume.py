@@ -27,8 +27,8 @@ class Volume:
         return
     # alsa setting
 
-    def set_amixer(self):
-        if playing:
+    def set_amixer(self, mode):
+        if mode == 'music':
             cmd = r"amixer -M set Master {}\%".format(self.musicVolume)
             returned_value = os.system(cmd)
             logger.debug("change musicVolume")
@@ -85,14 +85,14 @@ class Volume:
             value = 5
         if 10 <= self.systemVolume + value <= 100:
             self.systemVolume += value
-            self.set_amixer()
+            self.set_amixer('system')
 
     def quieter_system_volume(self, value=5):
         if value == None:
             value = 5
         if 10 <= self.systemVolume - value <= 100:
             self.systemVolume -= value
-            self.set_amixer()
+            self.set_amixer('system')
     # music
 
     def get_music_volume(self):
@@ -103,7 +103,7 @@ class Volume:
             value = 5
         if 0 <= value <= 100:
             self.musicVolume = value
-            self.set_amixer()
+            self.set_amixer('music')
         return True
 
     def louder_music_volume(self, value=5):
@@ -111,14 +111,14 @@ class Volume:
             value = 5
         if 0 <= self.musicVolume + value <= 100:
             self.musicVolume += value
-            self.set_amixer()
+            self.set_amixer('music')
 
     def quieter_music_volume(self, value=5):
         if value == None:
             value = 5
         if 0 <= self.musicVolume - value <= 100:
             self.musicVolume -= value
-            self.set_amixer()
+            self.set_amixer('music')
 
 
 #if __name__ == '__main__':
