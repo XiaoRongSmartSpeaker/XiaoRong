@@ -15,22 +15,23 @@ class Job(Thread):
         self.name = name
         self.func = func.__name__
         self.args = args
+        self.result = None
 
         # threading control parameter
         self.__main_porc = main
         self.__running = Event()
         self.__unlock = Event()
-        self.__pause = Event()
+        self.__resume = Event()
         self.__running.clear()
         self.__unlock.set()
-        self.__pause.clear()
+        self.__resume.set()
 
         print("Thread '", name, "' setup successfully.", sep='')
 
     def reset(self) -> None:
         self.__running.clear()
         self.__unlock.set()
-        self.__pause.clear()
+        self.__resume.set()
 
     def run(self) -> None:
         if self.__unlock.is_set():
@@ -63,15 +64,19 @@ class Job(Thread):
             " pause is ",
             True if self.__pause.is_set() else False,
             sep='')
-
-    def is_run(self) -> bool:
         return True if self.__running.is_set() else False
 
+    def is_pause(self) -> bool:
+        return False if self.__resume.is_set() else True
+
+    def wait_for_exec(self) -> None:
+        self.__resume.is_set()
+
     def pause(self) -> None:
-        self.__pause.set()
+        self.__resume.clear()
 
     def resume(self) -> None:
-        self.__pause.clear()
+        self.__resume.set()
 
     def lock(self) -> None:
         self.__unlock.clear()
