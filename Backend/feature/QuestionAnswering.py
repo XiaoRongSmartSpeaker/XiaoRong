@@ -3,6 +3,8 @@ import requests, urllib
 from requests_html import HTML
 from requests_html  import HTMLSession
 
+LENGTHLIMIT = 40
+
 try:
     import logger
     logger = logger.get_logger(__name__)
@@ -136,10 +138,10 @@ class QuestionAnswering():
             output[-1]['weather'] += weather[0].find(".VQF4g")[0].text.replace('\n', ' ') + ' '
             output[-1]['weather'] += weather[0].find(".wtsRwe")[0].text.replace('\n', ' ')[:-5]
             for it in weather[0].find('span'):
-                if 'id' in it.attrs and it.attrs['id'] == 'wob_tm':
-                    output[-1]['weather'] += f' {it.text}°C'
                 if 'id' in it.attrs and it.attrs['id'] == 'wob_ttm':
-                    output[-1]['weather'] += f' {it.text}°F'
+                    output[-1]['weather'] = f' {it.text}°F'+output[-1]['weather']
+                if 'id' in it.attrs and it.attrs['id'] == 'wob_tm':
+                    output[-1]['weather'] = f' {it.text}°C'+output[-1]['weather']
         else:
             output.append({'weather':None})
 
@@ -210,15 +212,18 @@ class QuestionAnswering():
         """
         self.query = query
         response = self.get_results()
+        ans = ''
         if response is None:
             ans = f"沒有查到「{search.query}」的相關資料"
-            return ans
-        results =  self.parse_results(response)
-        ans = self.get_answer(results)
+        else:
+            results =  self.parse_results(response)
+            ans = self.get_answer(results)
+            if len(ans) > LENGTHLIMIT:
+                ans = ans[:LENGTHLIMIT] + "......其他查詢結果請點詳細網址連結"
         self.thread.add_thread({
         "class": "TextToSpeech",
         "func": "text_to_voice",
-        "args": [ans],
+        "args": str(ans),
         })
         return ans
 

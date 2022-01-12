@@ -9,3 +9,4 @@ from .Bluetooth import Bluetooth
 from .Volume import Volume
 from .Translate import Translate
 from .MusicStreaming import MusicStreaming
+from .QuestionAnswering import QuestionAnswering

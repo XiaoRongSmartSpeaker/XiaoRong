@@ -66,7 +66,7 @@ class Extract:
             target = input_str[location + len(func_key[2]):]
             target = target.lstrip()
         else:
-            return{"class": 'question', "func": 'question_answering', "args": tuple(para)}
+            return{"class": 'QuestionAnswering', "func": 'google_search', "args": tuple(para)}
         # ==================================================CALL=======================================V
         if(function_name == 'make_call'):
             para = para_extract.target_call(target)
@@ -157,7 +157,7 @@ class Extract:
             para = para_extract.target_volume(target)
         elif(function_name == 'translate'):
             para = para_extract.target_language(target)
-        elif(function_name == 'question_answering'):
+        elif(function_name == 'google_search'):
             para = [target]
         elif(function_name == 'set_timer'):
             para = para_extract.target_countdown(input_str)
@@ -167,7 +167,7 @@ class Extract:
             para = ()
         else:
             para = [input_str]
-            return{"class": 'question', "func": 'question_answering', "args": tuple(para)}
+            return{"class": 'QuestionAnswering', "func": 'google_search', "args": tuple(para)}
         return{"class": class_name, "func": function_name, "args": tuple(para)}
 
     def import_thread(self, thread):  # function to implement threading
