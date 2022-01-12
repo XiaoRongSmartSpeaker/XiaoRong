@@ -5,6 +5,7 @@ from queue import Queue
 
 from Threading import Job
 from logger import logger
+from dotenv import load_dotenv
 
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
@@ -117,6 +118,9 @@ class Main():
 
 
 if __name__ == "__main__":
+    # load env
+    load_dotenv(override=True)
+
     # defination main process
     main = Main()
 
