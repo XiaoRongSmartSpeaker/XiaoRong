@@ -1,10 +1,11 @@
-import os
 import time
+import sys
+import inspect
 from queue import Queue
 
 from Threading import Job
-from importlib import import_module
 from logger import logger
+from dotenv import load_dotenv
 
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
@@ -25,6 +26,9 @@ class Main():
         ]
 
     def add_thread(self, func_info) -> None:
+        if 'args' in func_info and not isinstance(func_info['args'], tuple):
+            func_info['args'] = (func_info['args'],)
+        
         self.__pending_threads.put(func_info)
 
     def open_thread(self) -> None:
@@ -91,7 +95,8 @@ class Main():
                     self.threads.append(new_job)
                     self.threads[-1].start()
                     return
-                except BaseException:
+                except BaseException as e:
+                    print(e)
                     print('Could not find method', func_info['func'])
                     return
 
@@ -113,47 +118,32 @@ class Main():
 
 
 if __name__ == "__main__":
+    # load env
+    load_dotenv(override=True)
+
     # defination main process
     main = Main()
 
     # import feature class
-    feature_list = os.listdir(feature_path)
-    for file in feature_list:
-        full_filename = os.path.basename(feature_path + '/' + file)
-        filename = os.path.splitext(full_filename)
-
-        # if not a python file skip
-        if filename[1] != '.py':
-            continue
-        else:
-            feature = filename[0]
-
+    import feature
+    featureClasses = inspect.getmembers(
+        sys.modules[feature.__name__], inspect.isclass)
+    for featureClass in featureClasses:
         try:
-            # import feature module
-            module = import_module(
-                feature_path.replace(
-                    './', '') + '.' + feature)
-            try:
-                # from feature module get class object
-                class_entity = getattr(module, feature)
-                feature_obj = {
-                    'class': class_entity,
-                    'name': feature
-                }
-                print('import class instance successfully')
-                main.feature_list.append(feature_obj)
-                # initialize instance corresponding thread
-                main.instance_thread_correspond[feature] = []
-            except BaseException:
-                print('import class instance error')
-                continue
+            feature_obj = {
+                'class': featureClass[1],
+                'name': featureClass[0]
+            }
+            print('import class instance successfully')
+            main.feature_list.append(feature_obj)
+            # initialize instance corresponding thread
+            main.instance_thread_correspond[feature_obj['name']] = []
         except BaseException:
-            print('import module python file error')
-            continue
+            print('import class instance failed')
 
     # initial speaker feature
     main.add_thread({
-        'class': 'voice_to_text',
+        'class': 'SpeechToText',
         'func': 'voice_to_text',
     })
     main.open_thread()
@@ -169,11 +159,14 @@ if __name__ == "__main__":
 
         # clear that completed threading
         # because newer threads are at the back of list
+        threading_running = False
         main.threads.reverse()
         for thread in main.threads:
             if not thread.is_alive():
-                # discard the last one thread on a feature instance
-                main.instance_thread_correspond[thread.name].pop()
+                threading_running = True
+                if len(main.instance_thread_correspond[thread.name]) != 0:
+                    # discard the last one thread on a feature instance
+                    main.instance_thread_correspond[thread.name].pop()
 
                 # get the previous one thread on a feature instance
                 try:
@@ -197,6 +190,12 @@ if __name__ == "__main__":
 
         main.threads.reverse()
 
+        # if there is no thread alive, open voice to text feature
+        if not threading_running:
+            main.instance_thread_correspond["SpeechToText"][-1].resume()
+
         # if there are pending thread data
         if not main.threading_empty():
+            # open feature and pause voice to text
+            main.instance_thread_correspond["SpeechToText"][-1].pause()
             main.open_thread()

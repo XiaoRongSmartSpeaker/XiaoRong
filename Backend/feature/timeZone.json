@@ -1,0 +1,3684 @@
+{
+    "timezoneList": [
+     {
+      "tzid": "Africa/Abidjan",
+      "cityNames": [
+       "阿必尚"
+      ]
+     },
+     {
+      "tzid": "Africa/Accra",
+      "cityNames": [
+       "阿克拉"
+      ]
+     },
+     {
+      "tzid": "Africa/Addis_Ababa",
+      "cityNames": [
+       "阿的斯阿貝巴",
+       "阿迪斯阿貝巴",
+       "衣索比亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Algiers",
+      "cityNames": [
+       "阿爾及爾",
+       "阿爾及利亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Asmara",
+      "cityNames": [
+       "阿斯瑪拉",
+       "厄利垂亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Asmera",
+      "cityNames": [
+       "阿斯瑪拉",
+       "厄利垂亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Bamako",
+      "cityNames": [
+       "巴馬科",
+       "馬利"
+      ]
+     },
+     {
+      "tzid": "Africa/Bangui",
+      "cityNames": [
+       "班基",
+       "中非共和國"
+      ]
+     },
+     {
+      "tzid": "Africa/Banjul",
+      "cityNames": [
+       "班竹",
+       "甘必亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Bissau",
+      "cityNames": [
+       "比紹",
+       "幾內亞比索"
+      ]
+     },
+     {
+      "tzid": "Africa/Blantyre",
+      "cityNames": [
+       "布蘭岱",
+       "馬拉威"
+      ]
+     },
+     {
+      "tzid": "Africa/Brazzaville",
+      "cityNames": [
+       "布拉柴維爾",
+       "剛果"
+      ]
+     },
+     {
+      "tzid": "Africa/Bujumbura",
+      "cityNames": [
+       "布瓊布拉",
+       "蒲隆地"
+      ]
+     },
+     {
+      "tzid": "Africa/Cairo",
+      "cityNames": [
+       "開羅",
+       "埃及"
+      ]
+     },
+     {
+      "tzid": "Africa/Casablanca",
+      "cityNames": [
+       "卡薩布蘭卡",
+       "摩洛哥"
+      ]
+     },
+     {
+      "tzid": "Africa/Ceuta",
+      "cityNames": [
+       "休達"
+      ]
+     },
+     {
+      "tzid": "Africa/Conakry",
+      "cityNames": [
+       "柯那基里",
+       "幾內亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Dakar",
+      "cityNames": [
+       "達卡",
+       "塞內加爾"
+      ]
+     },
+     {
+      "tzid": "Africa/Dar_es_Salaam",
+      "cityNames": [
+       "三蘭港",
+       "坦尚尼亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Djibouti",
+      "cityNames": []
+     },
+     {
+      "tzid": "Africa/Douala",
+      "cityNames": [
+       "杜阿拉",
+       "喀麥隆"
+      ]
+     },
+     {
+      "tzid": "Africa/El_Aaiun",
+      "cityNames": [
+       "西撒哈拉"
+      ]
+     },
+     {
+      "tzid": "Africa/Freetown",
+      "cityNames": [
+       "自由城",
+       "獅子山"
+      ]
+     },
+     {
+      "tzid": "Africa/Gaborone",
+      "cityNames": [
+       "嘉柏隆",
+       "波札那"
+      ]
+     },
+     {
+      "tzid": "Africa/Harare",
+      "cityNames": [
+       "哈拉雷",
+       "辛巴威"
+      ]
+     },
+     {
+      "tzid": "Africa/Johannesburg",
+      "cityNames": [
+       "約翰內斯堡",
+       "南非"
+      ]
+     },
+     {
+      "tzid": "Africa/Juba",
+      "cityNames": [
+       "朱巴",
+       "南蘇丹"
+      ]
+     },
+     {
+      "tzid": "Africa/Kampala",
+      "cityNames": [
+       "坎帕拉",
+       "烏干達"
+      ]
+     },
+     {
+      "tzid": "Africa/Khartoum",
+      "cityNames": [
+       "卡土穆",
+       "蘇丹"
+      ]
+     },
+     {
+      "tzid": "Africa/Kigali",
+      "cityNames": [
+       "基加利",
+       "盧安達"
+      ]
+     },
+     {
+      "tzid": "Africa/Kinshasa",
+      "cityNames": [
+       "金沙薩",
+       "剛果民主共和國"
+      ]
+     },
+     {
+      "tzid": "Africa/Lagos",
+      "cityNames": [
+       "拉各斯",
+       "奈及利亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Libreville",
+      "cityNames": [
+       "自由市",
+       "加彭"
+      ]
+     },
+     {
+      "tzid": "Africa/Lome",
+      "cityNames": [
+       "洛梅",
+       "多哥"
+      ]
+     },
+     {
+      "tzid": "Africa/Luanda",
+      "cityNames": [
+       "盧安達",
+       "安哥拉"
+      ]
+     },
+     {
+      "tzid": "Africa/Lubumbashi",
+      "cityNames": [
+       "盧邦巴希",
+       "剛果民主共和國",
+       "剛果"
+      ]
+     },
+     {
+      "tzid": "Africa/Lusaka",
+      "cityNames": [
+       "路沙卡",
+       "尚比亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Malabo",
+      "cityNames": [
+       "馬拉波",
+       "赤道幾內亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Maputo",
+      "cityNames": [
+       "馬布多",
+       "莫三比克"
+      ]
+     },
+     {
+      "tzid": "Africa/Maseru",
+      "cityNames": [
+       "馬塞魯",
+       "賴索托"
+      ]
+     },
+     {
+      "tzid": "Africa/Mbabane",
+      "cityNames": [
+       "姆巴巴納",
+       "史瓦帝尼王國"
+      ]
+     },
+     {
+      "tzid": "Africa/Mogadishu",
+      "cityNames": [
+       "摩加迪休",
+       "索馬利亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Monrovia",
+      "cityNames": [
+       "蒙羅維亞",
+       "賴比瑞亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Nairobi",
+      "cityNames": [
+       "奈羅比",
+       "肯亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Ndjamena",
+      "cityNames": [
+       "恩賈梅納",
+       "查德"
+      ]
+     },
+     {
+      "tzid": "Africa/Niamey",
+      "cityNames": [
+       "尼阿美",
+       "尼日"
+      ]
+     },
+     {
+      "tzid": "Africa/Nouakchott",
+      "cityNames": [
+       "諾克少",
+       "茅利塔尼亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Ouagadougou",
+      "cityNames": [
+       "瓦加杜古",
+       "布吉納法索"
+      ]
+     },
+     {
+      "tzid": "Africa/Porto-Novo",
+      "cityNames": [
+       "波多諾伏",
+       "貝南"
+      ]
+     },
+     {
+      "tzid": "Africa/Sao_Tome",
+      "cityNames": [
+       "聖多美普林西比"
+      ]
+     },
+     {
+      "tzid": "Africa/Timbuktu",
+      "cityNames": [
+       "廷巴克圖",
+       "馬利"
+      ]
+     },
+     {
+      "tzid": "Africa/Tripoli",
+      "cityNames": [
+       "的黎波里",
+       "利比亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Tunis",
+      "cityNames": [
+       "突尼斯",
+       "突尼西亞"
+      ]
+     },
+     {
+      "tzid": "Africa/Windhoek",
+      "cityNames": [
+       "文豪克",
+       "納米比亞"
+      ]
+     },
+     {
+      "tzid": "America/Adak",
+      "cityNames": [
+       "埃達克",
+       "阿拉斯加"
+      ]
+     },
+     {
+      "tzid": "America/Anchorage",
+      "cityNames": [
+       "安克雷奇",
+       "阿拉斯加"
+      ]
+     },
+     {
+      "tzid": "America/Anguilla",
+      "cityNames": [
+       "安奎拉"
+      ]
+     },
+     {
+      "tzid": "America/Antigua",
+      "cityNames": [
+       "安地卡及巴布達"
+      ]
+     },
+     {
+      "tzid": "America/Araguaina",
+      "cityNames": [
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Buenos_Aires",
+      "cityNames": [
+       "布宜諾斯艾利斯",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Catamarca",
+      "cityNames": [
+       "卡塔馬卡",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/ComodRivadavia",
+      "cityNames": [
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Cordoba",
+      "cityNames": [
+       "阿根廷",
+       "科爾多瓦"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Jujuy",
+      "cityNames": [
+       "阿根廷",
+       "胡胡伊"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/La_Rioja",
+      "cityNames": [
+       "拉里奧哈",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Mendoza",
+      "cityNames": [
+       "門多薩",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Rio_Gallegos",
+      "cityNames": [
+       "里奧加耶戈斯",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Salta",
+      "cityNames": [
+       "薩爾塔",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/San_Juan",
+      "cityNames": [
+       "聖胡安",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/San_Luis",
+      "cityNames": [
+       "聖路易",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Tucuman",
+      "cityNames": [
+       "圖庫曼"
+      ]
+     },
+     {
+      "tzid": "America/Argentina/Ushuaia",
+      "cityNames": [
+       "烏斯懷亞",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Aruba",
+      "cityNames": [
+       "阿魯巴",
+       "荷屬阿魯巴"
+      ]
+     },
+     {
+      "tzid": "America/Asuncion",
+      "cityNames": [
+       "亞松森"
+      ]
+     },
+     {
+      "tzid": "America/Atikokan",
+      "cityNames": [
+       "加拿大"
+      ]
+     },
+     {
+      "tzid": "America/Atka",
+      "cityNames": [
+       "阿特卡"
+      ]
+     },
+     {
+      "tzid": "America/Bahia",
+      "cityNames": [
+       "巴伊亞州"
+      ]
+     },
+     {
+      "tzid": "America/Bahia_Banderas",
+      "cityNames": [
+       "班德拉斯灣",
+       "Bahía de Banderas"
+      ]
+     },
+     {
+      "tzid": "America/Barbados",
+      "cityNames": [
+       "巴貝多"
+      ]
+     },
+     {
+      "tzid": "America/Belem",
+      "cityNames": [
+       "貝倫",
+       "巴西"
+      ]
+     },
+     {
+      "tzid": "America/Belize",
+      "cityNames": [
+       "貝里斯"
+      ]
+     },
+     {
+      "tzid": "America/Blanc-Sablon",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Boa_Vista",
+      "cityNames": [
+       "巴西羅賴馬博阿維斯塔",
+       "羅賴馬博阿維斯塔"
+      ]
+     },
+     {
+      "tzid": "America/Bogota",
+      "cityNames": [
+       "波哥大",
+       "哥倫比亞"
+      ]
+     },
+     {
+      "tzid": "America/Boise",
+      "cityNames": [
+       "博伊西",
+       "波夕",
+       "美國愛達荷州"
+      ]
+     },
+     {
+      "tzid": "America/Buenos_Aires",
+      "cityNames": [
+       "布宜諾斯艾利斯",
+       "阿根廷"
+      ]
+     },
+     {
+      "tzid": "America/Cambridge_Bay",
+      "cityNames": [
+       "劍橋灣"
+      ]
+     },
+     {
+      "tzid": "America/Campo_Grande",
+      "cityNames": [
+       "格蘭德營"
+      ]
+     },
+     {
+      "tzid": "America/Cancun",
+      "cityNames": [
+       "坎昆"
+      ]
+     },
+     {
+      "tzid": "America/Caracas",
+      "cityNames": [
+       "加拉加斯",
+       "委內瑞拉"
+      ]
+     },
+     {
+      "tzid": "America/Catamarca",
+      "cityNames": [
+       "卡塔馬卡"
+      ]
+     },
+     {
+      "tzid": "America/Cayenne",
+      "cityNames": [
+       "開雲"
+      ]
+     },
+     {
+      "tzid": "America/Cayman",
+      "cityNames": [
+       "開曼群島",
+       "凱門群島",
+       "蓋曼群島"
+      ]
+     },
+     {
+      "tzid": "America/Chicago",
+      "cityNames": [
+       "芝加哥",
+       "伊利諾伊州"
+      ]
+     },
+     {
+      "tzid": "America/Chihuahua",
+      "cityNames": [
+       "Chihuahua",
+       "赤瓦瓦"
+      ]
+     },
+     {
+      "tzid": "America/Coral_Harbour",
+      "cityNames": [
+       "珊瑚港"
+      ]
+     },
+     {
+      "tzid": "America/Cordoba",
+      "cityNames": [
+       "哥多華"
+      ]
+     },
+     {
+      "tzid": "America/Costa_Rica",
+      "cityNames": [
+       "哥斯大黎加",
+       "哥斯大黎加共和國"
+      ]
+     },
+     {
+      "tzid": "America/Creston",
+      "cityNames": [
+       "克雷斯頓"
+      ]
+     },
+     {
+      "tzid": "America/Cuiaba",
+      "cityNames": [
+       "庫亞巴"
+      ]
+     },
+     {
+      "tzid": "America/Curacao",
+      "cityNames": [
+       "庫拉索"
+      ]
+     },
+     {
+      "tzid": "America/Danmarkshavn",
+      "cityNames": [
+       "德文灣"
+      ]
+     },
+     {
+      "tzid": "America/Dawson",
+      "cityNames": [
+       "道森",
+       "喬治亞州"
+      ]
+     },
+     {
+      "tzid": "America/Dawson_Creek",
+      "cityNames": [
+       "道森河"
+      ]
+     },
+     {
+      "tzid": "America/Denver",
+      "cityNames": [
+       "",
+       "丹佛",
+       "科羅拉多州"
+      ]
+     },
+     {
+      "tzid": "America/Detroit",
+      "cityNames": [
+       "底特律",
+       "美國密西根州"
+      ]
+     },
+     {
+      "tzid": "America/Dominica",
+      "cityNames": [
+       "多米尼克"
+      ]
+     },
+     {
+      "tzid": "America/Edmonton",
+      "cityNames": [
+       "愛德蒙頓"
+      ]
+     },
+     {
+      "tzid": "America/Eirunepe",
+      "cityNames": [
+       "埃魯內佩"
+      ]
+     },
+     {
+      "tzid": "America/El_Salvador",
+      "cityNames": [
+       "薩爾瓦多"
+      ]
+     },
+     {
+      "tzid": "America/Ensenada",
+      "cityNames": [
+       "恩森那達"
+      ]
+     },
+     {
+      "tzid": "America/Fort_Nelson",
+      "cityNames": [
+       "納爾遜堡"
+      ]
+     },
+     {
+      "tzid": "America/Fort_Wayne",
+      "cityNames": [
+       "東部標準時間",
+       "印第安納韋恩堡"
+      ]
+     },
+     {
+      "tzid": "America/Fortaleza",
+      "cityNames": [
+       "福塔雷薩",
+       "福塔萊薩"
+      ]
+     },
+     {
+      "tzid": "America/Glace_Bay",
+      "cityNames": [
+       "格萊斯貝"
+      ]
+     },
+     {
+      "tzid": "America/Godthab",
+      "cityNames": [
+       "格陵蘭"
+      ]
+     },
+     {
+      "tzid": "America/Goose_Bay",
+      "cityNames": [
+       "歡樂谷"
+      ]
+     },
+     {
+      "tzid": "America/Grand_Turk",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Grenada",
+      "cityNames": [
+       "格瑞那達"
+      ]
+     },
+     {
+      "tzid": "America/Guadeloupe",
+      "cityNames": [
+       "瓜地洛普"
+      ]
+     },
+     {
+      "tzid": "America/Guatemala",
+      "cityNames": [
+       "瓜地馬拉"
+      ]
+     },
+     {
+      "tzid": "America/Guayaquil",
+      "cityNames": [
+       "瓜亞基爾",
+       "聖地牙哥·德·瓜亞基爾"
+      ]
+     },
+     {
+      "tzid": "America/Guyana",
+      "cityNames": [
+       "蓋亞那",
+       "蓋亞那合作共和國"
+      ]
+     },
+     {
+      "tzid": "America/Halifax",
+      "cityNames": [
+       "哈利法克斯"
+      ]
+     },
+     {
+      "tzid": "America/Havana",
+      "cityNames": [
+       "夏灣拿",
+       "古巴",
+       "哈瓦那",
+       "灣京"
+      ]
+     },
+     {
+      "tzid": "America/Hermosillo",
+      "cityNames": [
+       "埃莫西約"
+      ]
+     },
+     {
+      "tzid": "America/Indiana/Indianapolis",
+      "cityNames": [
+       "印第安納波利斯",
+       "印城"
+      ]
+     },
+     {
+      "tzid": "America/Indiana/Knox",
+      "cityNames": [
+       "諾克斯"
+      ]
+     },
+     {
+      "tzid": "America/Indiana/Marengo",
+      "cityNames": [
+       "馬倫戈"
+      ]
+     },
+     {
+      "tzid": "America/Indiana/Petersburg",
+      "cityNames": [
+       "彼得斯堡"
+      ]
+     },
+     {
+      "tzid": "America/Indiana/Tell_City",
+      "cityNames": [
+       "特爾城"
+      ]
+     },
+     {
+      "tzid": "America/Indiana/Vevay",
+      "cityNames": [
+       "韋韋"
+      ]
+     },
+     {
+      "tzid": "America/Indiana/Vincennes",
+      "cityNames": [
+       "萬塞訥"
+      ]
+     },
+     {
+      "tzid": "America/Indiana/Winamac",
+      "cityNames": [
+       "威納馬克"
+      ]
+     },
+     {
+      "tzid": "America/Indianapolis",
+      "cityNames": [
+       "印第安納波利斯"
+      ]
+     },
+     {
+      "tzid": "America/Inuvik",
+      "cityNames": [
+       "因紐維克"
+      ]
+     },
+     {
+      "tzid": "America/Iqaluit",
+      "cityNames": [
+       "伊魁特",
+       ""
+      ]
+     },
+     {
+      "tzid": "America/Jamaica",
+      "cityNames": [
+       "牙買加 "
+      ]
+     },
+     {
+      "tzid": "America/Jujuy",
+      "cityNames": [
+       "胡胡伊"
+      ]
+     },
+     {
+      "tzid": "America/Juneau",
+      "cityNames": [
+       "朱諾"
+      ]
+     },
+     {
+      "tzid": "America/Kentucky/Louisville",
+      "cityNames": [
+       "路易維爾"
+      ]
+     },
+     {
+      "tzid": "America/Kentucky/Monticello",
+      "cityNames": [
+       "蒙蒂塞洛"
+      ]
+     },
+     {
+      "tzid": "America/Knox_IN",
+      "cityNames": [
+       "路易維爾"
+      ]
+     },
+     {
+      "tzid": "America/Kralendijk",
+      "cityNames": [
+       "克拉倫代克",
+       "波奈"
+      ]
+     },
+     {
+      "tzid": "America/La_Paz",
+      "cityNames": [
+       "拉巴斯"
+      ]
+     },
+     {
+      "tzid": "America/Lima",
+      "cityNames": [
+       "秘魯標準時間",
+       "秘魯利馬",
+       "秘魯",
+       "利馬"
+      ]
+     },
+     {
+      "tzid": "America/Los_Angeles",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Louisville",
+      "cityNames": [
+       "路易維爾"
+      ]
+     },
+     {
+      "tzid": "America/Lower_Princes",
+      "cityNames": [
+       "下太子區"
+      ]
+     },
+     {
+      "tzid": "America/Maceio",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Managua",
+      "cityNames": [
+       "馬拿瓜",
+       "尼加拉瓜"
+      ]
+     },
+     {
+      "tzid": "America/Manaus",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Marigot",
+      "cityNames": [
+       "馬里戈特",
+       "法屬聖馬丁"
+      ]
+     },
+     {
+      "tzid": "America/Martinique",
+      "cityNames": [
+       "大西洋標準時間",
+       "馬丁尼克"
+      ]
+     },
+     {
+      "tzid": "America/Matamoros",
+      "cityNames": [
+       "馬塔莫羅斯"
+      ]
+     },
+     {
+      "tzid": "America/Mazatlan",
+      "cityNames": [
+       "馬薩特蘭"
+      ]
+     },
+     {
+      "tzid": "America/Mendoza",
+      "cityNames": [
+       "阿根廷標準時間",
+       "阿根廷門多薩省門多薩"
+      ]
+     },
+     {
+      "tzid": "America/Menominee",
+      "cityNames": [
+       "中部標準時間",
+       "密西根"
+      ]
+     },
+     {
+      "tzid": "America/Merida",
+      "cityNames": [
+       "梅里達",
+       "尤卡坦州"
+      ]
+     },
+     {
+      "tzid": "America/Metlakatla",
+      "cityNames": [
+       "梅特拉卡特拉"
+      ]
+     },
+     {
+      "tzid": "America/Mexico_City",
+      "cityNames": [
+       "墨西哥"
+      ]
+     },
+     {
+      "tzid": "America/Miquelon",
+      "cityNames": [
+       "聖皮埃與密克隆群島標準時間",
+       "聖皮埃與密克隆群島"
+      ]
+     },
+     {
+      "tzid": "America/Moncton",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Monterrey",
+      "cityNames": [
+       "蒙特雷",
+       "中部標準時間"
+      ]
+     },
+     {
+      "tzid": "America/Montevideo",
+      "cityNames": [
+       "烏拉圭標準時間",
+       "烏拉圭蒙特維多",
+       "蒙特維多"
+      ]
+     },
+     {
+      "tzid": "America/Montreal",
+      "cityNames": [
+       "東部標準時間",
+       "加拿大魁北克省蒙特婁",
+       "魁北克",
+       "蒙特婁"
+      ]
+     },
+     {
+      "tzid": "America/Montserrat",
+      "cityNames": [
+       "蒙哲臘"
+      ]
+     },
+     {
+      "tzid": "America/Nassau",
+      "cityNames": [
+       "巴哈馬拿騷"
+      ]
+     },
+     {
+      "tzid": "America/New_York",
+      "cityNames": [
+       "紐約",
+       "美國"
+      ]
+     },
+     {
+      "tzid": "America/Nipigon",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Nome",
+      "cityNames": [
+       "阿拉斯加標準時間",
+       "阿拉斯加州",
+       "諾姆"
+      ]
+     },
+     {
+      "tzid": "America/Noronha",
+      "cityNames": [
+       "伯南布哥"
+      ]
+     },
+     {
+      "tzid": "America/North_Dakota/Beulah",
+      "cityNames": [
+       "比尤拉"
+      ]
+     },
+     {
+      "tzid": "America/North_Dakota/Center",
+      "cityNames": [
+       "中心"
+      ]
+     },
+     {
+      "tzid": "America/North_Dakota/New_Salem",
+      "cityNames": [
+       "中部標準時間",
+       "北達科他新薩勒姆"
+      ]
+     },
+     {
+      "tzid": "America/Nuuk",
+      "cityNames": [
+       "格陵蘭努克"
+      ]
+     },
+     {
+      "tzid": "America/Ojinaga",
+      "cityNames": [
+       "赤瓦瓦墨西哥",
+       "赤瓦瓦"
+      ]
+     },
+     {
+      "tzid": "America/Panama",
+      "cityNames": [
+       "巴拿馬"
+      ]
+     },
+     {
+      "tzid": "America/Pangnirtung",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Paramaribo",
+      "cityNames": [
+       "巴拉馬利波",
+       "蘇利南"
+      ]
+     },
+     {
+      "tzid": "America/Phoenix",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Port-au-Prince",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Port_of_Spain",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Porto_Acre",
+      "cityNames": [
+       "艾克標準時間",
+       "阿克里阿克里港"
+      ]
+     },
+     {
+      "tzid": "America/Porto_Velho",
+      "cityNames": [
+       "亞馬遜標準時間",
+       "朗多尼亞州韋柳港"
+      ]
+     },
+     {
+      "tzid": "America/Puerto_Rico",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Punta_Arenas",
+      "cityNames": [
+       "蓬塔阿雷納斯"
+      ]
+     },
+     {
+      "tzid": "America/Rainy_River",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Rankin_Inlet",
+      "cityNames": [
+       "紐納武特加拿大",
+       "紐納武特"
+      ]
+     },
+     {
+      "tzid": "America/Recife",
+      "cityNames": [
+       "雷西非",
+       "勒西菲",
+       "海息飛",
+       "勒西腓"
+      ]
+     },
+     {
+      "tzid": "America/Regina",
+      "cityNames": [
+       "薩斯喀徹溫雷吉納"
+      ]
+     },
+     {
+      "tzid": "America/Resolute",
+      "cityNames": [
+       "中部標準時間",
+       "紐納武特"
+      ]
+     },
+     {
+      "tzid": "America/Rio_Branco",
+      "cityNames": [
+       "亞馬遜標準時間",
+       "馬托格羅索"
+      ]
+     },
+     {
+      "tzid": "America/Rosario",
+      "cityNames": [
+       "西歐標準時間",
+       "西班牙羅薩里奧港",
+       "羅薩里奧港"
+      ]
+     },
+     {
+      "tzid": "America/Santa_Isabel",
+      "cityNames": [
+       "聖伊莎貝爾"
+      ]
+     },
+     {
+      "tzid": "America/Santarem",
+      "cityNames": [
+       ""
+      ]
+     },
+     {
+      "tzid": "America/Santiago",
+      "cityNames": [
+       "聖地牙哥",
+       "智利"
+      ]
+     },
+     {
+      "tzid": "America/Santo_Domingo",
+      "cityNames": [
+       "聖多明各",
+       "聖多明哥",
+       "多明尼加共和國"
+      ]
+     },
+     {
+      "tzid": "America/Sao_Paulo",
+      "cityNames": [
+       "聖保羅",
+       "巴西"
+      ]
+     },
+     {
+      "tzid": "America/Scoresbysund",
+      "cityNames": [
+       "格陵蘭東部標準時間",
+       "斯科斯比鬆"
+      ]
+     },
+     {
+      "tzid": "America/Shiprock",
+      "cityNames": [
+       "山區標準時間",
+       "新墨西哥州"
+      ]
+     },
+     {
+      "tzid": "America/Sitka",
+      "cityNames": [
+       "矽地卡"
+      ]
+     },
+     {
+      "tzid": "America/St_Barthelemy",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/St_Johns",
+      "cityNames": [
+       "聖約翰",
+       "加拿大紐芬蘭",
+       "紐芬蘭標準時間"
+      ]
+     },
+     {
+      "tzid": "America/St_Kitts",
+      "cityNames": [
+       "大西洋標準時間",
+       "聖克里斯多福及尼維斯"
+      ]
+     },
+     {
+      "tzid": "America/St_Lucia",
+      "cityNames": [
+       "聖露西亞"
+      ]
+     },
+     {
+      "tzid": "America/St_Thomas",
+      "cityNames": [
+       "美屬維京群島"
+      ]
+     },
+     {
+      "tzid": "America/St_Vincent",
+      "cityNames": [
+       "大西洋標準時間",
+       "聖文森及格瑞那丁"
+      ]
+     },
+     {
+      "tzid": "America/Swift_Current",
+      "cityNames": [
+       "薩斯喀徹溫斯威夫特卡倫特",
+       "加拿大"
+      ]
+     },
+     {
+      "tzid": "America/Tegucigalpa",
+      "cityNames": [
+       "中部標準時間",
+       "德古西加巴",
+       "宏都拉斯"
+      ]
+     },
+     {
+      "tzid": "America/Thule",
+      "cityNames": [
+       "卡蘇伊特薩普"
+      ]
+     },
+     {
+      "tzid": "America/Thunder_Bay",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Tijuana",
+      "cityNames": [
+       "太平洋標準時間",
+       "下加利福尼亞提華納"
+      ]
+     },
+     {
+      "tzid": "America/Toronto",
+      "cityNames": [
+       "多倫多"
+      ]
+     },
+     {
+      "tzid": "America/Tortola",
+      "cityNames": [
+       "大西洋標準時間",
+       "英屬維京群島"
+      ]
+     },
+     {
+      "tzid": "America/Vancouver",
+      "cityNames": []
+     },
+     {
+      "tzid": "America/Virgin",
+      "cityNames": [
+       "猶他維爾京"
+      ]
+     },
+     {
+      "tzid": "America/Whitehorse",
+      "cityNames": [
+       "育空地區時間",
+       "加拿大育空地區白馬鎮"
+      ]
+     },
+     {
+      "tzid": "America/Winnipeg",
+      "cityNames": [
+       "溫尼伯"
+      ]
+     },
+     {
+      "tzid": "America/Yakutat",
+      "cityNames": [
+       "亞庫塔特"
+      ]
+     },
+     {
+      "tzid": "America/Yellowknife",
+      "cityNames": [
+       "黃刀鎮",
+       "加拿大"
+      ]
+     },
+     {
+      "tzid": "Antarctica/Casey",
+      "cityNames": []
+     },
+     {
+      "tzid": "Antarctica/Davis",
+      "cityNames": []
+     },
+     {
+      "tzid": "Antarctica/DumontDUrville",
+      "cityNames": []
+     },
+     {
+      "tzid": "Antarctica/Macquarie",
+      "cityNames": [
+       "澳大利亞"
+      ]
+     },
+     {
+      "tzid": "Antarctica/Mawson",
+      "cityNames": []
+     },
+     {
+      "tzid": "Antarctica/McMurdo",
+      "cityNames": [
+       "南極洲"
+      ]
+     },
+     {
+      "tzid": "Antarctica/Palmer",
+      "cityNames": []
+     },
+     {
+      "tzid": "Antarctica/Rothera",
+      "cityNames": [
+       "羅瑟拉研究站"
+      ]
+     },
+     {
+      "tzid": "Antarctica/South_Pole",
+      "cityNames": [
+       "阿蒙森-斯科特南極站"
+      ]
+     },
+     {
+      "tzid": "Antarctica/Syowa",
+      "cityNames": []
+     },
+     {
+      "tzid": "Antarctica/Troll",
+      "cityNames": [
+       "南極洲",
+       "南極"
+      ]
+     },
+     {
+      "tzid": "Antarctica/Vostok",
+      "cityNames": [
+       "沃斯托克站",
+       "沃斯托克"
+      ]
+     },
+     {
+      "tzid": "Arctic/Longyearbyen",
+      "cityNames": [
+       "中歐標準時間",
+       "挪威屬斯瓦巴及尖棉朗伊爾城"
+      ]
+     },
+     {
+      "tzid": "Asia/Aden",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Almaty",
+      "cityNames": [
+       "阿拉木圖"
+      ]
+     },
+     {
+      "tzid": "Asia/Amman",
+      "cityNames": [
+       "安曼",
+       "約旦"
+      ]
+     },
+     {
+      "tzid": "Asia/Anadyr",
+      "cityNames": [
+       "馬加丹"
+      ]
+     },
+     {
+      "tzid": "Asia/Aqtau",
+      "cityNames": [
+       "阿克套",
+       "阿克陶"
+      ]
+     },
+     {
+      "tzid": "Asia/Aqtobe",
+      "cityNames": [
+       "阿克托比",
+       "阿克托別",
+       "阿克糾賓斯克",
+       "哈薩克"
+      ]
+     },
+     {
+      "tzid": "Asia/Ashgabat",
+      "cityNames": [
+       "阿什哈巴德",
+       "土庫曼"
+      ]
+     },
+     {
+      "tzid": "Asia/Ashkhabad",
+      "cityNames": [
+       "阿什哈巴德",
+       "土庫曼"
+      ]
+     },
+     {
+      "tzid": "Asia/Atyrau",
+      "cityNames": [
+       "阿特勞"
+      ]
+     },
+     {
+      "tzid": "Asia/Baghdad",
+      "cityNames": [
+       "巴格達",
+       "白達",
+       "報達",
+       "伊拉克"
+      ]
+     },
+     {
+      "tzid": "Asia/Bahrain",
+      "cityNames": [
+       "巴林",
+       "巴林王國"
+      ]
+     },
+     {
+      "tzid": "Asia/Baku",
+      "cityNames": [
+       "亞塞拜然標準時間",
+       "亞塞拜然",
+       "巴庫"
+      ]
+     },
+     {
+      "tzid": "Asia/Bangkok",
+      "cityNames": [
+       "曼谷",
+       "泰國"
+      ]
+     },
+     {
+      "tzid": "Asia/Barnaul",
+      "cityNames": [
+       "巴爾瑙爾",
+       "俄羅斯"
+      ]
+     },
+     {
+      "tzid": "Asia/Beirut",
+      "cityNames": [
+       "貝魯特",
+       "黎巴嫩",
+       ""
+      ]
+     },
+     {
+      "tzid": "Asia/Bishkek",
+      "cityNames": [
+       "比什凱克",
+       "吉爾吉斯",
+       "比斯凱克",
+       "吉爾吉斯共和國"
+      ]
+     },
+     {
+      "tzid": "Asia/Brunei",
+      "cityNames": [
+       "汶萊",
+       "汶萊和平之國",
+       "汶萊達魯薩蘭國",
+       "文萊",
+       "婆羅乃"
+      ]
+     },
+     {
+      "tzid": "Asia/Calcutta",
+      "cityNames": [
+       "加爾各答",
+       "印度"
+      ]
+     },
+     {
+      "tzid": "Asia/Chita",
+      "cityNames": [
+       "赤塔"
+      ]
+     },
+     {
+      "tzid": "Asia/Choibalsan",
+      "cityNames": [
+       "喬巴山",
+       "克魯倫",
+       "桑貝子",
+       "巴彥圖門",
+       "喬巴山"
+      ]
+     },
+     {
+      "tzid": "Asia/Chongqing",
+      "cityNames": [
+       "重慶市",
+       "重慶",
+       "巴",
+       "渝",
+       "山城",
+       "霧都",
+       "橋都",
+       "中國"
+      ]
+     },
+     {
+      "tzid": "Asia/Chungking",
+      "cityNames": [
+       "重慶"
+      ]
+     },
+     {
+      "tzid": "Asia/Colombo",
+      "cityNames": [
+       "可倫坡",
+       "斯里蘭卡"
+      ]
+     },
+     {
+      "tzid": "Asia/Dacca",
+      "cityNames": [
+       "達卡",
+       "孟加拉"
+      ]
+     },
+     {
+      "tzid": "Asia/Damascus",
+      "cityNames": [
+       "大馬士革",
+       "敘利亞"
+      ]
+     },
+     {
+      "tzid": "Asia/Dhaka",
+      "cityNames": [
+       "達卡",
+       "孟加拉"
+      ]
+     },
+     {
+      "tzid": "Asia/Dili",
+      "cityNames": [
+       "帝利",
+       "東帝汶"
+      ]
+     },
+     {
+      "tzid": "Asia/Dubai",
+      "cityNames": [
+       "杜拜",
+       "阿拉伯聯合大公國"
+      ]
+     },
+     {
+      "tzid": "Asia/Dushanbe",
+      "cityNames": [
+       "杜尚別",
+       "塔吉克"
+      ]
+     },
+     {
+      "tzid": "Asia/Famagusta",
+      "cityNames": [
+       "法馬古斯塔"
+      ]
+     },
+     {
+      "tzid": "Asia/Gaza",
+      "cityNames": [
+       "加沙地帶",
+       "加薩走廊"
+      ]
+     },
+     {
+      "tzid": "Asia/Harbin",
+      "cityNames": [
+       "哈爾濱市",
+       "哈爾濱",
+       "北國冰城",
+       "東方莫斯科",
+       "黑龍江",
+       "東北"
+      ]
+     },
+     {
+      "tzid": "Asia/Hebron",
+      "cityNames": [
+       "希布倫"
+      ]
+     },
+     {
+      "tzid": "Asia/Ho_Chi_Minh",
+      "cityNames": [
+       "胡志明市",
+       "西貢",
+       "越南"
+      ]
+     },
+     {
+      "tzid": "Asia/Hong_Kong",
+      "cityNames": [
+       "香港"
+      ]
+     },
+     {
+      "tzid": "Asia/Hovd",
+      "cityNames": [
+       "科布多城"
+      ]
+     },
+     {
+      "tzid": "Asia/Irkutsk",
+      "cityNames": [
+       "伊爾庫茨克"
+      ]
+     },
+     {
+      "tzid": "Asia/Istanbul",
+      "cityNames": [
+       "伊斯坦堡",
+       "土耳其"
+      ]
+     },
+     {
+      "tzid": "Asia/Jakarta",
+      "cityNames": [
+       "雅加達",
+       "印尼"
+      ]
+     },
+     {
+      "tzid": "Asia/Jayapura",
+      "cityNames": [
+       "嘉雅浦拉"
+      ]
+     },
+     {
+      "tzid": "Asia/Jerusalem",
+      "cityNames": [
+       "以色列",
+       "耶路撒冷"
+      ]
+     },
+     {
+      "tzid": "Asia/Kabul",
+      "cityNames": [
+       "喀布爾",
+       "阿富汗"
+      ]
+     },
+     {
+      "tzid": "Asia/Kamchatka",
+      "cityNames": [
+       "馬加丹"
+      ]
+     },
+     {
+      "tzid": "Asia/Karachi",
+      "cityNames": [
+       "克拉嗤",
+       "",
+       "喀拉蚩"
+      ]
+     },
+     {
+      "tzid": "Asia/Kashgar",
+      "cityNames": [
+       "中國標準時間",
+       "疆維吾爾自治區"
+      ]
+     },
+     {
+      "tzid": "Asia/Kathmandu",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Katmandu",
+      "cityNames": [
+       "加德滿都",
+       "尼泊爾"
+      ]
+     },
+     {
+      "tzid": "Asia/Khandyga",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Kolkata",
+      "cityNames": [
+       "印度標準時間",
+       "西孟加拉邦加爾各答"
+      ]
+     },
+     {
+      "tzid": "Asia/Krasnoyarsk",
+      "cityNames": [
+       "克拉斯諾亞爾斯克標準時間",
+       "克拉斯諾亞爾斯克邊"
+      ]
+     },
+     {
+      "tzid": "Asia/Kuala_Lumpur",
+      "cityNames": [
+       "馬來西亞時間",
+       "馬來西亞吉隆坡",
+       "吉隆坡",
+       "馬來西亞"
+      ]
+     },
+     {
+      "tzid": "Asia/Kuching",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Kuwait",
+      "cityNames": [
+       "科威特"
+      ]
+     },
+     {
+      "tzid": "Asia/Macao",
+      "cityNames": [
+       "澳門"
+      ]
+     },
+     {
+      "tzid": "Asia/Macau",
+      "cityNames": [
+       "澳門"
+      ]
+     },
+     {
+      "tzid": "Asia/Magadan",
+      "cityNames": [
+       "馬加丹"
+      ]
+     },
+     {
+      "tzid": "Asia/Makassar",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Manila",
+      "cityNames": [
+       "菲律賓標準時間",
+       "菲律賓",
+       "菲律賓馬尼拉",
+       "馬尼拉",
+       "菲律賓馬尼拉大都會馬尼拉"
+      ]
+     },
+     {
+      "tzid": "Asia/Muscat",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Nicosia",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Novokuznetsk",
+      "cityNames": [
+       "克拉斯諾亞爾斯克標準時間",
+       "科麥羅沃州新庫斯內次"
+      ]
+     },
+     {
+      "tzid": "Asia/Novosibirsk",
+      "cityNames": [
+       "新西伯利亞標準時間",
+       "俄羅斯新西伯利亞州新西伯利亞"
+      ]
+     },
+     {
+      "tzid": "Asia/Omsk",
+      "cityNames": [
+       "鄂木斯克"
+      ]
+     },
+     {
+      "tzid": "Asia/Oral",
+      "cityNames": [
+       "西哈薩克時間",
+       "哈薩克烏拉爾",
+       "烏拉爾"
+      ]
+     },
+     {
+      "tzid": "Asia/Phnom_Penh",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Pontianak",
+      "cityNames": [
+       "坤甸"
+      ]
+     },
+     {
+      "tzid": "Asia/Pyongyang",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Qatar",
+      "cityNames": [
+       "阿拉伯標準時間",
+       "阿拉伯",
+       "卡達",
+       ""
+      ]
+     },
+     {
+      "tzid": "Asia/Qostanay",
+      "cityNames": [
+       "科斯塔奈"
+      ]
+     },
+     {
+      "tzid": "Asia/Qyzylorda",
+      "cityNames": [
+       "克孜勒奧爾達"
+      ]
+     },
+     {
+      "tzid": "Asia/Rangoon",
+      "cityNames": [
+       "仰光"
+      ]
+     },
+     {
+      "tzid": "Asia/Riyadh",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Saigon",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Sakhalin",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Samarkand",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Seoul",
+      "cityNames": [
+       "首爾",
+       "南韓"
+      ]
+     },
+     {
+      "tzid": "Asia/Shanghai",
+      "cityNames": [
+       "上海",
+       "北京",
+       "中國"
+      ]
+     },
+     {
+      "tzid": "Asia/Singapore",
+      "cityNames": [
+       "新加坡"
+      ]
+     },
+     {
+      "tzid": "Asia/Srednekolymsk",
+      "cityNames": [
+       "薩哈中科雷姆斯克"
+      ]
+     },
+     {
+      "tzid": "Asia/Taipei",
+      "cityNames": [
+       "台北",
+       "臺北",
+       "Taipei",
+       "桃園",
+       "新竹",
+       "苗栗",
+       "新北",
+       "基隆",
+       "宜蘭",
+       "花蓮",
+       "台東",
+       "臺東",
+       "台中",
+       "臺中",
+       "彰化",
+       "雲林",
+       "嘉義",
+       "台南",
+       "臺南",
+       "高雄",
+       "屏東",
+       "南投",
+       "澎湖",
+       "金門",
+       "馬祖",
+       "綠島",
+       "龜山島",
+       "蘭嶼",
+       "東沙環礁",
+       "台灣",
+       "臺灣",
+       "中華民國",
+       "福爾摩沙",
+       "Taiwan",
+       "ROC"
+      ]
+     },
+     {
+      "tzid": "Asia/Tashkent",
+      "cityNames": [
+       "烏茲別克標準時間",
+       "烏茲別克塔什干"
+      ]
+     },
+     {
+      "tzid": "Asia/Tbilisi",
+      "cityNames": [
+       "第比利斯",
+       "喬治亞"
+      ]
+     },
+     {
+      "tzid": "Asia/Tehran",
+      "cityNames": [
+       "伊朗標準時間",
+       "德黑蘭",
+       "伊朗"
+      ]
+     },
+     {
+      "tzid": "Asia/Tel_Aviv",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Thimbu",
+      "cityNames": [
+       "亭布",
+       "不丹"
+      ]
+     },
+     {
+      "tzid": "Asia/Thimphu",
+      "cityNames": [
+       "不丹標準時間"
+      ]
+     },
+     {
+      "tzid": "Asia/Tokyo",
+      "cityNames": [
+       "東京",
+       "日本"
+      ]
+     },
+     {
+      "tzid": "Asia/Tomsk",
+      "cityNames": [
+       "托木斯克",
+       "俄羅斯"
+      ]
+     },
+     {
+      "tzid": "Asia/Ujung_Pandang",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Ulaanbaatar",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Ulan_Bator",
+      "cityNames": [
+       "烏蘭巴托標準時間",
+       "蒙古烏蘭巴托",
+       "烏蘭巴托"
+      ]
+     },
+     {
+      "tzid": "Asia/Urumqi",
+      "cityNames": [
+       "烏魯木齊"
+      ]
+     },
+     {
+      "tzid": "Asia/Ust-Nera",
+      "cityNames": [
+       "烏斯季涅拉"
+      ]
+     },
+     {
+      "tzid": "Asia/Vientiane",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Vladivostok",
+      "cityNames": [
+       "俄羅斯"
+      ]
+     },
+     {
+      "tzid": "Asia/Yakutsk",
+      "cityNames": []
+     },
+     {
+      "tzid": "Asia/Yangon",
+      "cityNames": [
+       "仰光",
+       "緬甸"
+      ]
+     },
+     {
+      "tzid": "Asia/Yekaterinburg",
+      "cityNames": [
+       "葉卡捷琳堡標準時間",
+       "斯維爾德洛夫斯克州",
+       "凱薩琳堡"
+      ]
+     },
+     {
+      "tzid": "Asia/Yerevan",
+      "cityNames": [
+       "耶烈萬",
+       "亞美尼亞"
+      ]
+     },
+     {
+      "tzid": "Atlantic/Azores",
+      "cityNames": []
+     },
+     {
+      "tzid": "Atlantic/Bermuda",
+      "cityNames": [
+       "百慕達"
+      ]
+     },
+     {
+      "tzid": "Atlantic/Canary",
+      "cityNames": []
+     },
+     {
+      "tzid": "Atlantic/Cape_Verde",
+      "cityNames": []
+     },
+     {
+      "tzid": "Atlantic/Faeroe",
+      "cityNames": [
+       "法羅群島"
+      ]
+     },
+     {
+      "tzid": "Atlantic/Faroe",
+      "cityNames": [
+       "法羅群島"
+      ]
+     },
+     {
+      "tzid": "Atlantic/Jan_Mayen",
+      "cityNames": [
+       "揚馬延"
+      ]
+     },
+     {
+      "tzid": "Atlantic/Madeira",
+      "cityNames": [
+       "馬德拉島"
+      ]
+     },
+     {
+      "tzid": "Atlantic/Reykjavik",
+      "cityNames": [
+       "格林威治標準時間",
+       "冰島雷克雅維克",
+       "冰島",
+       "雷克雅維克"
+      ]
+     },
+     {
+      "tzid": "Atlantic/South_Georgia",
+      "cityNames": [
+       "南喬治亞與南三明治群島"
+      ]
+     },
+     {
+      "tzid": "Atlantic/St_Helena",
+      "cityNames": [
+       "聖赫勒拿島"
+      ]
+     },
+     {
+      "tzid": "Atlantic/Stanley",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/ACT",
+      "cityNames": [
+       "澳洲東部夏令時間",
+       "澳大利亞"
+      ]
+     },
+     {
+      "tzid": "Australia/Adelaide",
+      "cityNames": [
+       "阿得雷德"
+      ]
+     },
+     {
+      "tzid": "Australia/Brisbane",
+      "cityNames": [
+       "布里斯班"
+      ]
+     },
+     {
+      "tzid": "Australia/Broken_Hill",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/Canberra",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/Currie",
+      "cityNames": [
+       "塔斯馬尼亞州澳洲",
+       "塔斯馬尼亞州",
+       "澳洲東部夏令時間"
+      ]
+     },
+     {
+      "tzid": "Australia/Darwin",
+      "cityNames": [
+       "達爾文"
+      ]
+     },
+     {
+      "tzid": "Australia/Eucla",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/Hobart",
+      "cityNames": [
+       "澳洲東部夏令時間"
+      ]
+     },
+     {
+      "tzid": "Australia/LHI",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/Lindeman",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/Lord_Howe",
+      "cityNames": [
+       "豪勳爵島"
+      ]
+     },
+     {
+      "tzid": "Australia/Melbourne",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/NSW",
+      "cityNames": [
+       "新南威爾斯州"
+      ]
+     },
+     {
+      "tzid": "Australia/North",
+      "cityNames": [
+       "北領地",
+       "北澳"
+      ]
+     },
+     {
+      "tzid": "Australia/Perth",
+      "cityNames": [
+       "澳洲西部標準時間",
+       "州珀斯"
+      ]
+     },
+     {
+      "tzid": "Australia/Queensland",
+      "cityNames": [
+       "昆士蘭州",
+       "昆州"
+      ]
+     },
+     {
+      "tzid": "Australia/South",
+      "cityNames": [
+       "澳洲中部夏令時間",
+       "南澳洲"
+      ]
+     },
+     {
+      "tzid": "Australia/Sydney",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/Tasmania",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/Victoria",
+      "cityNames": []
+     },
+     {
+      "tzid": "Australia/West",
+      "cityNames": [
+       "澳洲西部標準時間",
+       "西澳大利亞州珀斯"
+      ]
+     },
+     {
+      "tzid": "Australia/Yancowinna",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Brazil/Acre",
+      "cityNames": [
+       "阿克里",
+       ""
+      ]
+     },
+     {
+      "tzid": "Brazil/DeNoronha",
+      "cityNames": []
+     },
+     {
+      "tzid": "Brazil/East",
+      "cityNames": [
+       "巴西"
+      ]
+     },
+     {
+      "tzid": "Brazil/West",
+      "cityNames": [
+       "巴西",
+       "巴西聯邦共和國"
+      ]
+     },
+     {
+      "tzid": "CET",
+      "cityNames": [
+       "Central European Time",
+       "歐洲中部時間"
+      ]
+     },
+     {
+      "tzid": "CST6CDT",
+      "cityNames": [
+       "西六區"
+      ]
+     },
+     {
+      "tzid": "Canada/Atlantic",
+      "cityNames": []
+     },
+     {
+      "tzid": "Canada/Central",
+      "cityNames": [
+       "北美中部時區"
+      ]
+     },
+     {
+      "tzid": "Canada/Eastern",
+      "cityNames": []
+     },
+     {
+      "tzid": "Canada/Mountain",
+      "cityNames": [
+       "北美山區時區"
+      ]
+     },
+     {
+      "tzid": "Canada/Newfoundland",
+      "cityNames": []
+     },
+     {
+      "tzid": "Canada/Pacific",
+      "cityNames": [
+       "太平洋標準時間"
+      ]
+     },
+     {
+      "tzid": "Canada/Saskatchewan",
+      "cityNames": [
+       "薩斯喀徹溫",
+       "薩克其萬省"
+      ]
+     },
+     {
+      "tzid": "Canada/Yukon",
+      "cityNames": []
+     },
+     {
+      "tzid": "Chile/Continental",
+      "cityNames": [
+       "山區標準時間",
+       "亞利桑那大陸"
+      ]
+     },
+     {
+      "tzid": "Chile/EasterIsland",
+      "cityNames": []
+     },
+     {
+      "tzid": "Cuba",
+      "cityNames": [
+       "古巴",
+       "古巴共和國"
+      ]
+     },
+     {
+      "tzid": "EET",
+      "cityNames": [
+       "東歐時間",
+       "Eastern European Time"
+      ]
+     },
+     {
+      "tzid": "EST",
+      "cityNames": []
+     },
+     {
+      "tzid": "EST5EDT",
+      "cityNames": []
+     },
+     {
+      "tzid": "Egypt",
+      "cityNames": [
+       "埃及",
+       "埃及阿拉伯共和國"
+      ]
+     },
+     {
+      "tzid": "Eire",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT",
+      "cityNames": [
+       "格林威治"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT+0",
+      "cityNames": [
+       "Eastern Standard Time",
+       "東部標準時間"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT+1",
+      "cityNames": [
+       "歐洲中部時區"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT+10",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT+11",
+      "cityNames": [
+       "萬那杜標準時間"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT+12",
+      "cityNames": [
+       "國際換日線"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT+2",
+      "cityNames": [
+       "歐洲東部時區"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT+3",
+      "cityNames": [
+       "莫斯科時區"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT+4",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT+5",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT+6",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT+7",
+      "cityNames": [
+       "北美山區標準時間"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT+8",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT+9",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-0",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT-1",
+      "cityNames": [
+       "歐洲中部時區歐洲中部時區"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-10",
+      "cityNames": [
+       "歐洲西部時區"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-11",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT-12",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT-13",
+      "cityNames": [
+       "鳳凰群島標準時間"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-14",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/GMT-2",
+      "cityNames": [
+       "歐洲東部時區"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-3",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-4",
+      "cityNames": [
+       "大西洋標準時間"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-5",
+      "cityNames": [
+       "東部標準時間"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-6",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-7",
+      "cityNames": [
+       "北美山區標準時間"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-8",
+      "cityNames": [
+       "Alaska Daylight Time",
+       "Pacific Standard Time"
+      ]
+     },
+     {
+      "tzid": "Etc/GMT-9",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Etc/GMT0",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/Greenwich",
+      "cityNames": [
+       "格林威治"
+      ]
+     },
+     {
+      "tzid": "Etc/UCT",
+      "cityNames": []
+     },
+     {
+      "tzid": "Etc/UTC",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Etc/Universal",
+      "cityNames": [
+       "Etc/Universal"
+      ]
+     },
+     {
+      "tzid": "Etc/Zulu",
+      "cityNames": [
+       "東部標準時間",
+       "印第安納"
+      ]
+     },
+     {
+      "tzid": "Europe/Amsterdam",
+      "cityNames": [
+       "阿姆斯特丹",
+       "荷蘭"
+      ]
+     },
+     {
+      "tzid": "Europe/Andorra",
+      "cityNames": [
+       "安道爾"
+      ]
+     },
+     {
+      "tzid": "Europe/Astrakhan",
+      "cityNames": [
+       "阿斯特拉罕州"
+      ]
+     },
+     {
+      "tzid": "Europe/Athens",
+      "cityNames": [
+       "東歐標準時間",
+       "希臘",
+       "雅典"
+      ]
+     },
+     {
+      "tzid": "Europe/Belfast",
+      "cityNames": [
+       "貝爾法斯特",
+       "北愛爾蘭"
+      ]
+     },
+     {
+      "tzid": "Europe/Belgrade",
+      "cityNames": [
+       "中歐標準時間",
+       "塞爾維亞貝爾格萊德",
+       "貝爾格萊德"
+      ]
+     },
+     {
+      "tzid": "Europe/Berlin",
+      "cityNames": [
+       "柏林",
+       "德國"
+      ]
+     },
+     {
+      "tzid": "Europe/Bratislava",
+      "cityNames": [
+       "布拉提斯拉瓦",
+       "斯洛伐克"
+      ]
+     },
+     {
+      "tzid": "Europe/Brussels",
+      "cityNames": [
+       "布魯塞爾",
+       "比利時"
+      ]
+     },
+     {
+      "tzid": "Europe/Bucharest",
+      "cityNames": [
+       "布加勒斯特",
+       "羅馬尼亞"
+      ]
+     },
+     {
+      "tzid": "Europe/Budapest",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Busingen",
+      "cityNames": [
+       "布辛根"
+      ]
+     },
+     {
+      "tzid": "Europe/Chisinau",
+      "cityNames": [
+       "東歐標準時間",
+       "摩爾多瓦基希訥烏"
+      ]
+     },
+     {
+      "tzid": "Europe/Copenhagen",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Dublin",
+      "cityNames": [
+       "都柏林",
+       "愛爾蘭"
+      ]
+     },
+     {
+      "tzid": "Europe/Gibraltar",
+      "cityNames": [
+       "直布羅陀"
+      ]
+     },
+     {
+      "tzid": "Europe/Guernsey",
+      "cityNames": [
+       "耿西"
+      ]
+     },
+     {
+      "tzid": "Europe/Helsinki",
+      "cityNames": [
+       "東歐標準時間",
+       "芬蘭赫爾辛基",
+       "赫爾辛基",
+       "芬蘭"
+      ]
+     },
+     {
+      "tzid": "Europe/Isle_of_Man",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Istanbul",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Jersey",
+      "cityNames": [
+       "澤西島",
+       "澤西"
+      ]
+     },
+     {
+      "tzid": "Europe/Kaliningrad",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Kiev",
+      "cityNames": [
+       "基輔",
+       "烏克蘭"
+      ]
+     },
+     {
+      "tzid": "Europe/Kirov",
+      "cityNames": [
+       "莫斯科標準時間",
+       "基洛夫州基洛夫"
+      ]
+     },
+     {
+      "tzid": "Europe/Lisbon",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Ljubljana",
+      "cityNames": [
+       "盧布爾雅那",
+       "斯洛維尼亞"
+      ]
+     },
+     {
+      "tzid": "Europe/London",
+      "cityNames": [
+       "倫敦",
+       "英國"
+      ]
+     },
+     {
+      "tzid": "Europe/Luxembourg",
+      "cityNames": [
+       "盧森堡",
+       "盧森堡大公國"
+      ]
+     },
+     {
+      "tzid": "Europe/Madrid",
+      "cityNames": [
+       "馬德里",
+       "西班牙"
+      ]
+     },
+     {
+      "tzid": "Europe/Malta",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Mariehamn",
+      "cityNames": [
+       "瑪麗港",
+       "奧蘭群島"
+      ]
+     },
+     {
+      "tzid": "Europe/Minsk",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Monaco",
+      "cityNames": [
+       "Europe/Monaco",
+       "中歐標準時間",
+       "摩納哥"
+      ]
+     },
+     {
+      "tzid": "Europe/Moscow",
+      "cityNames": [
+       "俄羅斯莫斯科",
+       "俄羅斯",
+       "莫斯科"
+      ]
+     },
+     {
+      "tzid": "Europe/Nicosia",
+      "cityNames": [
+       "尼克西亞",
+       "賽普勒斯"
+      ]
+     },
+     {
+      "tzid": "Europe/Oslo",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Paris",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Podgorica",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Prague",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Riga",
+      "cityNames": [
+       "里加",
+       "拉脫維亞"
+      ]
+     },
+     {
+      "tzid": "Europe/Rome",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Samara",
+      "cityNames": [
+       "薩馬拉"
+      ]
+     },
+     {
+      "tzid": "Europe/San_Marino",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Sarajevo",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Saratov",
+      "cityNames": [
+       "俄羅斯薩拉托夫州薩拉托夫",
+       "薩拉托夫州薩拉托夫"
+      ]
+     },
+     {
+      "tzid": "Europe/Simferopol",
+      "cityNames": [
+       "辛菲洛普"
+      ]
+     },
+     {
+      "tzid": "Europe/Skopje",
+      "cityNames": [
+       "中歐標準時間",
+       "北馬其頓斯科普里"
+      ]
+     },
+     {
+      "tzid": "Europe/Sofia",
+      "cityNames": [
+       "保加利亞索非亞",
+       "保加利亞",
+       "索非亞"
+      ]
+     },
+     {
+      "tzid": "Europe/Stockholm",
+      "cityNames": [
+       "斯德哥爾摩",
+       "瑞典"
+      ]
+     },
+     {
+      "tzid": "Europe/Tallinn",
+      "cityNames": [
+       "愛沙尼亞塔林",
+       "塔林",
+       "東歐標準時間"
+      ]
+     },
+     {
+      "tzid": "Europe/Tirane",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Tiraspol",
+      "cityNames": [
+       "蒂拉斯波爾",
+       "聶斯特河沿岸",
+       "提拉斯浦",
+       "聶斯特河沿岸共和國"
+      ]
+     },
+     {
+      "tzid": "Europe/Ulyanovsk",
+      "cityNames": [
+       "烏里揚諾夫斯克"
+      ]
+     },
+     {
+      "tzid": "Europe/Uzhgorod",
+      "cityNames": [
+       ""
+      ]
+     },
+     {
+      "tzid": "Europe/Vaduz",
+      "cityNames": [
+       "瓦杜茲",
+       "列支敦斯登",
+       "瓦都茲"
+      ]
+     },
+     {
+      "tzid": "Europe/Vatican",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Vienna",
+      "cityNames": [
+       "維也納",
+       "奧地利"
+      ]
+     },
+     {
+      "tzid": "Europe/Vilnius",
+      "cityNames": [
+       "維爾紐斯",
+       "立陶宛"
+      ]
+     },
+     {
+      "tzid": "Europe/Volgograd",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Warsaw",
+      "cityNames": [
+       "中歐標準時間",
+       "波蘭華沙"
+      ]
+     },
+     {
+      "tzid": "Europe/Zagreb",
+      "cityNames": [
+       "薩格勒布",
+       "克羅埃西亞"
+      ]
+     },
+     {
+      "tzid": "Europe/Zaporozhye",
+      "cityNames": []
+     },
+     {
+      "tzid": "Europe/Zurich",
+      "cityNames": []
+     },
+     {
+      "tzid": "GB",
+      "cityNames": [
+       "格林威治標準時間",
+       "英國"
+      ]
+     },
+     {
+      "tzid": "GB-Eire",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "GMT",
+      "cityNames": [
+       "格林威治平均時間"
+      ]
+     },
+     {
+      "tzid": "GMT+0",
+      "cityNames": []
+     },
+     {
+      "tzid": "GMT-0",
+      "cityNames": []
+     },
+     {
+      "tzid": "GMT0",
+      "cityNames": [
+       "格林威治標準時間",
+       "歐洲西部時間"
+      ]
+     },
+     {
+      "tzid": "Greenwich",
+      "cityNames": [
+       "格林威治"
+      ]
+     },
+     {
+      "tzid": "HST",
+      "cityNames": [
+       "夏威夷阿留申時區"
+      ]
+     },
+     {
+      "tzid": "Hongkong",
+      "cityNames": [
+       "香港"
+      ]
+     },
+     {
+      "tzid": "Iceland",
+      "cityNames": [
+       "冰島"
+      ]
+     },
+     {
+      "tzid": "Indian/Antananarivo",
+      "cityNames": [
+       "馬達加斯加"
+      ]
+     },
+     {
+      "tzid": "Indian/Chagos",
+      "cityNames": [
+       "英屬印度洋領地"
+      ]
+     },
+     {
+      "tzid": "Indian/Christmas",
+      "cityNames": [
+       "聖誕島"
+      ]
+     },
+     {
+      "tzid": "Indian/Cocos",
+      "cityNames": []
+     },
+     {
+      "tzid": "Indian/Comoro",
+      "cityNames": [
+       "葛摩"
+      ]
+     },
+     {
+      "tzid": "Indian/Kerguelen",
+      "cityNames": [
+       "法属南部地区",
+       "法屬南部地區"
+      ]
+     },
+     {
+      "tzid": "Indian/Mahe",
+      "cityNames": [
+       "塞席爾時間"
+      ]
+     },
+     {
+      "tzid": "Indian/Maldives",
+      "cityNames": []
+     },
+     {
+      "tzid": "Indian/Mauritius",
+      "cityNames": []
+     },
+     {
+      "tzid": "Indian/Mayotte",
+      "cityNames": [
+       "馬約特島"
+      ]
+     },
+     {
+      "tzid": "Indian/Reunion",
+      "cityNames": []
+     },
+     {
+      "tzid": "Iran",
+      "cityNames": []
+     },
+     {
+      "tzid": "Israel",
+      "cityNames": [
+       "以色列"
+      ]
+     },
+     {
+      "tzid": "Jamaica",
+      "cityNames": [
+       "牙買加"
+      ]
+     },
+     {
+      "tzid": "Japan",
+      "cityNames": [
+       "日本"
+      ]
+     },
+     {
+      "tzid": "Kwajalein",
+      "cityNames": [
+       "瓜加林環礁",
+       "馬紹爾群島共和國"
+      ]
+     },
+     {
+      "tzid": "Libya",
+      "cityNames": []
+     },
+     {
+      "tzid": "MET",
+      "cityNames": [
+       "歐洲中部時間"
+      ]
+     },
+     {
+      "tzid": "MST",
+      "cityNames": [
+       "北美山區時區"
+      ]
+     },
+     {
+      "tzid": "MST7MDT",
+      "cityNames": [
+       "US Mountain Time"
+      ]
+     },
+     {
+      "tzid": "Mexico/BajaNorte",
+      "cityNames": [
+       "下加利福尼亞"
+      ]
+     },
+     {
+      "tzid": "Mexico/BajaSur",
+      "cityNames": [
+       "南下加利福尼亞州"
+      ]
+     },
+     {
+      "tzid": "Mexico/General",
+      "cityNames": [
+       "墨西哥"
+      ]
+     },
+     {
+      "tzid": "NZ",
+      "cityNames": []
+     },
+     {
+      "tzid": "NZ-CHAT",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Navajo",
+      "cityNames": [
+       "山區標準時間",
+       "新墨西哥州",
+       "納瓦霍族保留地"
+      ]
+     },
+     {
+      "tzid": "PRC",
+      "cityNames": []
+     },
+     {
+      "tzid": "PST8PDT",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Pacific/Apia",
+      "cityNames": [
+       "薩摩亞"
+      ]
+     },
+     {
+      "tzid": "Pacific/Auckland",
+      "cityNames": [
+       "奧克蘭",
+       "紐西蘭"
+      ]
+     },
+     {
+      "tzid": "Pacific/Bougainville",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Chatham",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Chuuk",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Easter",
+      "cityNames": [
+       "太平洋时间",
+       "智利"
+      ]
+     },
+     {
+      "tzid": "Pacific/Efate",
+      "cityNames": [
+       "萬那杜"
+      ]
+     },
+     {
+      "tzid": "Pacific/Enderbury",
+      "cityNames": [
+       "恩德伯里島"
+      ]
+     },
+     {
+      "tzid": "Pacific/Fakaofo",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Fiji",
+      "cityNames": [
+       "斐濟"
+      ]
+     },
+     {
+      "tzid": "Pacific/Funafuti",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Galapagos",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Gambier",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Guadalcanal",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Guam",
+      "cityNames": [
+       "關島"
+      ]
+     },
+     {
+      "tzid": "Pacific/Honolulu",
+      "cityNames": [
+       "夏威夷"
+      ]
+     },
+     {
+      "tzid": "Pacific/Johnston",
+      "cityNames": [
+       "美國本土外小島嶼"
+      ]
+     },
+     {
+      "tzid": "Pacific/Kanton",
+      "cityNames": [
+       "阿巴里靈阿環礁"
+      ]
+     },
+     {
+      "tzid": "Pacific/Kiritimati",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Kosrae",
+      "cityNames": [
+       "科斯雷"
+      ]
+     },
+     {
+      "tzid": "Pacific/Kwajalein",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Majuro",
+      "cityNames": [
+       "馬久羅",
+       "馬紹爾群島共和國"
+      ]
+     },
+     {
+      "tzid": "Pacific/Marquesas",
+      "cityNames": [
+       "馬克薩斯群島",
+       "法屬玻里尼西亞"
+      ]
+     },
+     {
+      "tzid": "Pacific/Midway",
+      "cityNames": [
+       "美國"
+      ]
+     },
+     {
+      "tzid": "Pacific/Nauru",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Niue",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Norfolk",
+      "cityNames": [
+       "諾福克島"
+      ]
+     },
+     {
+      "tzid": "Pacific/Noumea",
+      "cityNames": [
+       "新喀里多尼亞",
+       ""
+      ]
+     },
+     {
+      "tzid": "Pacific/Pago_Pago",
+      "cityNames": [
+       "美屬薩摩亞",
+       ""
+      ]
+     },
+     {
+      "tzid": "Pacific/Palau",
+      "cityNames": [
+       "帛琉"
+      ]
+     },
+     {
+      "tzid": "Pacific/Pitcairn",
+      "cityNames": [
+       "皮特肯群島"
+      ]
+     },
+     {
+      "tzid": "Pacific/Pohnpei",
+      "cityNames": [
+       "波納佩島",
+       "密克羅尼西亞聯邦",
+       "密克羅尼西亞"
+      ]
+     },
+     {
+      "tzid": "Pacific/Ponape",
+      "cityNames": [
+       "波納佩島",
+       "澎貝島",
+       ""
+      ]
+     },
+     {
+      "tzid": "Pacific/Port_Moresby",
+      "cityNames": [
+       "巴布亞紐幾內亞"
+      ]
+     },
+     {
+      "tzid": "Pacific/Rarotonga",
+      "cityNames": [
+       "帕西非克里佐特拉羅湯加島"
+      ]
+     },
+     {
+      "tzid": "Pacific/Saipan",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Samoa",
+      "cityNames": [
+       "薩摩亞"
+      ]
+     },
+     {
+      "tzid": "Pacific/Tahiti",
+      "cityNames": [
+       "法屬玻里尼西亞"
+      ]
+     },
+     {
+      "tzid": "Pacific/Tarawa",
+      "cityNames": [
+       "吉里巴斯",
+       "基里巴斯"
+      ]
+     },
+     {
+      "tzid": "Pacific/Tongatapu",
+      "cityNames": [
+       "東加"
+      ]
+     },
+     {
+      "tzid": "Pacific/Truk",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Wake",
+      "cityNames": []
+     },
+     {
+      "tzid": "Pacific/Wallis",
+      "cityNames": [
+       "瓦利斯群島和富圖那群島",
+       ""
+      ]
+     },
+     {
+      "tzid": "Pacific/Yap",
+      "cityNames": [
+       "雅浦島"
+      ]
+     },
+     {
+      "tzid": "Poland",
+      "cityNames": [
+       "波蘭"
+      ]
+     },
+     {
+      "tzid": "Portugal",
+      "cityNames": [
+       "西歐標準時間",
+       "葡萄牙里斯本",
+       "葡萄牙",
+       "里斯本"
+      ]
+     },
+     {
+      "tzid": "ROC",
+      "cityNames": [
+       "台灣",
+       "中華民國"
+      ]
+     },
+     {
+      "tzid": "ROK",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "Singapore",
+      "cityNames": [
+       "新加坡"
+      ]
+     },
+     {
+      "tzid": "Turkey",
+      "cityNames": [
+       "土耳其",
+       "土耳其共和國"
+      ]
+     },
+     {
+      "tzid": "UCT",
+      "cityNames": []
+     },
+     {
+      "tzid": "US/Alaska",
+      "cityNames": [
+       "阿拉斯加標準時間",
+       "阿拉斯加州",
+       "朱諾"
+      ]
+     },
+     {
+      "tzid": "US/Aleutian",
+      "cityNames": [
+       "阿留申群島"
+      ]
+     },
+     {
+      "tzid": "US/Arizona",
+      "cityNames": [
+       "山區標準時間",
+       "亞利桑那鳳凰城"
+      ]
+     },
+     {
+      "tzid": "US/Central",
+      "cityNames": [
+       "北美中部時區"
+      ]
+     },
+     {
+      "tzid": "US/East-Indiana",
+      "cityNames": [
+       "印第安那州"
+      ]
+     },
+     {
+      "tzid": "US/Eastern",
+      "cityNames": [
+       "北美東部時區"
+      ]
+     },
+     {
+      "tzid": "US/Hawaii",
+      "cityNames": [
+       "夏威夷"
+      ]
+     },
+     {
+      "tzid": "US/Indiana-Starke",
+      "cityNames": [
+       "斯塔克郡"
+      ]
+     },
+     {
+      "tzid": "US/Michigan",
+      "cityNames": []
+     },
+     {
+      "tzid": "US/Mountain",
+      "cityNames": []
+     },
+     {
+      "tzid": "US/Pacific",
+      "cityNames": [
+       "太平洋標準時間",
+       "太平洋市",
+       "華盛頓"
+      ]
+     },
+     {
+      "tzid": "US/Samoa",
+      "cityNames": []
+     },
+     {
+      "tzid": "UTC",
+      "cityNames": []
+     },
+     {
+      "tzid": "Universal",
+      "cityNames": [
+       "東部標準時間",
+       "印第安納"
+      ]
+     },
+     {
+      "tzid": "W-SU",
+      "cityNames": [
+       " "
+      ]
+     },
+     {
+      "tzid": "WET",
+      "cityNames": [
+       "歐洲西部時間"
+      ]
+     },
+     {
+      "tzid": "Zulu",
+      "cityNames": [
+       "東部標準時間"
+      ]
+     }
+    ]
+   }

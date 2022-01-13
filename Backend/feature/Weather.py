@@ -1,11 +1,11 @@
 import requests
 import json
-import urllib.request
-import pandas as pd
 import datetime
 import os
 from dotenv import load_dotenv
 import threading
+import logger
+logger = logger.get_logger(__name__)
 
 class Weather:
 
@@ -19,6 +19,8 @@ class Weather:
 
     def weather_forecast(self, time, place):
 
+        print(type(time))
+        logger.info(f"[weather_forcast] 收到 {time} {place}")
         listTaiwan = ['新竹縣', '金門縣', '苗栗縣', '新北市', '宜蘭縣', '雲林縣', '臺南市', '高雄市', '彰化縣', 
                       '臺北市', '南投縣', '澎湖縣', '基隆市', '桃園市', '花蓮縣', '連江縣', '臺東縣', '嘉義市', 
                       '嘉義縣', '屏東縣', '臺中市', '新竹市']
@@ -42,6 +44,9 @@ class Weather:
         url_World = f'https://opendata.cwb.gov.tw/fileapi/v1/opendataapi/F-C0032-007?Authorization={self.__weather_api_key}&downloadType=WEB&format=JSON'
 
 
+        if place == "HERE":
+            place = self.find_place()
+        
         r = requests.get(url_Taiwan)
         if place in listTaiwan:
             index = listTaiwan.index(place)
@@ -53,6 +58,7 @@ class Weather:
             timeEnd = data["weatherElement"][10]['time'][0]["endTime"]
             if time < timeStart:
                 message = "時間已過期，無法查詢"
+                logger.info(f"[weather] 時間已過期，無法查詢 {time} < {timeStart}")
 
                 self.thread.add_thread({
                 'class': 'TextToSpeech',
@@ -224,7 +230,12 @@ class Weather:
     def find_place(self):
         with urllib.request.urlopen("https://geolocation-db.com/json") as url:
             data = json.loads(url.read().decode())
-            return data['state']
+            if data['country_name'] == "Taiwan":
+                ## 如果在台灣 且 state 為 null 的話 回傳臺北市
+                if data['state'] == None:
+                    return '臺北市'
+                else:
+                    return data['state']
 
 
 if __name__ == "__main__":
