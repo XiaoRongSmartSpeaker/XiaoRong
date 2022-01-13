@@ -1,7 +1,5 @@
-cd ./wifi_driver
-chmod +x install.sh
+curl http://downloads.fars-robotics.net/wifi-drivers/8188eu-drivers/8188eu-5.10.63-v7l-1460.tar.gz | tar -xz
 sudo ./install.sh
-cd ..
 
 sudo apt update
 
