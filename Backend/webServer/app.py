@@ -29,7 +29,7 @@ def wifis():
 def setting_wifi():
     if request.method == 'PUT':
         wifi = json.loads(request.data)
-        isConnected = wifi_connect.WiFiConnect(wifi["SSID"], wifi["password"])
+        isConnected = wifi_connect.CreateWifiConfig(wifi["SSID"], wifi["password"])
         # print(json.loads(request.data))
         response = {'isConnected':isConnected}
     return json.dumps(response)

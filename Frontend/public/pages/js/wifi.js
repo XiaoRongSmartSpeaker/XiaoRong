@@ -143,8 +143,8 @@ function fetch_show_wifi()
         for(let i=0; i<total_networks; i++)
         {
             //wifi signal 
-            // wifi_signal = Number(networks[i].Signal_level.split('/')[0]);
-            wifi_signal = networks[i].Signal_level.match(/[-]\d+/g);
+             wifi_signal = Number(networks[i].Signal.split('/')[0]);
+            //wifi_signal = networks[i].Signal.match(/[-]\d+/g);
             console.log(wifi_signal)
             wifi_encry = networks[i].Encryption
             //console.log(wifi_signal, wifi_encry);
