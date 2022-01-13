@@ -11,12 +11,14 @@ var language = {
         'create_account': '還沒有帳號嗎？<a href="https://accounts.google.com/signup" class="underline" target="_blank">馬上註冊!</a>'
   },
 }
+const urlObj = new URL(document.URL)
+const flask_base_url = urlObj.protocol + "//" + urlObj.hostname + ":" + urlObj.port
 window.onload = function(){
   get_lan();
 }
 function post_id(google_id)
 {
-  fetch('http://localhost:3000/user_info', {
+  fetch(flask_base_url + '/user_info', {
     method: 'POST',
     body: JSON.stringify({
       user_id: google_id,
