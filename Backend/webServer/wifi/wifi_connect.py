@@ -17,6 +17,7 @@ def CreateWifiConfig(SSID, password):
                 wifi.write(config)
 
         print("Wifi config added")
+        os.system("sudo wpa_cli -i wlan1 reconfigure")
         os.system("sudo systemctl daemon-reload")
         os.system("sudo systemctl restart dhcpcd")
 
