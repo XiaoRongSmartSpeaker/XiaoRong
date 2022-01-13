@@ -20,7 +20,9 @@ sudo sh -c "iptables-save > /etc/iptables.ipv4.nat"
 sudo mv AP/rc.local /etc/
 chmod +x /etc/rc.local
 
-sudo apt-get install -y build-essential tk-dev libncurses5-dev libnss3-dev libatlas-base-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev libffi6-dev
+sudo apt-get install -y build-essential tk-dev libncurses5-dev libnss3-dev libatlas-base-dev libncursesw5-dev libreadline6-dev libdb5.3-dev libgdbm-dev libsqlite3-dev libssl-dev libbz2-dev libexpat1-dev liblzma-dev zlib1g-dev libffi-dev
+# May not find the package libffi6-dev
+sudo apt-get install -y libffi6-dev
 if [ -z "$(type -P python3.7)" ] 
 then
     curl -O https://www.python.org/ftp/python/3.7.3/Python-3.7.3.tar.xz
