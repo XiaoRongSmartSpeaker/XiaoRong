@@ -1,10 +1,10 @@
 import requests
 import json
+import urllib.request
 import datetime
 import os
 from dotenv import load_dotenv
 import threading
-import urllib.request
 import logger
 logger = logger.get_logger(__name__)
 
