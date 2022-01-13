@@ -14,3 +14,4 @@ from .Weather import Weather
 from .WorldTime import WorldTime
 from .Countdown import Countdown
 from .Test import Test
+from .Alarm import Alarm
