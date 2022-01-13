@@ -112,6 +112,17 @@ class MusicStreaming():
 
     def play_music(self, target):
 
+        if target == "":
+            message = "請重講一次並加上歌名"
+
+            self.thread.add_thread({
+            'class': 'TextToSpeech',
+            'func': 'text_to_voice',
+            'args':(message,),
+            })
+
+            return
+
         load_dotenv()
         API_Key = os.getenv("YOUTUBE_API_KEY")
         
