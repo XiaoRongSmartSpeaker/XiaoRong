@@ -8,6 +8,8 @@ import urllib.request
 import threading
 import os
 from dotenv import load_dotenv
+import logger
+logger = logger.get_logger(__name__)
 
 import time
 
@@ -30,21 +32,21 @@ class MusicStreaming():
         self.isPlaying = False
         self.isPause = True
         self.isStop = False
-        print('Player paused')
+        logger.info('Player paused')
 
     def continue_music(self):
         self.player.set_pause(False)
         self.isPlaying = True
         self.isPause = False
         self.isStop = False
-        print('Player continued')
+        logger.info('Player continued')
 
     def stop_music(self):
         self.player.stop()
         self.isPlaying = False
         self.isPause = False
         self.isStop = True
-        print('Player stop')
+        logger.info('Player stop')
 
     def now_playing(self):
         self.pause_music()
@@ -60,11 +62,13 @@ class MusicStreaming():
     def return_playing_status(self):
         return [self.isPlaying, self.isPause, self.isStop]
         
-                        
     def playing(self):
         self.player.play()
         good_states = ["State.Playing", "State.NothingSpecial", "State.Opening", "State.Paused"]
+        start = time.time()
+
         while str(self.player.get_state()) in good_states:
+            end = time.time()
             self.isPlaying = True
             self.isPause = False
             self.isStop = False
@@ -77,14 +81,15 @@ class MusicStreaming():
             if self.thread.is_run() == False:
                 self.stop_music()
 
-            print('Stream is working. Current state = {}'.format(self.player.get_state()))
+            if ((end - start) % 10) == 0: 
+                logger.debug('Stream is working. Current state = {}'.format(self.player.get_state()))
 
-        print('Stream is not working. Current state = {}'.format(self.player.get_state()))
+        logger.debug('Stream is not working. Current state = {}'.format(self.player.get_state()))
         self.stop_music()
 
     def pafy_video(self, videoId):
         url = 'https://www.youtube.com/watch?v={0}'.format(videoId)
-        print(url)
+        logger.info(url)
     #    ydl_opts = {"--no-check-certificate": True}
     #    play_video = pafy.new(url, ydl_opts)
         self.play_video = pafy.new(url)
@@ -96,9 +101,9 @@ class MusicStreaming():
         
         code = urllib.request.urlopen(url).getcode()
         if str(code).startswith('2') or str(code).startswith('3'):
-            print('Stream is working')
+            logger.info('Stream is working')
         else:
-            print('Stream is dead')
+            logger.info('Stream is dead')
         
         Media = Instance.media_new(play_url)
         Media.get_mrl()
@@ -137,7 +142,7 @@ class MusicStreaming():
 
         response = request.execute()
 
-        print(response)
+        logger.info(response)
 
         videos = []
 
@@ -146,5 +151,5 @@ class MusicStreaming():
                 videos.append('%s' % (search_result['id']['videoId']))
 
         if videos:
-            print('Videos:{0}'.format(videos))
+            logger.info('Videos:{0}'.format(videos))
             self.pafy_video(videos[0])
