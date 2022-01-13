@@ -38,7 +38,7 @@ class WorldTime():
         for tz in self.tzList:
             if place.casefold() in tz["tzid"].casefold() or  place.casefold() in tz["cityNames"]:
                 tzId = pytz.timezone(tz["tzid"])
-                tzTime = datetime.now(tzId).strftime('%Y年%m月%d日 %H點%M分%S秒 %Z %z')
+                tzTime = datetime.now(tzId).strftime('%m月%d日 %H點%M分%S秒 %Z')
                 sentence = place + '，現在時間是' + tzTime
                 logger.debug(sentence)
                 self.threadHandler.add_thread({
