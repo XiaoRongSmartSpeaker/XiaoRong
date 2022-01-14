@@ -22,8 +22,8 @@ playing = True  # for Development
 
 class Volume:
     def __init__(self) -> None:
-        self.systemVolume = 100
-        self.musicVolume = 100
+        self.systemVolume = 50
+        self.musicVolume = 50
         return
     # alsa setting
 
