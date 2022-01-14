@@ -165,8 +165,8 @@ class Extract:
             para = ()
         elif(function_name == 'stop_countdown'):
             para = ()
-        elif(function_name == 'set_alert'):
-            para = para_extract.target_alert(target)
+        elif(function_name == 'set_alarm'):
+            para = para_extract.target_alarm(target)
         elif(function_name == 'memorandum'):
             para = ()
         elif(function_name == 'get_time_at_place'):

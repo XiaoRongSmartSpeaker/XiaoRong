@@ -267,7 +267,7 @@ def target_countdown(full_input_str):
 # enter a full input str to get final result
 
 
-def target_alert(input_str):
+def target_alarm(input_str):
     day = None
     hour = None
     minute = None
@@ -299,7 +299,7 @@ def target_alert(input_str):
         input_str = input_str[later_obj.end():]
     input_str = input_str.replace('兩', '2')
     input_str = cn2an.transform(input_str, "cn2an")
-    time = re.compile(r'((\d+)(點|時)(\d+)分)')
+    time = re.compile(r'((\d+)(點|時)(\d+)分)的鬧鐘')
     time_obj = time.match(input_str)
     if(time_obj):
         hour = int(time_obj.group(2))
