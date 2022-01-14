@@ -26,7 +26,6 @@ var language = {
 }
 const urlObj = new URL(document.URL)
 const flask_base_url = urlObj.protocol + "//" + urlObj.hostname + ":" + urlObj.port
-
 window.onload = function(){
     get_lan();
 }
@@ -143,9 +142,7 @@ function fetch_show_wifi()
         for(let i=0; i<total_networks; i++)
         {
             //wifi signal 
-             wifi_signal = Number(networks[i].Signal.split('/')[0]);
-            //wifi_signal = networks[i].Signal.match(/[-]\d+/g);
-            console.log(wifi_signal)
+            wifi_signal = Number(networks[i].Signal.split('/')[0]);
             wifi_encry = networks[i].Encryption
             //console.log(wifi_signal, wifi_encry);
 

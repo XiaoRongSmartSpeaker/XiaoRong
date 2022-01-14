@@ -24,6 +24,8 @@ var language = {
 window.onload = function(){
   get_lan();
 }
+const urlObj = new URL(document.URL)
+const flask_base_url = urlObj.protocol + "//" + urlObj.hostname + ":" + urlObj.port
 function get_lan()
 {
     const params = new URLSearchParams(window.location.search);
@@ -60,7 +62,7 @@ function get_lan()
 //get_lan();
 function post_info(location, language, time, speaker_name)
 {
-  fetch('http://localhost:5000/speaker_info', {
+  fetch(flask_base_url +'/speaker_info', {
     method: 'POST',
     body: JSON.stringify({
       location: location,

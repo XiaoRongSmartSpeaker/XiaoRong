@@ -13,7 +13,6 @@ var language = {
 }
 const urlObj = new URL(document.URL)
 const flask_base_url = urlObj.protocol + "//" + urlObj.hostname + ":" + urlObj.port
-
 window.onload = function(){
   get_lan();
 }
@@ -29,7 +28,9 @@ function post_id(google_id)
   .then(response => response.json())
   .then(data => {
     console.log('Success:', data);
-
+    // Redirect to setting.html
+    window.location.href = `setting.html?lan=${lan}`;
+    
   })
   .catch((error) => {
     console.error('Error:', error);
@@ -59,9 +60,7 @@ function attachSignin(element) {
         // POST user's ID to backend 
         post_id(profile.getId());
 
-        // Redirect to setting.html
-          
-        window.location.href = `setting.html?lan=${lan}`;
+        
         
       }, function(error) {
         alert(JSON.stringify(error, undefined, 2));

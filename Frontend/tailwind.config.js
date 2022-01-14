@@ -18,9 +18,7 @@ module.exports = {
         xxs: ['0.65rem', { lineHeight: '0.875remr' }],
       }
     },
-    fontFamily: {
-      body: ['Nunito'],
-    }
+    
   },
   variants: {
     extend: {},
