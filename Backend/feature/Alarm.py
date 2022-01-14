@@ -53,6 +53,11 @@ class Alarm():
 			return False
 		elif not 0 <= m < 60:
 			logger.debug('Error minute')
+			self.threadHandler.add_thread({
+                    'class': 'TextToSpeech',
+                    'func': 'text_to_voice',
+                    'args': ("須設定幾點幾分",)
+                    })
 			return False
 		self.alarmList.append({"day": day, "hour": h, "minute": m})
 		self.save_alarm_list()
@@ -92,11 +97,11 @@ class Alarm():
 	def stop_ringing(self):
 		self.isPlayingAudio = False
 		return
-if __name__ == "__main__":
-	a = Alarm()
-	day, h, m = map(int, input("輸入鬧鐘時間（格式：星期(1-7):hh:mm）").split(":"))
-	a.main()
-	if a.set_alarm(day, h, m) == False:
-		print('error time!')
-	time.sleep(30)
-	a.stop_ringing()
+# if __name__ == "__main__":
+# 	a = Alarm()
+# 	day, h, m = map(int, input("輸入鬧鐘時間（格式：星期(1-7):hh:mm）").split(":"))
+# 	a.main()
+# 	if a.set_alarm(day, h, m) == False:
+# 		print('error time!')
+# 	time.sleep(30)
+# 	a.stop_ringing()
