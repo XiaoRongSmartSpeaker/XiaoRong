@@ -19,6 +19,7 @@ class Weather:
         self.thread = thread
 
     def weather_forecast(self, time, place):
+
         print(type(time))
         logger.info(f"[weather_forcast] 收到 {time} {place}")
         listTaiwan = ['新竹縣', '金門縣', '苗栗縣', '新北市', '宜蘭縣', '雲林縣', '臺南市', '高雄市', '彰化縣', 
