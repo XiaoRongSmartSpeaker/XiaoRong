@@ -48,6 +48,7 @@ sudo apt-get install -y python3-pyaudio
 sudo apt-get install -y libdbus-1-dev
 sudo apt-get install -y libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0
 sudo apt-get install -y llvm-11-dev
+sudo apt-get install -y ffmpeg
 sudo rm /usr/bin/llvm-config
 sudo ln -s /usr/bin/llvm-config-11 /usr/bin/llvm-config
 
