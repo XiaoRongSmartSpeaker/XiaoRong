@@ -15,3 +15,4 @@ from .WorldTime import WorldTime
 from .Countdown import Countdown
 from .Test import Test
 from .Alarm import Alarm
+from .ButtonController import ButtonController
