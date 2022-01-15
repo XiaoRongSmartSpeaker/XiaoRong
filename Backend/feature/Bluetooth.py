@@ -376,9 +376,11 @@ class Bluetooth():
             return 0
 
     def volume_change(self, volume):
-        # TODO: link to system volume change
-        # add_thread(set_system_volume, volume)
-        pass
+        self.threadHandler.add_thread({
+            'class': 'Volume',
+            'func': 'set_music_volume',
+            'args': (volume, ),
+        })
 
     def set_bluetooth_alias(self, alias):
         self.adapter.change_alias(alias)

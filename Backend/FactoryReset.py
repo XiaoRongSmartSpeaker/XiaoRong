@@ -5,6 +5,7 @@ from time import sleep
 import requests
 import configparser
 import shutil
+import threading
 
 import feature.TextToSpeech as TextToSpeech
 
@@ -30,8 +31,8 @@ except ModuleNotFoundError as e:
 
 class FactoryReset:
     def __init__(self, main_instance = None):
-        # self.state = 0
         logger.debug("initializing")
+        self.state = 0
         self._default_config_path = DEFAULT_CONFIG_PATH     # get factory default config file path
         self._config_path = CONFIG_PATH                     # get current config file path
         # self._speaker_name = os.getenv('SPEAKER_NAME')    # get speaker_name for server API request
@@ -127,7 +128,6 @@ class FactoryReset:
             self._main_instance.close()     # main.close()
         else:
             logger.error("Method to close all thread is not correctly implemented")
-        pass
 
     def _restore_config(self):
         if not os.path.exists(self._default_config_path):
@@ -149,9 +149,9 @@ class FactoryReset:
 
         self._call_server_delete_speaker_data()
 
-        self._restore_config()
+        # self._restore_config()
 
-        # self._terminate_other_process()
+        self._terminate_other_process()
 
         for i in range(3):
             logger.info("Rebooting in " + str(3 - i))
@@ -160,8 +160,49 @@ class FactoryReset:
         # os.system('reboot')
 
     def factory_reset_notification(self):
-        TextToSpeech.text_to_voice("音箱重置即將開始")
-        TextToSpeech.text_to_voice("繼續按住按鈕十秒以執行重置")
+        TextToSpeech.text_to_voice("蟲置將開始")
+        
+    def reset(self, args):
+        device = args[0]
+        LC = args[1]
+        if device.is_pressed:
+            print("setting timer...")
+            t1 = threading.Timer(5.0, self.change_state,[LC])
+            t2 = threading.Timer(10.0, self.change_state,[LC])
+            t3 = threading.Timer(15.0, self.change_state,[LC])
+            t1.start()
+            t2.start()
+            t3.start()
+            device.when_released = lambda : self.cancel([t1,t2,t3], LC)
+            
+    def cancel(self, ts, LC):
+        print("canceling...")
+        for t in ts:
+            t.cancel()
+        if self.state != 3:
+            for i in range(3):
+                LC.off(i)
+        self.state = 0
+        
+    def change_state(self,LC):
+        print("changing...")
+        if self.state == 0:
+            LC.light(0)
+            # TextToSpeech.text_to_voice("五秒")
+            self.state = 1
+            self.factory_reset_notification()
+        elif self.state == 1:
+            LC.light(1)
+            # TextToSpeech.text_to_voice("十秒")
+            self.state = 2
+        elif self.state == 2:
+            LC.light(2)
+            TextToSpeech.text_to_voice("十五秒，蟲治開始")
+            self.state = 3
+            #reset here
+            for i in range(3):
+                LC.blink(i)  
+            self.factory_reset()
 
 # testing only
 if __name__ == "__main__":

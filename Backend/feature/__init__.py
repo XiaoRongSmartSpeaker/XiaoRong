@@ -8,3 +8,11 @@ from .Extract import Extract
 from .Bluetooth import Bluetooth
 from .Volume import Volume
 from .Translate import Translate
+from .MusicStreaming import MusicStreaming
+from .QuestionAnswering import QuestionAnswering
+from .Weather import Weather
+from .WorldTime import WorldTime
+from .Countdown import Countdown
+from .Test import Test
+from .Alarm import Alarm
+from .ButtonController import ButtonController
