@@ -85,8 +85,11 @@ class FactoryReset:
         else:
             file_pair_list = []
         
+        print(file_pair_list)
+        
         for file_pair in file_pair_list:
-            file, default_file = file_pair.split(" ", 1) + ['']
+            print(file_pair.split())
+            file, default_file = file_pair.split(" ", 1)
             try:
                 os.path.exists(file)
                 os.path.exists(default_file)
