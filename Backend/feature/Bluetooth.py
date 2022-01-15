@@ -313,6 +313,15 @@ class Bluetooth():
         logger.info("Ready to start bluetooth daemon")
 
     def bluetooth_daemon_start(self) -> None:
+        if self.threadHandler:
+            self.threadHandler.add_thread({
+                'class': 'SpeechToText',
+                'func': 'voice_to_text',
+                'args': ('藍芽已開啟', )
+            })
+            logger.info("Bluetooth daemon opened")
+        else:
+            logger.error("threadHandler not exist. Failed to add thread.")
         self.mainloop.run()
 
     def open_bluetooth(self):
@@ -338,6 +347,15 @@ class Bluetooth():
         self.adapter.make_power_off()
         self.manager.UnregisterAgent(AGENT_PATH)
         self.mainloop.quit()
+        if self.threadHandler:
+            self.threadHandler.add_thread({
+                'class': 'SpeechToText',
+                'func': 'voice_to_text',
+                'args': ('藍芽已關閉', )
+            })
+        else:
+            logger.error("threadHandler not exist. Failed to add thread.")
+        logger.info("Bluetooth daemon closed")
 
     def get_bluetooth_status(self):
         connectedDevicesList = self.device.get_connected_devices_list()
@@ -421,7 +439,18 @@ class Bluetooth():
                     self.device.disconnect(device_address)
                     logger.info("Other device already connected.")
                 else:
-                    self.agent.connectedDevice = device_address
+                    obj = proxyobj(self.bus, path, PROPERTY_INTERFACE)
+                    deviceName = obj.Get(DEVICE_INTERFACE, "Name")
+                    logger.debug(f"已連接{deviceName}")
+
+                    if self.threadHandler:
+                        self.threadHandler.add_thread({
+                            'class': 'SpeechToText',
+                            'func': 'voice_to_text',
+                            'args': (f'已連接{deviceName}', )
+                        })
+                    else:
+                        logger.error("threadHandler not exist. Failed to add thread.")
             # Device disconnected
             elif iface == "Device1" and name == "Connected" and value == 0 and self.agent.connectedDevice == get_device_address_by_path(path):
                 self.agent.connectedDevice = None
