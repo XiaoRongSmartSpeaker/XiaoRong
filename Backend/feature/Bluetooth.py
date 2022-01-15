@@ -315,8 +315,8 @@ class Bluetooth():
     def bluetooth_daemon_start(self) -> None:
         if self.threadHandler:
             self.threadHandler.add_thread({
-                'class': 'SpeechToText',
-                'func': 'voice_to_text',
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
                 'args': ('藍芽已開啟', )
             })
             logger.info("Bluetooth daemon opened")
@@ -349,8 +349,8 @@ class Bluetooth():
         self.mainloop.quit()
         if self.threadHandler:
             self.threadHandler.add_thread({
-                'class': 'SpeechToText',
-                'func': 'voice_to_text',
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
                 'args': ('藍芽已關閉', )
             })
         else:
@@ -445,8 +445,8 @@ class Bluetooth():
 
                     if self.threadHandler:
                         self.threadHandler.add_thread({
-                            'class': 'SpeechToText',
-                            'func': 'voice_to_text',
+                            'class': 'TextToSpeech',
+                            'func': 'text_to_voice',
                             'args': (f'已連接{deviceName}', )
                         })
                     else:
