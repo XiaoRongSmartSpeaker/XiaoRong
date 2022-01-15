@@ -160,8 +160,7 @@ class FactoryReset:
         # os.system('reboot')
 
     def factory_reset_notification(self):
-        TextToSpeech.text_to_voice("音箱重置即將開始")
-        TextToSpeech.text_to_voice("繼續按住按鈕十秒以執行重置")
+        TextToSpeech.text_to_voice("蟲置將開始")
         
     def reset(self, args):
         device = args[0]
@@ -189,13 +188,16 @@ class FactoryReset:
         print("changing...")
         if self.state == 0:
             LC.light(0)
+            # TextToSpeech.text_to_voice("五秒")
             self.state = 1
             self.factory_reset_notification()
         elif self.state == 1:
             LC.light(1)
+            # TextToSpeech.text_to_voice("十秒")
             self.state = 2
         elif self.state == 2:
             LC.light(2)
+            TextToSpeech.text_to_voice("十五秒，蟲治開始")
             self.state = 3
             #reset here
             for i in range(3):

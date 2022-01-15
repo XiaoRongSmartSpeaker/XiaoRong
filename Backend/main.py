@@ -164,7 +164,7 @@ if __name__ == "__main__":
     main.add_thread({
         'class': 'ButtonController',
         'func': 'start',
-        'args': [{13:{'BUTTON':[factory_reset,'reset',[]]}}],
+        'args': {13:{'BUTTON':[factory_reset,'reset',[]]}},
     })
     main.open_thread()
     
