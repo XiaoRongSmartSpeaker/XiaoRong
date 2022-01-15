@@ -63,7 +63,7 @@ function attachSignin(element) {
         
         
       }, function(error) {
-        alert(JSON.stringify(error, undefined, 2));
+        //alert(JSON.stringify(error, undefined, 2));
       });
 }
 
