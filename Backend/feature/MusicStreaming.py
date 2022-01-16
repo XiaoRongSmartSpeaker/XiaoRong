@@ -41,7 +41,8 @@ class MusicStreaming():
             logger.info('Player cannot paused')
 
     def continue_music(self):
-        if self.isPause == True and self.player.get_state() == 'State.Paused':
+        print(self.player.get_state())
+        if self.isPause == True and self.player.get_state() == vlc.State.Paused:
             self.thread.resume()
             self.player.set_pause(False)
             self.isPlaying = True
