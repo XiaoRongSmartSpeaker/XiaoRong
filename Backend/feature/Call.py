@@ -10,7 +10,7 @@ class Call:
         pass
 
     def make_call(self, way, number):
-        self.number = number
+        self.number = number.replace('-', '');
 
         bus = dbus.SystemBus()
         manager = dbus.Interface(bus.get_object('org.ofono', '/'),
