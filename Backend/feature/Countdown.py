@@ -1,8 +1,7 @@
 from logging import Manager
 import time
-from playsound import playsound
+from pygame import mixer
 import sys
-from multiprocessing import Process
 try:
 	import logger
 	logger = logger.get_logger(__name__)
@@ -73,14 +72,16 @@ class Countdown():
 			# 	'func': 'text_to_voice',
 			# 	'args': ('計時時間到',)
 			# 	}) 
-			self.play_ring()
+			mixer.init()
+			mixer.music.load(self.audioFile)
+			mixer.music.play(1)	
 			while self.isPlayingAudio and self.audioSec:
 				self.audioSec -= 1
 				time.sleep(1)
 			logger.info('end of ring')
 			self.audioSec = 150
 			self.isPlayingAudio = False
-			self.playingAudio.terminate()
+			mixer.music.stop()
 		else:
 			logger.info('Cancel countdown')
 			self.threadHandler.add_thread({
@@ -96,10 +97,9 @@ class Countdown():
 		# playsound(None)
 		self.isPlayingAudio = False
 		return
-	def play_ring(self):
-		# playsound(self.audioFile)
-		self.playingAudio = Process(target=playsound, args=(self.audioFile,))
-		self.playingAudio.start()	
+	# def play_ring(self):
+	# 	# playsound(self.audioFile)
+		
 # if __name__ == "__main__":
 #     a = Countdown()
 #     h, m, s = map(int, input("輸入到計時時間（格式：hh:mm:ss）").split(":"))
