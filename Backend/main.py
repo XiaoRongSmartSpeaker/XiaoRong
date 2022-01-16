@@ -23,6 +23,9 @@ class Main():
         self.__DAEMON_THREAD = [                    # define daemon work
             'voice_to_text'
         ]
+        self.WHITE_LIST= [                          # define white list to
+            'voice_to_text',                        # skip voice to text
+        ]
 
     def add_thread(self, func_info) -> None:
         if not isinstance(func_info['args'], tuple):
@@ -159,7 +162,6 @@ if __name__ == "__main__":
         main.threads.reverse()
         for thread in main.threads:
             if not thread.is_alive():
-                threading_running = True
                 # discard the last one thread on a feature instance
                 main.instance_thread_correspond[thread.name].pop()
 
@@ -182,11 +184,17 @@ if __name__ == "__main__":
                 # delete thread
                 print('delete thread', thread)
                 main.threads.remove(thread)
+            elif thread.func not in main.WHITE_LIST:
+                threading_running = True
 
         main.threads.reverse()
 
+        # if music pause, resume voive to text
+        if len(main.instance_thread_correspond["MusicStreaming"]) > 0:
+            if main.instance_thread_correspond["MusicStreaming"].is_pause():
+                main.instance_thread_correspond["SpeechToText"][-1].resume()
         # if there is no thread alive, open voice to text feature
-        if not threading_running:
+        elif not threading_running:
             main.instance_thread_correspond["SpeechToText"][-1].resume()
 
         # if there are pending thread data
