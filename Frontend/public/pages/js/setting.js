@@ -2,8 +2,6 @@ var lan = 'ch';
 var language = {
   "en":{
         'header':'Setup your XiaoRong',
-        'label_language': 'Language',
-        'language': '<option>English</option><option>中文</option><option>한국인</option>',
         'label_location': 'Location',
         'location': '<option>Taiwan</option><option>Japan</option><option>Korea</option>',
         'label_timezone': 'Timezone',
@@ -12,8 +10,6 @@ var language = {
   },
   "ch":{
         'header':'設定您的小絨',
-        'label_language': '語言',
-        'language': '<option>中文</option><option>English</option><option>한국인</option>',
         'label_location': '地區',
         'location': '<option>台灣</option><option>日本</option><option>韓國</option>',
         'label_timezone': '時區',
@@ -25,7 +21,14 @@ window.onload = function(){
   get_lan();
 }
 const urlObj = new URL(document.URL)
-const flask_base_url = urlObj.protocol + "//" + urlObj.hostname + ":" + urlObj.port
+let flask_base_url= urlObj.protocol + "//" + urlObj.hostname;
+
+if(urlObj.port != undefined)
+{
+  flask_base_url = flask_base_url.concat(":" + urlObj.port);
+}
+
+
 function get_lan()
 {
     const params = new URLSearchParams(window.location.search);
@@ -60,13 +63,13 @@ function get_lan()
 }
 
 //get_lan();
-function post_info(location, language, time, speaker_name)
+function post_info(location, time, speaker_name)
 {
   fetch(flask_base_url +'/speaker_info', {
     method: 'POST',
     body: JSON.stringify({
       location: location,
-      language: language,
+      //language: language,
       time: time,
       speaker_name: speaker_name,
     }),
@@ -104,7 +107,7 @@ document.querySelector("button").addEventListener("click", () => {
 
     // get location
     var location = document.querySelector("#location").value;
-    var language = document.querySelector("#language").value;
+    //var language = document.querySelector("#language").value;
     var time = document.querySelector("#time").value;
 
 

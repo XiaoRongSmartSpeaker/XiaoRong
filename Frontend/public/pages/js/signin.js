@@ -12,7 +12,13 @@ var language = {
   },
 }
 const urlObj = new URL(document.URL)
-const flask_base_url = urlObj.protocol + "//" + urlObj.hostname + ":" + urlObj.port
+let flask_base_url= urlObj.protocol + "//" + urlObj.hostname;
+
+if(urlObj.port != undefined)
+{
+  flask_base_url = flask_base_url.concat(":" + urlObj.port);
+}
+
 window.onload = function(){
   get_lan();
 }
@@ -56,10 +62,11 @@ function attachSignin(element) {
       function(googleUser) {
         var profile = googleUser.getBasicProfile();
         console.log(profile)
-        
+
+       
         // POST user's ID to backend 
         post_id(profile.getId());
-
+       
         
         
       }, function(error) {
