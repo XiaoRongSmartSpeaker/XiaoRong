@@ -104,6 +104,12 @@ class Main():
 
         print('Could not find the feature instance', func_info['class'])
 
+    def get_instance(self, class_name) -> object:
+        for dec_class in self.declare_class:
+            if dec_class['name'] == class_name:
+                return dec_class['instance']
+        return None
+
     def threading_empty(self) -> bool:
         return True if self.__pending_threads.empty() else False
 
