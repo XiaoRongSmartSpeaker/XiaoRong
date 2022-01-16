@@ -313,6 +313,15 @@ class Bluetooth():
         logger.info("Ready to start bluetooth daemon")
 
     def bluetooth_daemon_start(self) -> None:
+        if self.threadHandler:
+            self.threadHandler.add_thread({
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args': ('藍芽已開啟', )
+            })
+            logger.info("Bluetooth daemon opened")
+        else:
+            logger.error("threadHandler not exist. Failed to add thread.")
         self.mainloop.run()
 
     def open_bluetooth(self):
@@ -338,6 +347,15 @@ class Bluetooth():
         self.adapter.make_power_off()
         self.manager.UnregisterAgent(AGENT_PATH)
         self.mainloop.quit()
+        if self.threadHandler:
+            self.threadHandler.add_thread({
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args': ('藍芽已關閉', )
+            })
+        else:
+            logger.error("threadHandler not exist. Failed to add thread.")
+        logger.info("Bluetooth daemon closed")
 
     def get_bluetooth_status(self):
         connectedDevicesList = self.device.get_connected_devices_list()
@@ -422,9 +440,34 @@ class Bluetooth():
                     logger.info("Other device already connected.")
                 else:
                     self.agent.connectedDevice = device_address
+
+                    obj = proxyobj(self.bus, path, PROPERTY_INTERFACE)
+                    deviceName = obj.Get(DEVICE_INTERFACE, "Name")
+                    logger.info(f"已連接{deviceName}")
+
+                    if self.threadHandler:
+                        self.threadHandler.add_thread({
+                            'class': 'TextToSpeech',
+                            'func': 'text_to_voice',
+                            'args': (f'已連接{deviceName}', )
+                        })
+                    else:
+                        logger.error("threadHandler not exist. Failed to add thread.")
             # Device disconnected
             elif iface == "Device1" and name == "Connected" and value == 0 and self.agent.connectedDevice == get_device_address_by_path(path):
                 self.agent.connectedDevice = None
+
+                obj = proxyobj(self.bus, path, PROPERTY_INTERFACE)
+                deviceName = obj.Get(DEVICE_INTERFACE, "Name")
+                logger.info(f"{deviceName}已斷開連接")
+                if self.threadHandler:
+                    self.threadHandler.add_thread({
+                        'class': 'TextToSpeech',
+                        'func': 'text_to_voice',
+                        'args': (f'{deviceName}已斷開連接', )
+                    })
+                else:
+                    logger.error("threadHandler not exist. Failed to add thread.")
 
     def interfaces_added(self, path, interfaces):
         for iface, props in interfaces.items():

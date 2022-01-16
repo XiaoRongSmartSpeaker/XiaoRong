@@ -5,6 +5,8 @@ import logging
 import threading
 from time import sleep
 from gpiozero import Button, PWMLED
+import Volume
+import MusicStreaming
 
 class Test():
     def __init__(self):
@@ -61,19 +63,25 @@ class Test():
             #reset here        
     
 class Worker(threading.Thread):
-    def __init__(self, device, cls, func, args):
+    def __init__(self, device, cls, func, args=None):
         threading.Thread.__init__(self)
         self.kill = False
         self.device = device
         self.cls = cls
         self.func = func
-        self.args = [device] + args
-    
+        if func == 'reset':
+            self.args = [device] + args
+        else:
+            self.args = args
+
     def run(self):
         while not self.kill:
             try:
                 todo = getattr(self.cls, self.func)
-                self.device.when_pressed = lambda : todo(self.args)
+                if self.args != None:
+                    self.device.when_pressed = lambda : todo(self.args)
+                else:
+                    self.device.when_pressed = lambda : todo()
             except AttributeError:
                 print("Attribute Error... Cannot find function from class")
                 exit()
@@ -115,7 +123,10 @@ class ButtonController():
             #     self._led.append({PWMLED(key):func})
         for item in self._sw:
             but, func = list(item.items())[0]
-            self._sw_threads.append(Worker(but, func[0],func[1], func[2]+[self.LC]))
+            if func[1] == 'reset':
+                self._sw_threads.append(Worker(but, func[0],func[1], func[2]+[self.LC]))
+            else:
+                self._sw_threads.append(Worker(but, func[0],func[1]))                
             self._sw_threads[-1].daemon = True
             self._sw_threads[-1].start()
         # for item in self._led:
@@ -127,7 +138,10 @@ class ButtonController():
     def modify_button_function(self, index, new_func):
         device = self._sw_threads[index].device
         self._sw_threads[index].kill=True
-        self._sw_threads[index] = Worker(device, new_func.split(',')[0],new_func.split(',')[1])
+        if new_func[1] == 'reset':
+            self._sw_threads[index] = (Worker(device, new_func[0], new_func[1], new_func[2]+[self.LC]))
+        else:
+            self._sw_threads[index] = Worker(device, new_func[0],new_func[1])
         self._sw_threads[index].daemon = True
         self._sw_threads[index].start()
 
@@ -169,12 +183,13 @@ if __name__=='__main__':
     check = True
     T = Test()
     # ff = FactoryReset(T)
-    LC = LEDController([23,24,25])
+    # LC = LEDController([23,24,25])
+    vv = Volume.Volume()
     BC = ButtonController()
     # BC = ButtonController({27:{'BUTTON':'Worker,listen'},24:{'BUTTON':'Worker,listen'},12:{'LED':'Worker,light'},16:{'LED':'Worker,light'},20:{'LED':'Worker,light'}})
     try:
         print("Starting Threads...")
-        BC.start({13:{'BUTTON':[T,'listen']}})
+        BC.start({13:{'BUTTON':[vv,'louder_volume']},14:{'BUTTON':[vv,'louder_volume']},15:{'BUTTON':[vv,'quieter_volume']}})
         print(BC._sw_threads)
         BC.wait_until_finish()
     except:

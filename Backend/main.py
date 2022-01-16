@@ -156,6 +156,11 @@ if __name__ == "__main__":
         'func': 'voice_to_text',
     })
     main.open_thread()
+    main.add_thread({
+        'class': 'Volume',
+        'func': '__init__',
+    })
+    main.open_thread()
     
     main.add_thread({
         'class': 'monitering',
@@ -163,10 +168,15 @@ if __name__ == "__main__":
     })
     main.open_thread()
     
+    volume_instance = None
+    for dec_class in main.declare_class:
+        if dec_class['name'] == 'Volume':
+            volume_instance = dec_class['instance']
+    
     main.add_thread({
         'class': 'ButtonController',
         'func': 'start',
-        'args': {13:{'BUTTON':[factory_reset,'reset',[]]}},
+        'args': {13:{'BUTTON':[factory_reset,'reset',[]]},14:{'BUTTON':[volume_instance,'louder_volume',[]]},15:{'BUTTON':[volume_instance,'quieter_volume',[]]}},
     })
     main.open_thread()
     
@@ -174,7 +184,19 @@ if __name__ == "__main__":
     while True:
         # check every second
         time.sleep(1)
-
+        MS = None
+        BC = None
+        for dec_class in main.declare_class:
+            if dec_class['name'] == 'MusicStreaming':
+                MS = dec_class['instance']
+            if dec_class['name'] == 'ButtonController':
+                BC = dec_class['instance']
+                    
+        if MS != None and BC != None and MS.isPlaying == True:
+            BC.modify_button_function(0, [MS,'stop_music',[]])
+        elif BC != None:
+            BC.modify_button_function(0, [factory_reset,'reset',[]])
+            
         # clear that completed threading
         # because newer threads are at the back of list
         threading_running = False

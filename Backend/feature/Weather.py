@@ -47,6 +47,9 @@ class Weather:
 
         if place == "HERE":
             place = self.find_place()
+
+        if place == '馬祖':
+            place = '連江縣'
         
         r = requests.get(url_Taiwan)
         if place in listTaiwan:
