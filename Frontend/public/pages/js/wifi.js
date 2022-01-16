@@ -24,6 +24,13 @@ var language = {
         'network': '可用的網路'
     },
 }
+const urlObj = new URL(document.URL)
+let flask_base_url= urlObj.protocol + "//" + urlObj.hostname;
+
+if(urlObj.port != undefined)
+{
+  flask_base_url = flask_base_url.concat(":" + urlObj.port);
+}
 window.onload = function(){
     get_lan();
 }
@@ -127,7 +134,7 @@ function fetch_show_wifi()
     Show_spinner();
     
     
-    fetch('http://localhost:3000/wifis')
+    fetch(flask_base_url + '/wifis')
     .then(response => response.json())
     .then(networks => {
         
@@ -141,7 +148,7 @@ function fetch_show_wifi()
         {
             //wifi signal 
             wifi_signal = Number(networks[i].Signal_level.split('/')[0]);
-            wifi_encry = networks[i].Encryption_key
+            wifi_encry = networks[i].Encryption
             //console.log(wifi_signal, wifi_encry);
 
             //wifi encryption == 'on
@@ -310,7 +317,7 @@ function input_password(wifi_name, pw, wifi_encry)
     
 
     //Post pw to api
-    fetch('http://localhost:3000/setting_wifi', {
+    fetch(flask_base_url + '/setting_wifi', {
         method: 'PUT',
         body: JSON.stringify({
           SSID: wifi_name,
