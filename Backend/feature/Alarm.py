@@ -1,7 +1,7 @@
 from logging import Manager
 import time
 import multiprocessing
-from playsound import playsound
+from pygame import mixer
 import sys
 import json
 
@@ -73,15 +73,16 @@ class Alarm():
 			for setTime in self.alarmList:
 				if now == setTime:
 					logger.info('Alarm time')
-					self.isPlayingAudio = True
-					self.play_ring()
+					mixer.init()
+					mixer.music.load(self.audioFile)
+					mixer.music.play(1)	
 					while self.isPlayingAudio and self.audioSec:
 						self.audioSec -= 1
 						time.sleep(1)
+					logger.info('end of ring')
 					self.audioSec = 150
 					self.isPlayingAudio = False
-					logger.info('end of ring')
-					self.playingAudio.terminate()
+					mixer.music.stop()
 					break
 			time.sleep(1)
 
