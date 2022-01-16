@@ -6,3 +6,5 @@ from .SpeechToText import SpeechToText
 from .TextToSpeech import TextToSpeech
 from .Extract import Extract
 from .Bluetooth import Bluetooth
+from .Volume import Volume
+from .Translate import Translate
