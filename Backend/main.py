@@ -9,6 +9,7 @@ from logger import logger
 from dotenv import load_dotenv
 
 import FactoryReset
+import LogManager
 
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
@@ -127,8 +128,8 @@ if __name__ == "__main__":
 
     # defination main process
     main = Main()
+
     factory_reset = FactoryReset.FactoryReset(main)
-    # factory_reset.factory_reset()
     
     print("Open signal listener")
     signal.signal(10, main.close)
