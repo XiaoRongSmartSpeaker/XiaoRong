@@ -20,10 +20,3 @@ def CreateWifiConfig(SSID, password):
         os.system("sudo wpa_cli -i wlan1 reconfigure")
         os.system("sudo systemctl daemon-reload")
         os.system("sudo systemctl restart dhcpcd")
-
-def WiFiConnect(SSID, password):
-    connect = os.system("sudo iw wlan0 " + SSID + " keys d:0:" + password)
-    return connect
-
-def test():
-	os.system("whoami")
