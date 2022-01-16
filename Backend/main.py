@@ -204,7 +204,7 @@ if __name__ == "__main__":
                 BC = dec_class['instance']
                     
         if MS != None and BC != None and MS.isPlaying == True:
-            BC.modify_button_function(0, [MS,'stop_music',[]])
+            BC.modify_button_function(0, [MS,'pause_music',[]])
         elif BC != None:
             BC.modify_button_function(0, [factory_reset,'reset',[]])
             
