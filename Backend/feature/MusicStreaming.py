@@ -13,6 +13,8 @@ logger = logger.get_logger(__name__)
 
 import time
 
+from TextToSpeech import TextToSpeech
+
 
 class MusicStreaming():
 
@@ -28,18 +30,26 @@ class MusicStreaming():
         self.thread = thread
         
     def pause_music(self):
-        self.player.set_pause(True)
-        self.isPlaying = False
-        self.isPause = True
-        self.isStop = False
-        logger.info('Player paused')
+        if self.isPlaying == True:
+            self.thread.pause()
+            self.player.set_pause(True)
+            self.isPlaying = False
+            self.isPause = True
+            self.isStop = False
+            logger.info('Player paused')
+        else:
+            logger.info('Player cannot paused')
 
     def continue_music(self):
-        self.player.set_pause(False)
-        self.isPlaying = True
-        self.isPause = False
-        self.isStop = False
-        logger.info('Player continued')
+        if self.isPause == True and self.player.get_state() == 'State.Paused':
+            self.thread.resume()
+            self.player.set_pause(False)
+            self.isPlaying = True
+            self.isPause = False
+            self.isStop = False
+            logger.info('Player continued')
+        else:
+            logger.info('Player cannot continued')
 
     def stop_music(self):
         self.player.stop()
@@ -47,16 +57,17 @@ class MusicStreaming():
         self.isPause = False
         self.isStop = True
         logger.info('Player stop')
+        TextToSpeech.text_to_voice('已停止播放')
 
-    def now_playing(self):
-        self.pause_music()
-        now_music = self.pafy_video.title
-        self.continue_music()
-        return now_music
+    # def now_playing(self):
+    #     title = self.play_video.title
+    #     TextToSpeech.text_to_voice(title)
 
-    def repeat_playing(self):
-        while(self.thread.is_run == False):
-            self.playing()
+        # self.continue_music()
+
+    # def repeat_playing(self):
+    #     while(self.thread.is_run() == False):
+    #         self.playing()
         
 
     def return_playing_status(self):
@@ -67,19 +78,26 @@ class MusicStreaming():
         good_states = ["State.Playing", "State.NothingSpecial", "State.Opening", "State.Paused"]
         start = time.time()
 
+        self.isPlaying = True
+        self.isPause = False
+        self.isStop = False
+
         while str(self.player.get_state()) in good_states:
             end = time.time()
-            self.isPlaying = True
-            self.isPause = False
-            self.isStop = False
+            
             # print(self.thread.is_pause())
-            if self.thread.is_pause():
-                self.pause_music()
-            else:
-                self.continue_music()
+            # if self.thread.is_pause():
+            #     self.player.set_pause(True)
+            # else:
+            #     self.player.set_pause(False)
 
-            if self.thread.is_run() == False:
-                self.stop_music()
+            # if self.eventObj.is_set():
+            #     self.eventObjReadyToExec.set()
+            #     while(self.eventObjReadyToExec.is_set() == True):
+            #         pass
+
+            # if self.thread.is_run() == False:
+            #     self.stop_music()
 
             if ((end - start) % 10) == 0: 
                 logger.debug('Stream is working. Current state = {}'.format(self.player.get_state()))
