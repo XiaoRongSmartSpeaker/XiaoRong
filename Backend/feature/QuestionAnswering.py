@@ -248,11 +248,11 @@ class QuestionAnswering():
             ans = self.get_answer(results)
             if len(ans) > LENGTHLIMIT:
                 ans = ans[:LENGTHLIMIT] + "......其他查詢結果請點詳細網址連結"
-        # self.thread.add_thread({
-        # "class": "TextToSpeech",
-        # "func": "text_to_voice",
-        # "args": str(ans),
-        # })
+        self.thread.add_thread({
+        "class": "TextToSpeech",
+        "func": "text_to_voice",
+        "args": str(ans),
+        })
         return ans
 
 if __name__ == '__main__':  
