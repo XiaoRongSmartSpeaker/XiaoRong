@@ -24,7 +24,7 @@ class Translate:
                 # cmd = r.recognize_google(audio, language='zh-TW')
                 print(sttTXT_org)
                 if '結束翻譯' in sttTXT_org:
-                    TextToSpeech.text_to_voice(sttTXT_org)
+                    TextToSpeech.text_to_voice('翻譯已結束','zh-TW')
                     break
                 
                 sttTXT_tblob = TextBlob(sttTXT_org)
