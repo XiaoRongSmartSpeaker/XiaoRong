@@ -26,8 +26,12 @@ class Main():
         self.__pending_threads = Queue()            # pending thread info
         self.__DAEMON_THREAD = [                    # define daemon work
         ]
-        self.WHITE_LIST= [                          # define white list to
+        self.WHITE_LIST = [                         # define white list to
             'voice_to_text',                        # skip voice to text
+        ]
+        self.STREAMING_LIST = [                     # define streaming white list
+            'Bluetooth',
+            'MusicStreaming'
         ]
 
     def add_thread(self, func_info) -> None:
@@ -240,11 +244,12 @@ if __name__ == "__main__":
         main.threads.reverse()
 
         # if music pause, resume voive to text
-        if len(main.instance_thread_correspond["MusicStreaming"]) > 0:
-            if main.instance_thread_correspond["MusicStreaming"][-1].is_pause():
-                main.instance_thread_correspond["SpeechToText"][-1].resume()
+        for feat in main.STREAMING_LIST:
+            if len(main.instance_thread_correspond[feat]) > 0:
+                if main.instance_thread_correspond[feat][-1].is_pause():
+                    main.instance_thread_correspond["SpeechToText"][-1].resume()
         # if there is no thread alive, open voice to text feature
-        elif not threading_running:
+        if not threading_running:
             main.instance_thread_correspond["SpeechToText"][-1].resume()
 
         # if there are pending thread data
