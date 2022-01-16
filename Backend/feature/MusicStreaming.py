@@ -41,7 +41,6 @@ class MusicStreaming():
             logger.info('Player cannot paused')
 
     def continue_music(self):
-        print(self.player.get_state())
         if self.isPause == True and self.player.get_state() == vlc.State.Paused:
             self.thread.resume()
             self.player.set_pause(False)
@@ -155,7 +154,6 @@ class MusicStreaming():
         request = youtube.search().list(
                 part = 'id, snippet',
                 maxResults = 3,
-                order = 'viewCount',
                 q = target
             )
 
