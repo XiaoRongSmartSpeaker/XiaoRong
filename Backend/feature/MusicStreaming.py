@@ -13,6 +13,8 @@ logger = logger.get_logger(__name__)
 
 import time
 
+from TextToSpeech import TextToSpeech
+
 
 class MusicStreaming():
 
@@ -50,9 +52,11 @@ class MusicStreaming():
 
     def now_playing(self):
         self.pause_music()
-        now_music = self.pafy_video.title
+
+        title = self.pafy_video.title
+        TextToSpeech.text_to_voice(title)
+
         self.continue_music()
-        return now_music
 
     def repeat_playing(self):
         while(self.thread.is_run == False):
