@@ -9,7 +9,7 @@ class Call:
     def __init__(self):
         pass
 
-    def call(self, way, number):
+    def make_call(self, way, number):
         self.number = number
 
         bus = dbus.SystemBus()
