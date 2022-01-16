@@ -28,7 +28,7 @@ class Main():
         ]
 
     def add_thread(self, func_info) -> None:
-        if not isinstance(func_info['args'], tuple):
+        if 'args' in func_info and not isinstance(func_info['args'], tuple):
             func_info['args'] = (func_info['args'],)
         
         self.__pending_threads.put(func_info)
