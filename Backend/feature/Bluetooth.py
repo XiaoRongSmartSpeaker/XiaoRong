@@ -297,6 +297,7 @@ class Bluetooth():
                            object_path=AGENT_PATH,
                            mainloop=self.mainloop)
         self.mediaPlayer = None
+        self.isPlaying = None
 
         # Agent manager initialize
         self.manager = proxyobj(self.bus, "/org/bluez",
@@ -366,6 +367,12 @@ class Bluetooth():
             return True, connectedDevicesList[0]["address"]
         else:
             return False, None
+
+    def get_bluetooth_playing_status(self) -> bool:
+        if self.isPlaying == True:
+            return True
+        else:
+            return False
 
     def pause_bluetooth_playing(self) -> bool:
         try:
@@ -468,6 +475,12 @@ class Bluetooth():
                     })
                 else:
                     logger.error("threadHandler not exist. Failed to add thread.")
+            elif iface == "MediaPlayer1" and name == "status" and value == "pause":
+                self.threadHandler.pause()
+                self.isPlaying = False
+            elif iface == "MediaPlayer1" and name == "status" and value == "playing":
+                self.threadHandler.resume()
+                self.isPlaying = True
 
     def interfaces_added(self, path, interfaces):
         for iface, props in interfaces.items():
