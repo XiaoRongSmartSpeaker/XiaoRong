@@ -3,13 +3,20 @@
 import sys
 import dbus
 import logging
-
+import Bluetooth
+import TextToSpeech
 
 class Call:
     def __init__(self):
         pass
 
     def make_call(self, way, number):
+        if(Bluetooth.get_bluetooth_status() == False):   #get_bluetooth_status(): False
+            #print('device not connected')
+            TextToSpeech.text_to_voice('藍芽沒有鏈接')
+            return
+        os.system('./enable-modem')
+        os.system('./online-modem')
         self.number = number.replace('-', '');
 
         bus = dbus.SystemBus()
@@ -26,7 +33,7 @@ class Call:
         vcm = dbus.Interface(bus.get_object('org.ofono', modem),
                              'org.ofono.VoiceCallManager')
 
-        path = vcm.Dial(number, hide_callerid)
+        path = vcm.Dial(self.number, hide_callerid)
         logging.info('making a phone call')
         print(path)
 
