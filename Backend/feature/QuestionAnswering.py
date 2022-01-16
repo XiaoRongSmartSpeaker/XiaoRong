@@ -131,9 +131,19 @@ class QuestionAnswering():
             output.append({'exchange':None})
 
         if unit:
-            output.append({'unit':unit.text.replace('\n',' ').replace("詳細內容",'')})
+            if unit.text.startswith("目前顯示的是以下字詞的搜尋結果"):
+                output.append({'unit':None})
+            else:
+                output.append({'unit':unit.text.replace('\n',' ').replace("詳細內容",'')})
         else:
             output.append({'unit':None})
+
+        if location:
+            output.append({'location':""})
+            for it in location:
+                output[-1]['location'] += it.text.replace('\n',' ')+' '
+        else:
+            output.append({'location':None})
 
         if calculate:
             output.append({'calculate':""})
@@ -171,13 +181,6 @@ class QuestionAnswering():
             output.append({'internet_diet':idiet.text.replace("查看以下內容的搜尋結果:", "")})
         else:
             output.append({'internet_diet':None})
-
-        if location:
-            output.append({'location':""})
-            for it in location:
-                output[-1]['location'] += it.text.replace('\n',' ')+' '
-        else:
-            output.append({'location':None})
 
         for result in results:
 
