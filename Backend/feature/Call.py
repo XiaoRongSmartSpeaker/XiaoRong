@@ -1,18 +1,26 @@
 #!/usr/bin/python3
-
+import os
 import sys
 import dbus
 import logging
-import Bluetooth
-import TextToSpeech
+from Bluetooth import Bluetooth
+from TextToSpeech import TextToSpeech
 
 class Call:
     def __init__(self):
-        pass
+        self.thread = None
+
+    def import_thread(self, thread):
+        self.thread = thread
 
     def make_call(self, way, number):
-        if(Bluetooth.get_bluetooth_status() == False):   #get_bluetooth_status(): False
-            #print('device not connected')
+        b_instance = self.thread.get_instance('Bluetooth')
+        if (b_instance != None):
+            isConnected, address = b_instance.get_bluetooth_status()
+            if(isConnected == False):
+                TextToSpeech.text_to_voice('藍芽沒有鏈接')
+                return
+        else:
             TextToSpeech.text_to_voice('藍芽沒有鏈接')
             return
         os.system('./enable-modem')
