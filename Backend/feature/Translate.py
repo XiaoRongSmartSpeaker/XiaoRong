@@ -5,6 +5,7 @@ import os
 from pygame import mixer
 import time
 import librosa
+from TextToSpeech import TextToSpeech
 
 class Translate:
     def translate(fromLanguage='zh-TW', toLanguage='en'):
@@ -23,14 +24,7 @@ class Translate:
                 # cmd = r.recognize_google(audio, language='zh-TW')
                 print(sttTXT_org)
                 if '結束翻譯' in sttTXT_org:
-                    end_message = gTTS('翻譯已結束', lang='zh-TW')
-                    end_message.save(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                    s=librosa.get_duration(filename=f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                    mixer.init()
-                    mixer.music.load(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                    mixer.music.play(1)
-                    time.sleep(s)
-                    os.system(f'rm {os.path.dirname(__file__)}/Audio/temp.mp3')
+                    TextToSpeech.text_to_voice(sttTXT_org)
                     break
                 
                 sttTXT_tblob = TextBlob(sttTXT_org)
