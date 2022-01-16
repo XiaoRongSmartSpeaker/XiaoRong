@@ -133,10 +133,10 @@ class Extract:
             para = ()
         elif(function_name == 'stop_music'):
             para = ()
-        elif(function_name == 'now_playing'):
-            para = ()
-        elif(function_name == 'repeat_playing'):
-            para = ()
+        # elif(function_name == 'now_playing'):
+        #     para = ()
+        # elif(function_name == 'repeat_playing'):
+        #     para = ()
         elif(function_name == 'louder_system_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'quieter_system_volume'):
