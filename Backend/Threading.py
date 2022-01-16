@@ -18,7 +18,7 @@ class Job(Thread):
         self.result = None
 
         # threading control parameter
-        self.__main_porc = main
+        self.__main_proc = main
         self.__running = Event()
         self.__unlock = Event()
         self.__resume = Event()
@@ -43,7 +43,10 @@ class Job(Thread):
             super(Job, self).run()
 
     def add_thread(self, func_info) -> None:
-        self.__main_porc.add_thread(func_info)
+        self.__main_proc.add_thread(func_info)
+
+    def get_instance(self, class_name) -> object:
+        return self.__main_proc.get_instance(class_name)
 
     def check_info(self):
         print(
@@ -73,7 +76,7 @@ class Job(Thread):
         return False if self.__resume.is_set() else True
 
     def wait_for_exec(self) -> None:
-        self.__resume.is_set()
+        self.__resume.wait()
 
     def pause(self) -> None:
         self.__resume.clear()
