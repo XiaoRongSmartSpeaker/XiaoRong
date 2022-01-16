@@ -191,7 +191,7 @@ if __name__ == "__main__":
 
         # if music pause, resume voive to text
         if len(main.instance_thread_correspond["MusicStreaming"]) > 0:
-            if main.instance_thread_correspond["MusicStreaming"].is_pause():
+            if main.instance_thread_correspond["MusicStreaming"][-1].is_pause():
                 main.instance_thread_correspond["SpeechToText"][-1].resume()
         # if there is no thread alive, open voice to text feature
         elif not threading_running:
