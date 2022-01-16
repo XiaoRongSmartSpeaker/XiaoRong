@@ -69,7 +69,6 @@ function post_info(location, time, speaker_name)
     method: 'POST',
     body: JSON.stringify({
       location: location,
-      //language: language,
       time: time,
       speaker_name: speaker_name,
     }),
@@ -107,12 +106,11 @@ document.querySelector("button").addEventListener("click", () => {
 
     // get location
     var location = document.querySelector("#location").value;
-    //var language = document.querySelector("#language").value;
+    
     var time = document.querySelector("#time").value;
 
 
     //post info to API
-    post_info(location, language, time, speaker_name)
-    console.log(location, language, time, speaker_name);
-
+    post_info(location, time, speaker_name)
+    
 });
