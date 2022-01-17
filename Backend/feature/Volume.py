@@ -3,20 +3,21 @@ import sys
 
 import time  # for Development
 try:
-	import logger
-	logger = logger.get_logger(__name__)
+    import logger
+    logger = logger.get_logger(__name__)
 except ModuleNotFoundError:
-	import logging
-	logger = logging.getLogger()
-	logger.setLevel(logging.DEBUG)
-	ch = logging.StreamHandler(sys.stdout)
-	ch.setLevel(logging.DEBUG)
-	formatter = logging.Formatter(
-		'%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-	ch.setFormatter(formatter)
-	logger.addHandler(ch)
+    import logging
+    logger = logging.getLogger()
+    logger.setLevel(logging.DEBUG)
+    ch = logging.StreamHandler(sys.stdout)
+    ch.setLevel(logging.DEBUG)
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
 
 
+playing = True  # for Development
 
 
 class Volume:
@@ -140,8 +141,7 @@ if __name__ == '__main__':
 #    def get_all_volume():
 #        print("System:", a.get_system_volume())
 #        print("Music:", a.get_music_volume())
-	a = Volume()
-	a.main()
+#    a = Volume()
 #    a.set_music_volume(50)
 #    get_all_volume()
 #    time.sleep(10)
