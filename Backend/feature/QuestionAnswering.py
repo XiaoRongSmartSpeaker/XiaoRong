@@ -3,7 +3,7 @@ import requests, urllib
 from requests_html import HTML
 from requests_html  import HTMLSession
 
-LENGTHLIMIT = 40
+LENGTHLIMIT = 60
 
 try:
     import logger
@@ -81,6 +81,8 @@ class QuestionAnswering():
         css_identifier_support = ".kno-rdesc span"
         css_identifier_internet_diet = ".kp-blk"
         css_identifier_time = ".card-section.sL6Rbf"
+        css_identifier_unit = ".card-section"
+        css_identifier_location = ".rllt__details"
 
         #store css find result
         output = []
@@ -95,6 +97,8 @@ class QuestionAnswering():
         support = response.html.find(css_identifier_support, first=False)
         idiet = response.html.find(css_identifier_internet_diet, first=True)
         time = response.html.find(css_identifier_time, first=True)
+        unit = response.html.find(css_identifier_unit, first=True)
+        location = response.html.find(css_identifier_location, first=False)
 
         if diet:
             output.append({'diet':diet.text})
@@ -125,6 +129,21 @@ class QuestionAnswering():
             output.append({'exchange':exchange.text.replace('\n',' ')})
         else:
             output.append({'exchange':None})
+
+        if unit:
+            if unit.text.startswith("目前顯示的是以下字詞的搜尋結果"):
+                output.append({'unit':None})
+            else:
+                output.append({'unit':unit.text.replace('\n',' ').replace("詳細內容",'')})
+        else:
+            output.append({'unit':None})
+
+        if location:
+            output.append({'location':""})
+            for it in location:
+                output[-1]['location'] += it.text.replace('\n',' ')+' '
+        else:
+            output.append({'location':None})
 
         if calculate:
             output.append({'calculate':""})
@@ -165,11 +184,18 @@ class QuestionAnswering():
 
         for result in results:
 
-            item = {
-                'title': result.find(css_identifier_title, first=True).text,
-                'link': result.find(css_identifier_link, first=True).attrs['href'],
-                'text': result.find(css_identifier_text, first=True).text
-            }
+            if result.find(css_identifier_title, first=True) != None and result.find(css_identifier_link, first=True) != None and result.find(css_identifier_text, first=True)!= None:
+                item = {
+                    'title': result.find(css_identifier_title, first=True).text,
+                    'link': result.find(css_identifier_link, first=True).attrs['href'],
+                    'text': result.find(css_identifier_text, first=True).text
+                }
+            else:
+                item = {
+                    "title":None,
+                    "link":None,
+                    "text":None
+                }
             
             output.append(item)
             
@@ -192,11 +218,13 @@ class QuestionAnswering():
                 break
     
         if flag:
-            for result in results[:11]:
+            for result in results[:14]:
                 if list(result.keys())[0] == 'title' and list(result.items())[0][1] != None:
                     ans += ( urllib.parse.unquote(str(result['title'])+','+str(result['text'])+'\n'))
         
         ans = (ans.strip())
+        if ans.startswith('找不到符合搜尋字詞') or ans.startswith("您是不是要查"):
+            ans = ''
         if ans == '':
             ans = f"沒有查到「{search.query}」的相關資料"
 
