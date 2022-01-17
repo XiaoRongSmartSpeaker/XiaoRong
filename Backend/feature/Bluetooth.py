@@ -1,10 +1,15 @@
 #!/usr/bin/python
 from logging import Manager
 import sys
+from urllib import response
+from xmlrpc.client import SERVER_ERROR
 import dbus
 import dbus.service
 import dbus.mainloop.glib
 import threading
+import requests
+import json
+from util import get_device_id
 try:
     from gi.repository import GLib
 except ImportError:
@@ -22,6 +27,8 @@ except ModuleNotFoundError:
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
     logger.addHandler(ch)
+# Server Url setting
+SERVER_URI = "http://www.xiaorongserver.tk"
 
 # static name & path setting
 SERVICE_NAME = "org.bluez"
@@ -311,6 +318,31 @@ class Bluetooth():
         # Event Listener initialize
         self.__init_listener()
 
+        # Bluetooth device name initialize
+        device_id = get_device_id()
+        if device_id != "ERROR000000000":
+            device_name = None
+            try:
+                r = requests.session()
+                response = r.get(f"{SERVER_URI}/{device_id}")
+                if response.status_code != 404:
+                    device_name = json.load(response.json())["device_name"]
+                else:
+                    device_name = None
+                    logger.error(f"Error msg from server \"{json.load(response.json())['detail']}\"")
+            except ConnectionError:
+                logger.error("Network failed to connect. Unable to fetch device_name from server.")
+            except BaseException as e:
+                logger.error(e)
+                
+            if device_name == None or device_name == "":
+                self.set_bluetooth_alias("小瀜音箱")
+                logger.debug("The device_name fetch from server is None or empty, therefore set bluetooth device name into 小瀜音箱")
+            else:
+                self.set_bluetooth_alias(device_name)
+        else:
+            logger.error("Failed to get the device_id from system")
+
         logger.info("Ready to start bluetooth daemon")
 
     def bluetooth_daemon_start(self) -> None:
@@ -409,6 +441,7 @@ class Bluetooth():
 
     def set_bluetooth_alias(self, alias):
         self.adapter.change_alias(alias)
+        logger.info(f"Set Bluetooth name to {alias}")
 
     def import_thread(self, thread):
         self.threadHandler = thread
