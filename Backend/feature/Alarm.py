@@ -27,7 +27,12 @@ class Alarm():
 		self.alarmListFile = 'feature/AlarmList.json'
 		self.isPlayingAudio = False  
 		self.playingAudio = None  
-		self.audioSec = 150              
+		self.audioSec = 150    
+		self.get_alarm_list()
+		self.threadHandler.add_thread({
+			'class': 'Alarm',
+			'func': 'start_alarm',
+		})          
 		return
 	def import_thread(self, thread):
 		self.threadHandler = thread
@@ -92,13 +97,7 @@ class Alarm():
 					mixer.music.stop()
 					break
 			time.sleep(1)
-
-	def main(self):
-		self.get_alarm_list()
-		self.threadHandler.add_thread({
-			'class': 'Alarm',
-			'func': 'start_alarm',
-		})
+		
 	def stop_ringing(self):
 		self.isPlayingAudio = False
 		return

@@ -29,7 +29,7 @@ class Main():
             'voice_to_text'
         ]
         self.WHITE_LIST = [                         # define white list to
-            'voice_to_text', 'volume_switch'                       # skip voice to text
+            'voice_to_text', 'volume_switch', 'start_alarm', "start_countdown"                       # skip voice to text
         ]
         self.STREAMING_LIST = [                     # define streaming white list
             'Bluetooth',
@@ -176,6 +176,10 @@ if __name__ == "__main__":
     main.add_thread({
         'class': 'Volume',
         'func': 'volume_switch',
+    })
+    main.add_thread({
+        'class': 'Alarm',
+        'func': 'start_alarm',
     })
     main.open_thread()
     
