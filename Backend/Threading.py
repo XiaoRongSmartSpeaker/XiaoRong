@@ -73,7 +73,7 @@ class Job(Thread):
         return False if self.__resume.is_set() else True
 
     def wait_for_exec(self) -> None:
-        self.__resume.is_set()
+        self.__resume.wait()
 
     def pause(self) -> None:
         self.__resume.clear()
