@@ -1,3 +1,4 @@
+
 var lan = 'ch';
 var language = {
   en: {
@@ -53,7 +54,6 @@ function get_lan() {
 
   console.log(params.has('lan'));
 }
-
 //get_lan();
 function post_info(location, time, speaker_name) {
   fetch(flask_base_url + '/speaker_info', {
@@ -96,6 +96,7 @@ document.querySelector('button').addEventListener('click', () => {
   var location = document.querySelector('#location').value;
 
   var time = document.querySelector('#time').value;
+
 
   //post info to API
   post_info(location, time, speaker_name);

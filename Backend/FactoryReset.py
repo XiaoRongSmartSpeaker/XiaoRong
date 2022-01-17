@@ -1,11 +1,13 @@
 from logging import INFO
 import os
+from socket import timeout
 import sys
 from time import sleep
 import requests
 import configparser
 import shutil
 import threading
+import json
 
 import feature.TextToSpeech as TextToSpeech
 
@@ -29,23 +31,34 @@ except ModuleNotFoundError as e:
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
+# for server data delete test
+# server_url = "http://140.122.185.210/devicedata/" (creat a device data)
+dd = {
+    "device_id": "0777",
+    "account": "string1",
+    "device_name": "string777",
+    "language": "string",
+    "system_volume": 0,
+    "media_volume": 0,
+    "user_account": "string"
+}
+
 class FactoryReset:
     def __init__(self, main_instance = None):
         logger.debug("initializing")
         self.state = 0
         self._default_config_path = DEFAULT_CONFIG_PATH     # get factory default config file path
         self._config_path = CONFIG_PATH                     # get current config file path
-        # self._speaker_name = os.getenv('SPEAKER_NAME')    # get speaker_name for server API request
-        self._server_url = 'https://httpbin.org/delay/10'
-        if main_instance:
-            self._main_instance = main_instance
-    
+        self._device_id = "0777"
+        self._server_url = "http://140.122.185.210/devicedata/" + self._device_id
+        self._main_instance = main_instance
+        
     def _call_server_delete_speaker_data(self):
-        # payloads = {'speaker_name': self._speaker_name}
-        my_headers = {'user-agent': 'smartspeaker'}
         try:
-            # response = requests.get(self._server_url, params=payloads, timeout=10)
-            response = requests.get(self._server_url, headers=my_headers, timeout=10)
+            # for test only
+            # response = requests.post("http://140.122.185.210/devicedata/", json.dumps(dd))
+            # print(response.text)
+            response = requests.delete(self._server_url, timeout=10)
             response.raise_for_status()
         except requests.exceptions.HTTPError as errh:
             logger.error(errh)
@@ -59,7 +72,6 @@ class FactoryReset:
         else:
             logger.info("Successfully sent request to delete speaker data")
             print(response.text)
-            # print response
         
         with open(CONFIG_PATH, 'w') as configfile:
             config.write(configfile)
@@ -85,8 +97,11 @@ class FactoryReset:
         else:
             file_pair_list = []
         
+        print(file_pair_list)
+        
         for file_pair in file_pair_list:
-            file, default_file = file_pair.split(" ", 1) + ['']
+            print(file_pair.split())
+            file, default_file = file_pair.split(" ", 1)
             try:
                 os.path.exists(file)
                 os.path.exists(default_file)
@@ -149,7 +164,7 @@ class FactoryReset:
 
         self._call_server_delete_speaker_data()
 
-        # self._restore_config()
+        self._restore_config()
 
         self._terminate_other_process()
 
@@ -197,7 +212,7 @@ class FactoryReset:
             self.state = 2
         elif self.state == 2:
             LC.light(2)
-            TextToSpeech.text_to_voice("十五秒，蟲治開始")
+            TextToSpeech.text_to_voice("蟲治開始")
             self.state = 3
             #reset here
             for i in range(3):
@@ -207,5 +222,4 @@ class FactoryReset:
 # testing only
 if __name__ == "__main__":
     ff = FactoryReset()
-    # ff.factory_reset_notification()
     ff.factory_reset()

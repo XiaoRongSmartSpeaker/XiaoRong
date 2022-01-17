@@ -9,6 +9,7 @@ from logger import logger
 from dotenv import load_dotenv
 
 import FactoryReset
+import LogManager
 
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
@@ -25,9 +26,10 @@ class Main():
         self.instance_thread_correspond = {}        # instance corresponding thread
         self.__pending_threads = Queue()            # pending thread info
         self.__DAEMON_THREAD = [                    # define daemon work
+            'voice_to_text'
         ]
         self.WHITE_LIST = [                         # define white list to
-            'voice_to_text',                        # skip voice to text
+            'voice_to_text', 'volume_switch', 'start_alarm', "start_countdown"                       # skip voice to text
         ]
         self.STREAMING_LIST = [                     # define streaming white list
             'Bluetooth',
@@ -139,8 +141,8 @@ if __name__ == "__main__":
 
     # defination main process
     main = Main()
+
     factory_reset = FactoryReset.FactoryReset(main)
-    # factory_reset.factory_reset()
     
     print("Open signal listener")
     signal.signal(10, main.close)
@@ -170,6 +172,18 @@ if __name__ == "__main__":
     main.add_thread({
         'class': 'Volume',
         'func': '__init__',
+    })
+    main.add_thread({
+        'class': 'Volume',
+        'func': 'volume_switch',
+    })
+    main.add_thread({
+        'class': 'Alarm',
+        'func': '__init__',
+    })
+    main.add_thread({
+        'class': 'Alarm',
+        'func': 'start_alarm',
     })
     main.open_thread()
     

@@ -28,7 +28,7 @@
     "stop_ringing"         :{"class":"Countdown"        , "keywords":["停止鈴聲"]}, 
     "stop_countdown"       :{"class":"Countdown"        , "keywords":["取消計時"]}, 
     "get_time_at_place"    :{"class":"WorldTime"        , "keywords":["查詢"]},
-    "set_alarm"            :{"class":"Alarm"            , "keywords":["設定"]},
+    "set_alarm"            :{"class":"Alarm"            , "keywords":["設定鬧鐘"]},
     "memorandum"           :{"class":"Memorandum"       , "keywords":["我要錄音"]},
     "google_search"        :{"class":"QuestionAnswering", "keywords":["幫我查"]}
 }
