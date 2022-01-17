@@ -1,14 +1,11 @@
 #!/usr/bin/python
-from logging import Manager
 import sys
-from urllib import response
 from xmlrpc.client import SERVER_ERROR
 import dbus
 import dbus.service
 import dbus.mainloop.glib
 import threading
 import requests
-import json
 from util import get_device_id
 try:
     from gi.repository import GLib
@@ -326,10 +323,10 @@ class Bluetooth():
                 r = requests.session()
                 response = r.get(f"{SERVER_URI}/{device_id}")
                 if response.status_code != 404:
-                    device_name = json.load(response.json())["device_name"]
+                    device_name = response.json()["device_name"]
                 else:
                     device_name = None
-                    logger.error(f"Error msg from server \"{json.load(response.json())['detail']}\"")
+                    logger.error(f"Error msg from server \"{response.json()['detail']}\"")
             except ConnectionError:
                 logger.error("Network failed to connect. Unable to fetch device_name from server.")
             except BaseException as e:
