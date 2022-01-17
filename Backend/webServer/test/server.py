@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 import requests
 import json
 
@@ -22,7 +21,7 @@ def getUser(email=""):
         print("OK")
         return r.json
     else:
-        return NULL
+        return None
 
 def addUser(user):
     r = requests.post(url+'/userdata', data=user)
