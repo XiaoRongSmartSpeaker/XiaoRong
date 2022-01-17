@@ -5,8 +5,8 @@ import os
 from wifi import wifi_connect, wifi_scan
 # import test.scan as scan
 # import test.connect as connect
-import test.signin as sign
-import test.setting as setup
+# import test.signin as sign
+# import test.setting as setup
 import test.server as server
 import json
 #from flask_cors import CORS, cross_origin
@@ -31,6 +31,9 @@ device = {
     "media_volume":50, 
     "region":str,
     "time_zone":str,
+    "isPlaying":False,
+    "isPause":False,
+    "isStop":True,
     "user_email":str
 }
 
@@ -49,32 +52,38 @@ def wifis():
 @app.route('/setting_wifi', methods=['PUT'])
 def setting_wifi():
     if request.method == 'PUT':
-        wifi = json.loads(request.data)
+        wifi = json.loads(request.json)
         isConnected = wifi_connect.CreateWifiConfig(wifi["SSID"], wifi["password"])
-        # print(json.loads(request.data))
+        # print(json.loads(request.json))
         response = {'isConnected':isConnected}
     return json.dumps(response)
 
 @app.route('/user_info', methods=['POST'])
 def signin():
+    global user
     # print('hello')
     if request.method == 'POST':
-        user = server.getUser(request.data["email"])
-        if(not user):
-            user["access_token"] = request.data["access_token"]
-            user["client_secret"] = request.data["client_secret"]
-            user["user_email"] = request.data["email"]
-            user["user_name"] = request.data["full_name"]
-            user["language"] = request.data["language"]
-        # sign.signin(request.data)
-        server.addUser(user)
-        response = {'Success': True}
+        user["access_token"] = request.json["access_token"]
+        user["client_secret"] = request.json["client_secret"]
+        user["user_name"] = request.json["full_name"]
+        user["language"] = request.json["language"]
+        user["user_email"] = request.json["email"]
+        if(not server.getUser(user["user_email"])):
+            if server.addUser(json.dumps(user)) == 201:
+                response = {'Success': True}
+            else:
+                response = {'Success': False}
+        else:
+            response = {'Success': True}
+
     elif request.method == 'GET':
         response = {'Success': False}
     return json.dumps(response)
 
 @app.route('/speaker_info', methods=['POST'])
 def setting():
+    global device
+    global user
     cpuserial = "0000000000000000"
     try:
         f = open('/proc/cpuinfo','r')
@@ -84,14 +93,16 @@ def setting():
         f.close()
     except:
         cpuserial = "ERROR000000000"
+    
     device["device_id"] = cpuserial
-    device["device_name"] = request.data['speaker_name']
-    device["region"] = request.data['time']
-    device["time_zone"] = request.data['location']
-    device["language"] = request.data["language"]
+    device["device_name"] = request.json['speaker_name']
+    device["region"] = request.json['time']
+    device["time_zone"] = request.json['location']
+    device["language"] = request.json["language"]
     device["user_email"] = user["user_email"]
-    # setup.setup(request.data)
-    server.addDevice(device)
+    print(user)
+    print(device)
+    server.addDevice(json.dumps(device))
     response = {'Success': True}
     return json.dumps(response)
 
