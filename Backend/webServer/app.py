@@ -110,7 +110,10 @@ def setting():
 
 @app.route('/done', methods=['GET'])
 def done():
-    exit(0)
+    func = request.environ.get('werkzeug.server.shutdown')
+    if func is None:
+        raise RuntimeError('Not running with the Werkzeug Server')
+    func()
 
 @app.route('/<path:path>')
 def serve_page(path):
