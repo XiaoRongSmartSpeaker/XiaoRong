@@ -9,7 +9,7 @@ import shutil
 import threading
 import json
 
-import feature.TextToSpeech as TextToSpeech
+# import feature.TextToSpeech as TextToSpeech
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'config.ini')
 DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'default', 'default_config.ini')
@@ -172,7 +172,7 @@ class FactoryReset:
             logger.info("Rebooting in " + str(3 - i))
             sleep(1)
 
-        # os.system('reboot')
+        os.system('sudo reboot now')
 
     def factory_reset_notification(self):
         TextToSpeech.text_to_voice("蟲置將開始")
