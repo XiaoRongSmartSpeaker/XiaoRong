@@ -1,4 +1,3 @@
-from asyncio.windows_events import NULL
 from flask import Flask, request, render_template, redirect
 # from flask.wrappers import Request
 import sys
@@ -61,13 +60,14 @@ def signin():
     # print('hello')
     if request.method == 'POST':
         user = server.getUser(request.data["email"])
-        if(user == NULL):
+        if(not user):
             user["access_token"] = request.data["access_token"]
             user["client_secret"] = request.data["client_secret"]
             user["user_email"] = request.data["email"]
             user["user_name"] = request.data["full_name"]
-        
-        sign.signin(request.data)
+            user["language"] = request.data["language"]
+        # sign.signin(request.data)
+        server.addUser(user)
         response = {'Success': True}
     elif request.method == 'GET':
         response = {'Success': False}
@@ -90,7 +90,7 @@ def setting():
     device["time_zone"] = request.data['location']
     device["language"] = request.data["language"]
     device["user_email"] = user["user_email"]
-    setup.setup(request.data)
+    # setup.setup(request.data)
     server.addDevice(device)
     response = {'Success': True}
     return json.dumps(response)

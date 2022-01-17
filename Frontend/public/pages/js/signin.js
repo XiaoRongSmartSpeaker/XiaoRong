@@ -31,6 +31,7 @@ function post_data(access_token, name, email, client_secret) {
       full_name: name,
       email: email,
       client_secret: client_secret,
+      language: lan
     }),
     headers: { 'Content-Type': 'application/json' },
   })
