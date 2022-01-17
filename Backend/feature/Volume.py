@@ -26,6 +26,8 @@ class Volume:
 		self.musicVolume = 50 
 		self.threadHandler = None   
 		self.isPlaying = False
+		self.set_amixer("system")
+
 	def import_thread(self, thread):
 		self.threadHandler = thread
 		return
@@ -88,7 +90,7 @@ class Volume:
 	def get_system_volume(self) -> int:
 		return self.systemVolume
 
-	def set_system_volume(self, value=5):
+	def set_system_volume(self, value=50):
 		if value == None:
 			value = 5
 		if 10 <= value <= 100:
@@ -114,7 +116,7 @@ class Volume:
 	def get_music_volume(self):
 		return self.musicVolume
 
-	def set_music_volume(self, value=5):
+	def set_music_volume(self, value=50):
 		if value == None:
 			value = 5
 		if 0 <= value <= 100:
