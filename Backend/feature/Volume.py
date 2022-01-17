@@ -30,7 +30,7 @@ class Volume:
 		self.threadHandler = thread
 		return
 	# alsa setting
-	def main(self):
+	def volume_switch(self):
 		while True:
 			bluetooth = self.threadHandler.get_instance("Bluetooth")
 			music = self.threadHandler.get_instance("MusicStreaming")
