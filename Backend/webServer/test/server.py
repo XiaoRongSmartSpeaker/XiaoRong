@@ -51,35 +51,35 @@ def getLog(device_id:str):
     return r.json()
 
 def isPlaying(device_id:str):
-    data = {
+    data = json.dumps({
         "isPlaying":True,
         "isPause":False,
         "isStop":False,
         "device_id":device_id
-    }
-    r = requests.put(url+"/devicedata/playing/"+device_id, data=data)
+    })
+    r = requests.put(url+"/devicedata/playing", data=data)
     print("status code:" + str(r.status_code))
     return r.status_code
 
 def isPause(device_id:str):
-    data = {
+    data = json.dumps({
         "isPlaying":False,
         "isPause":True,
         "isStop":False,
         "device_id":device_id
-    }
-    r = requests.put(url+"/devicedata/playing/"+device_id, data=data)
+    })
+    r = requests.put(url+"/devicedata/playing", data=data)
     print("status code:" + str(r.status_code))
     return r.status_code
 
 def isStop(device_id:str):
-    data = {
+    data = json.dumps({
         "isPlaying":False,
         "isPause":False,
         "isStop":True,
         "device_id":device_id
-    }
-    r = requests.put(url+"/devicedata/playing/"+device_id, data=data)
+    })
+    r = requests.put(url+"/devicedata/playing", data=data)
     print("status code:" + str(r.status_code))
     return r.status_code
 
