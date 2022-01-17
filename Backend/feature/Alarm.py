@@ -36,17 +36,15 @@ class Alarm():
 
 	def get_alarm_list(self):
 		jsonContent = {}
+		with open( self.alarmListFile, encoding="utf-8") as f:
+			jsonContent = f.read()
+		jsonContent = json.loads(jsonContent)
+		# 取得 json "AlarmList" 欄位
 		try:
-			with open( "AlarmList.json", encoding="utf-8") as f:
-				jsonContent = f.read()
-			jsonContent = json.loads(jsonContent)
-			# 取得 json "AlarmList" 欄位
-			try:
-				self.alarmList = jsonContent["AlarmList"]  
-			except:
-				self.alarmList = []
+			self.alarmList = jsonContent["AlarmList"]  
 		except:
 			self.alarmList = []
+		# print("self.alarmList:" ,self.alarmList)
 	def set_alarm(self, day: int, h: int, m: int):
 		if day == None or not 1 <= day <= 7:
 			t = time.localtime()
@@ -68,31 +66,40 @@ class Alarm():
                     })
 			return False
 		self.alarmList.append({"day": day, "hour": h, "minute": m})
+		days = ['星期一', '星期二', '星期三', '星期四', '星期五', '星期六', '星期日']
+		self.threadHandler.add_thread({
+                    'class': 'TextToSpeech',
+                    'func': 'text_to_voice',
+                    'args': ("設定鬧鐘 {}{}時{}分".format(days[day-1], h, m))
+                    })
+		logger.info("設定鬧鐘 day:{} {}:{}".format(day, h, m))
 		self.save_alarm_list()
 		return
 	def save_alarm_list(self):
-		with open(self.alarmListFile, mode="a+", encoding="utf-8") as f:
+		with open(self.alarmListFile, mode="w+", encoding="utf-8") as f:
 			json.dump({"AlarmList":self.alarmList}, f, ensure_ascii=False)
 		return None
 	def start_alarm(self):
 		while True:
 			t = time.localtime()
 			now = {"day": t.tm_wday + 1, "hour": t.tm_hour, "minute": t.tm_min}
-			for setTime in self.alarmList:
-				if now == setTime:
-					logger.info('Alarm time')
-					mixer.init()
-					mixer.music.load(self.audioFile)
-					mixer.music.play(1)	
-					while self.isPlayingAudio and self.audioSec:
-						self.audioSec -= 1
-						time.sleep(1)
-					logger.info('end of ring')
-					self.audioSec = 150
-					self.isPlayingAudio = False
-					mixer.music.stop()
-					break
-			time.sleep(1)
+
+			print(now)
+			if now in self.alarmList:
+				logger.info('Alarm time')
+				mixer.init()
+				mixer.music.load(self.audioFile)
+				mixer.music.play(1)	
+				self.isPlayingAudio = True
+				while self.isPlayingAudio and self.audioSec:
+					self.audioSec -= 1
+					time.sleep(1)
+				logger.info('end of ring')
+				self.audioSec = 150
+				self.isPlayingAudio = False
+				mixer.music.stop()
+				break
+			time.sleep(60)
 		
 	def stop_ringing(self):
 		self.isPlayingAudio = False
