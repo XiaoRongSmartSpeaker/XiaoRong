@@ -438,7 +438,6 @@ class Bluetooth():
 
     def set_bluetooth_alias(self, alias):
         self.adapter.change_alias(alias)
-        logger.info(f"Set Bluetooth name to {alias}")
 
     def import_thread(self, thread):
         self.threadHandler = thread
