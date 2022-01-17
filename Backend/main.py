@@ -179,6 +179,10 @@ if __name__ == "__main__":
     })
     main.add_thread({
         'class': 'Alarm',
+        'func': '__init__',
+    })
+    main.add_thread({
+        'class': 'Alarm',
         'func': 'start_alarm',
     })
     main.open_thread()
