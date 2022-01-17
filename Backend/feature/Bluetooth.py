@@ -321,7 +321,7 @@ class Bluetooth():
             device_name = None
             try:
                 r = requests.session()
-                response = r.get(f"{SERVER_URI}/{device_id}")
+                response = r.get(f"{SERVER_URI}/devicedata/{device_id}")
                 if response.status_code != 404:
                     device_name = response.json()["device_name"]
                 else:
