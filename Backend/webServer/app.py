@@ -108,6 +108,10 @@ def setting():
     response = {'Success': True}
     return json.dumps(response)
 
+@app.route('/done', methods=['GET'])
+def done():
+    exit(0)
+
 @app.route('/<path:path>')
 def serve_page(path):
     print(path)

@@ -13,6 +13,7 @@ var language = {
 };
 window.onload = function(){
     get_lan();
+    fetch(flask_base_url + '/done')
 }
 function get_lan()
 {
