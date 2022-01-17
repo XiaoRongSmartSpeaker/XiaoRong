@@ -1,65 +1,94 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>XiaoRong Speaker</title>
-    <link rel="stylesheet" href="styles.css">
-    
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <div class="h-screen flex flex-col justify-evenly items-center">
-        <!--header-->
-        <div  class="w-72 h-10">
-            <h1 id="header" class="text-theme relative top-9"></h1>
-        </div>
-        <!--Form-->
-       <div class="w-full max-w-xs">
-            <form class="bg-white  rounded px-8 pt-6 ">
-                
-                <div class="mb-6">
-                    <label id="label_location" class="block text-xs text-light_theme mb-3">
-                        
-                    </label>
-                    <div class="relative">
-                        <select id="location" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
-                            
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <label id="label_timezone" class="block text-xs text-light_theme mb-3">
-                        
-                    </label>
-                    <div class="relative">
-                        <select id="time" class=" w-full border-2 border-normal_theme  text-theme py-2 px-3 pr-8 rounded-lg leading-tight" >
-                            <option>GMT +8</option>
-                            <option>GMT +9</option>
-                            <option>GMT +10</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="mb-6">
-                    <label id="label_speaker_name" class="block text-xs text-light_theme mb-3">
-                        
-                    </label>
-                    <input id="speaker_name" class="border-2 border-normal_theme text-theme rounded-lg w-full py-2 px-3  mb-3 leading-tight " >
-                    
-                </div>
-            
-            </form>
-            
-        </div>
-        <!--Button-->
-        <div>
-            
-            <button id="next_button" class="relative bottom-16 bg-theme w-64  h-10 text-white py-2 px-4 rounded-md " >
-                
-            </button>
-            
-        </div>
+      <!--header-->
+      <div class="w-72 h-10">
+        <h1 id="header" class="text-theme relative top-9"></h1>
+      </div>
+      <!--Form-->
+      <div class="w-full max-w-xs">
+        <form class="bg-white rounded px-8 pt-6">
+          <div class="mb-6">
+            <label
+              id="label_location"
+              class="block text-xs text-light_theme mb-3"
+            >
+            </label>
+            <div class="relative">
+              <select
+                id="location"
+                class="w-full border-2 border-normal_theme text-theme py-2 px-3 pr-8 rounded-lg leading-tight"
+              ></select>
+            </div>
+          </div>
+          <div class="mb-6">
+            <label
+              id="label_timezone"
+              class="block text-xs text-light_theme mb-3"
+            >
+            </label>
+            <div class="relative">
+              <select
+                id="time"
+                class="w-full border-2 border-normal_theme text-theme py-2 px-3 pr-8 rounded-lg leading-tight"
+              >
+                <option>GMT -12</option>
+                <option>GMT -11</option>
+                <option>GMT -10</option>
+                <option>GMT -9</option>
+                <option>GMT -8</option>
+                <option>GMT -7</option>
+                <option>GMT -6</option>
+                <option>GMT -5</option>
+                <option>GMT -4</option>
+                <option>GMT -3</option>
+                <option>GMT -2</option>
+                <option>GMT -1</option>
+                <option>GMT +0</option>
+                <option>GMT +1</option>
+                <option>GMT +2</option>
+                <option>GMT +3</option>
+                <option>GMT +4</option>
+                <option>GMT +5</option>
+                <option>GMT +6</option>
+                <option>GMT +7</option>
+                <option>GMT +8</option>
+                <option>GMT +9</option>
+                <option>GMT +10</option>
+                <option>GMT +11</option>
+                <option>GMT +12</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-6">
+            <label
+              id="label_speaker_name"
+              class="block text-xs text-light_theme mb-3"
+            >
+            </label>
+            <input
+              id="speaker_name"
+              class="border-2 border-normal_theme text-theme rounded-lg w-full py-2 px-3 mb-3 leading-tight"
+            />
+          </div>
+        </form>
+      </div>
+      <!--Button-->
+      <div>
+        <button
+          id="next_button"
+          class="relative bottom-16 bg-theme w-64 h-10 text-white py-2 px-4 rounded-md"
+        ></button>
+      </div>
     </div>
-</body>
-<script src="./js/setting.js"></script>
+  </body>
+  <script src="./js/setting.js"></script>
 </html>
