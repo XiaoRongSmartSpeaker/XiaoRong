@@ -11,6 +11,13 @@ var language = {
         'done_button': '完成設定'
     },
 };
+const urlObj = new URL(document.URL);
+let flask_base_url = urlObj.protocol + '//' + urlObj.hostname;
+
+if (urlObj.port != undefined) {
+  flask_base_url = flask_base_url.concat(':' + urlObj.port);
+}
+
 window.onload = function(){
     get_lan();
     fetch(flask_base_url + '/done')
