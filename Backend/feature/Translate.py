@@ -1,3 +1,4 @@
+from typing import Text
 import speech_recognition as sr
 from textblob import TextBlob
 from gtts import gTTS
@@ -5,9 +6,13 @@ import os
 from pygame import mixer
 import time
 import librosa
+from TextToSpeech import TextToSpeech
 
 class Translate:
-    def translate(fromLanguage='zh-TW', toLanguage='en'):
+    def __init__(self):
+        pass
+
+    def translate(self, fromLanguage='zh-TW', toLanguage='en'):
         while True:
             try:
                 r = sr.Recognizer()
@@ -19,18 +24,11 @@ class Translate:
                     r.pause_threshold=1
                     audio=r.listen(source,timeout=10)
 
-                sttTXT_org = r.recognize_google(audio, language = fromLanguage)
-                cmd = r.recognize_google(audio, language='zh-TW')
+                sttTXT_org = r.recognize_google(audio, language = 'zh-TW')
+                # cmd = r.recognize_google(audio, language='zh-TW')
                 print(sttTXT_org)
-                if '結束翻譯' in cmd:
-                    end_message = gTTS('翻譯已結束', lang='zh-TW')
-                    end_message.save(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                    s=librosa.get_duration(filename=f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                    mixer.init()
-                    mixer.music.load(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                    mixer.music.play(1)
-                    time.sleep(s)
-                    os.system(f'rm {os.path.dirname(__file__)}/Audio/temp.mp3')
+                if '結束翻譯' in sttTXT_org:
+                    TextToSpeech.text_to_voice('翻譯已結束','zh-TW')
                     break
                 
                 sttTXT_tblob = TextBlob(sttTXT_org)
@@ -40,16 +38,7 @@ class Translate:
                     print('not translated')
                     continue
                 print('Translated: ' + blobTranslated.raw)
-
-                tts = gTTS(blobTranslated.raw, lang=toLanguage)
-                tts.save(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                
-                s=librosa.get_duration(filename=f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                mixer.init()
-                mixer.music.load(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
-                mixer.music.play(1)
-                time.sleep(s)
-                os.system(f'rm {os.path.dirname(__file__)}/Audio/temp.mp3')
+                TextToSpeech.text_to_voice(blobTranslated.raw, toLanguage)
                 
             except sr.UnknownValueError:
                 mixer.init()

@@ -53,7 +53,7 @@ class Extract:
                 if(keyword == keyword_str):
                     keyword_str = keyword
                     classname = self.func_dict[func_name]["class"]
-                    return [classname, func_name, keyword]
+                    return [classname, func_name, keyword]     
         return [classname, func_name, 'None']
 
     def para_extract(self, input_str, func_key):
@@ -66,7 +66,7 @@ class Extract:
             target = input_str[location + len(func_key[2]):]
             target = target.lstrip()
         else:
-            return{"class": 'question', "func": 'question_answering', "args": tuple(para)}
+            return{"class": 'QuestionAnswering', "func": 'google_search', "args": tuple(para)}
         # ==================================================CALL=======================================V
         if(function_name == 'make_call'):
             para = para_extract.target_call(target)
@@ -133,41 +133,47 @@ class Extract:
             para = ()
         elif(function_name == 'stop_music'):
             para = ()
-        elif(function_name == 'now_playing'):
-            para = ()
-        elif(function_name == 'repeat_playing'):
-            para = ()
+        # elif(function_name == 'now_playing'):
+        #     para = ()
+        # elif(function_name == 'repeat_playing'):
+        #     para = ()
         elif(function_name == 'louder_system_volume'):
             para = para_extract.target_volume(target)
-        elif(function_name == 'quiter_system_volume'):
+        elif(function_name == 'quieter_system_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'set_system_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'louder_music_volume'):
             para = para_extract.target_volume(target)
-        elif(function_name == 'quiter_music_volume'):
+        elif(function_name == 'quieter_music_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'set_music_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'louder_volume'):
             para = para_extract.target_volume(target)
-        elif(function_name == 'quiter_volume'):
+        elif(function_name == 'quieter_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'set_volume'):
             para = para_extract.target_volume(target)
         elif(function_name == 'translate'):
             para = para_extract.target_language(target)
-        elif(function_name == 'question_answering'):
+        elif(function_name == 'google_search'):
             para = [target]
         elif(function_name == 'set_timer'):
             para = para_extract.target_countdown(input_str)
-        elif(function_name == 'set_alert'):
-            para = para_extract.target_alert(target)
+        elif(function_name == 'stop_ringing'):
+            para = ()
+        elif(function_name == 'stop_countdown'):
+            para = ()
+        elif(function_name == 'set_alarm'):
+            para = para_extract.target_alarm(target)
         elif(function_name == 'memorandum'):
             para = ()
+        elif(function_name == 'get_time_at_place'):
+            para = para_extract.target_place(target)
         else:
             para = [input_str]
-            return{"class": 'question', "func": 'question_answering', "args": tuple(para)}
+            return{"class": 'QuestionAnswering', "func": 'google_search', "args": tuple(para)}
         return{"class": class_name, "func": function_name, "args": tuple(para)}
 
     def import_thread(self, thread):  # function to implement threading
@@ -175,6 +181,7 @@ class Extract:
 
     def main(self, input_str):
         print(input_str)
+        input_str = input_str.replace('台', '臺')
         which = self.text2func(input_str)
         ret = self.para_extract(input_str, which)
         # open thread and call the function
