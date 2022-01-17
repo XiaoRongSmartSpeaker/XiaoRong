@@ -47,13 +47,13 @@ class Alarm():
 		except:
 			self.alarmList = []
 	def set_alarm(self, day: int, h: int, m: int):
-		if not 1 <= day <= 7:
+		if day == None or not 1 <= day <= 7:
 			logger.debug('Error day')
 			return False
-		elif not 0 <= h < 24:
+		elif h == None or not 0 <= h < 24:
 			logger.debug('Error hour')
 			return False
-		elif not 0 <= m < 60:
+		elif m == None or not 0 <= m < 60:
 			logger.debug('Error minute')
 			self.threadHandler.add_thread({
                     'class': 'TextToSpeech',
