@@ -361,6 +361,7 @@ class Bluetooth():
         self.adapter.make_pairable()
         self.adapter.make_discoverable()
         if self.threadHandler:
+            self.threadHandler.pause()
             self.threadHandler.add_thread({
                 'class': 'Bluetooth',
                 'func': 'bluetooth_daemon_start',
@@ -504,10 +505,10 @@ class Bluetooth():
                     })
                 else:
                     logger.error("threadHandler not exist. Failed to add thread.")
-            elif iface == "MediaPlayer1" and name == "status" and value == "pause":
+            elif iface == "MediaPlayer1" and name == "Status" and value == "paused":
                 self.threadHandler.pause()
                 self.isPlaying = False
-            elif iface == "MediaPlayer1" and name == "status" and value == "playing":
+            elif iface == "MediaPlayer1" and name == "Status" and value == "playing":
                 self.threadHandler.resume()
                 self.isPlaying = True
 
