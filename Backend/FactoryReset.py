@@ -160,7 +160,7 @@ class FactoryReset:
         logger.debug("Config file restored to factory default")
 
     def factory_reset(self):
-        # self._delete_device_user_data()
+        self._delete_device_user_data()
 
         self._call_server_delete_speaker_data()
 
