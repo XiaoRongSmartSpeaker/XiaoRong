@@ -17,29 +17,22 @@ app = Flask(__name__, static_url_path='', static_folder=frontend_path ,template_
 #CORS(app, support_credentials=True)
 
 
-token = {
-    "user_id": 0,
-    "access_token": str,
-    "api_key": str,
-    "client_secret": str
-}
 user = {
-  "status": str,
-  "music_account": str,
-  "device": str,
-  "user_name": str,
-  "user_email": str
+    "user_name": str,
+    "user_email": str,
+    "access_token":str,
+    "client_secret":str,
+    "language":str
 }
 device = {
-    "user_token": str,
-    "dev_id": str,
-    "dev_name": str,
-    "language": str,
-    "system_volume": 50,
-    "media_volume": 50,
-    "region": str,
-    "time_zone": str,
-    "user_account": str
+    "device_id":str,
+    "device_name":str,
+    "language":str,
+    "system_volume":int,
+    "media_volume":int, 
+    "region":str,
+    "time_zone":str,
+    "user_email":str
 }
 
 
@@ -65,8 +58,15 @@ def setting_wifi():
 
 @app.route('/user_info', methods=['POST'])
 def signin():
-    print('hello')
+    # print('hello')
     if request.method == 'POST':
+        user = server.getUser(request.data["email"])
+        if(user == NULL):
+            user["access_token"] = request.data["access_token"]
+            user["client_secret"] = request.data["client_secret"]
+            user["user_email"] = request.data["email"]
+            user["user_name"] = request.data["full_name"]
+        
         sign.signin(request.data)
         response = {'Success': True}
     elif request.method == 'GET':
