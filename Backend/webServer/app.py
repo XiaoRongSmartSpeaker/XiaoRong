@@ -52,7 +52,7 @@ def wifis():
 @app.route('/setting_wifi', methods=['PUT'])
 def setting_wifi():
     if request.method == 'PUT':
-        wifi = json.loads(request.json)
+        wifi = json.loads(request.json())
         isConnected = wifi_connect.CreateWifiConfig(wifi["SSID"], wifi["password"])
         # print(json.loads(request.json))
         response = {'isConnected':isConnected}
