@@ -1,8 +1,8 @@
 import requests
 import json
 
-# url = "http://140.122.185.210"
-url = "http://localhost:8000"
+url = "http://www.xiaorongserver.tk/"
+# url = "http://localhost:8000"
 
 def getDevice():
     r = requests.get(url+'/devicedata')
