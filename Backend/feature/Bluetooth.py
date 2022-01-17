@@ -344,6 +344,7 @@ class Bluetooth():
 
     def bluetooth_daemon_start(self) -> None:
         if self.threadHandler:
+            self.threadHandler.pause()
             self.threadHandler.add_thread({
                 'class': 'TextToSpeech',
                 'func': 'text_to_voice',
@@ -361,7 +362,6 @@ class Bluetooth():
         self.adapter.make_pairable()
         self.adapter.make_discoverable()
         if self.threadHandler:
-            self.threadHandler.pause()
             self.threadHandler.add_thread({
                 'class': 'Bluetooth',
                 'func': 'bluetooth_daemon_start',
