@@ -8,6 +8,7 @@ from wifi import wifi_connect, wifi_scan
 # import test.connect as connect
 import test.signin as sign
 import test.setting as setup
+import test.server as server
 import json
 #from flask_cors import CORS, cross_origin
 
@@ -16,18 +17,29 @@ app = Flask(__name__, static_url_path='', static_folder=frontend_path ,template_
 #CORS(app, support_credentials=True)
 
 
+token = {
+    "user_id": 0,
+    "access_token": str,
+    "api_key": str,
+    "client_secret": str
+}
 user = {
-    "device":str
+  "status": str,
+  "music_account": str,
+  "device": str,
+  "user_name": str,
+  "user_email": str
 }
 device = {
-    "dev_id":str,
-    "dev_name":str,
-    "language":str,
-    "system_volume":50,
-    "media_volume":50,
-    "region":str,
-    "time_zone":str,
-    "user_account":str
+    "user_token": str,
+    "dev_id": str,
+    "dev_name": str,
+    "language": str,
+    "system_volume": 50,
+    "media_volume": 50,
+    "region": str,
+    "time_zone": str,
+    "user_account": str
 }
 
 
@@ -67,7 +79,7 @@ def setting():
     device['time_zone'] = request.data['time']
     device['region'] = request.data['location']
     setup.setup(request.data)
-
+    server.addDevice(device)
     response = {'Success': True}
     return json.dumps(response)
 
