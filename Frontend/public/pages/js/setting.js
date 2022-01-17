@@ -71,6 +71,7 @@ function post_info(location, time, speaker_name)
       location: location,
       time: time,
       speaker_name: speaker_name,
+      language: lan
     }),
     headers: {'Content-Type': 'application/json'}
   })

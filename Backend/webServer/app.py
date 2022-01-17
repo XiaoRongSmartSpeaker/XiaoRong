@@ -28,8 +28,8 @@ device = {
     "device_id":str,
     "device_name":str,
     "language":str,
-    "system_volume":int,
-    "media_volume":int, 
+    "system_volume":50,
+    "media_volume":50, 
     "region":str,
     "time_zone":str,
     "user_email":str
@@ -75,9 +75,21 @@ def signin():
 
 @app.route('/speaker_info', methods=['POST'])
 def setting():
-    device['dev_name'] = request.data['speaker_name']
-    device['time_zone'] = request.data['time']
-    device['region'] = request.data['location']
+    cpuserial = "0000000000000000"
+    try:
+        f = open('/proc/cpuinfo','r')
+        for line in f:
+            if line[0:6]=='Serial':
+                cpuserial = line[10:26]
+        f.close()
+    except:
+        cpuserial = "ERROR000000000"
+    device["device_id"] = cpuserial
+    device["device_name"] = request.data['speaker_name']
+    device["region"] = request.data['time']
+    device["time_zone"] = request.data['location']
+    device["language"] = request.data["language"]
+    device["user_email"] = user["user_email"]
     setup.setup(request.data)
     server.addDevice(device)
     response = {'Success': True}
