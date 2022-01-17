@@ -5,9 +5,9 @@ import os
 from wifi import wifi_connect, wifi_scan
 # import test.scan as scan
 # import test.connect as connect
-# import test.signin as sign
-# import test.setting as setup
-import test.server as server
+import test.signin as sign
+import test.setting as setup
+# import test.server as server
 import json
 #from flask_cors import CORS, cross_origin
 
@@ -70,13 +70,15 @@ def signin():
         user["user_name"] = request.json["full_name"]
         user["language"] = request.json["language"]
         user["user_email"] = request.json["email"]
-        if(not server.getUser(user["user_email"])):
-            if server.addUser(json.dumps(user)) == 201:
-                response = {'Success': True}
-            else:
-                response = {'Success': False}
-        else:
-            response = {'Success': True}
+        # if(not server.getUser(user["user_email"])):
+        #     if server.addUser(json.dumps(user)) == 201:
+        #         response = {'Success': True}
+        #     else:
+        #         response = {'Success': False}
+        # else:
+        #     response = {'Success': True}
+        sign.signin(json.dumps(user))
+        response = {'Success': True}
 
     elif request.method == 'GET':
         response = {'Success': False}
@@ -104,7 +106,8 @@ def setting():
     device["user_email"] = user["user_email"]
     print(user)
     print(device)
-    server.addDevice(json.dumps(device))
+    # server.addDevice(json.dumps(device))
+    setup.setup(json.dumps(device))
     response = {'Success': True}
     return json.dumps(response)
 
