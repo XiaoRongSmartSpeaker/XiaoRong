@@ -28,6 +28,13 @@ class Main():
         self.__DAEMON_THREAD = [                    # define daemon work
             'voice_to_text'
         ]
+        self.WHITE_LIST = [                         # define white list to
+            'voice_to_text',                        # skip voice to text
+        ]
+        self.STREAMING_LIST = [                     # define streaming white list
+            'Bluetooth',
+            'MusicStreaming'
+        ]
 
     def add_thread(self, func_info) -> None:
         if 'args' in func_info and not isinstance(func_info['args'], tuple):
@@ -105,6 +112,12 @@ class Main():
                     return
 
         print('Could not find the feature instance', func_info['class'])
+
+    def get_instance(self, class_name) -> object:
+        for dec_class in self.declare_class:
+            if dec_class['name'] == class_name:
+                return dec_class['instance']
+        return None
 
     def threading_empty(self) -> bool:
         return True if self.__pending_threads.empty() else False
@@ -193,7 +206,7 @@ if __name__ == "__main__":
                 BC = dec_class['instance']
                     
         if MS != None and BC != None and MS.isPlaying == True:
-            BC.modify_button_function(0, [MS,'stop_music',[]])
+            BC.modify_button_function(0, [MS,'pause_music',[]])
         elif BC != None:
             BC.modify_button_function(0, [factory_reset,'reset',[]])
             
@@ -227,9 +240,16 @@ if __name__ == "__main__":
                 # delete thread
                 print('delete thread', thread)
                 main.threads.remove(thread)
+            elif thread.func not in main.WHITE_LIST:
+                threading_running = True
 
         main.threads.reverse()
 
+        # if music pause, resume voive to text
+        for feat in main.STREAMING_LIST:
+            if len(main.instance_thread_correspond[feat]) > 0:
+                if main.instance_thread_correspond[feat][-1].is_pause():
+                    main.instance_thread_correspond["SpeechToText"][-1].resume()
         # if there is no thread alive, open voice to text feature
         if not threading_running:
             main.instance_thread_correspond["SpeechToText"][-1].resume()

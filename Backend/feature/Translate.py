@@ -24,12 +24,11 @@ class Translate:
                     r.pause_threshold=1
                     audio=r.listen(source,timeout=10)
 
-                sttTXT_org = r.recognize_google(audio, language = fromLanguage)
-                cmd = r.recognize_google(audio, language='zh-TW')
+                sttTXT_org = r.recognize_google(audio, language = 'zh-TW')
+                # cmd = r.recognize_google(audio, language='zh-TW')
                 print(sttTXT_org)
-                if '結束翻譯' in cmd:
-
-                    TextToSpeech.text_to_voice('翻譯已結束', 'zh-TW')
+                if '結束翻譯' in sttTXT_org:
+                    TextToSpeech.text_to_voice('翻譯已結束','zh-TW')
                     break
                 
                 sttTXT_tblob = TextBlob(sttTXT_org)
