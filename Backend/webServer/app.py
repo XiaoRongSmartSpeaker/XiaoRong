@@ -113,15 +113,17 @@ def setting():
 
 @app.route('/done', methods=['GET'])
 def done():
-    func = request.environ.get('werkzeug.server.shutdown')
-    if func is None:
-        raise RuntimeError('Not running with the Werkzeug Server')
-    func()
+    shutdown_func = request.environ.get('werkzeug.server.shutdown')
+    if shutdown_func is None:
+        raise RuntimeError('Not running werkzeug')
+    shutdown_func()
+    return "Shutting down..."
 
 @app.route('/<path:path>')
 def serve_page(path):
     print(path)
     return render_template(path)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
