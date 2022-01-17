@@ -1,6 +1,7 @@
 from pprint import pprint
 from datetime import datetime, timedelta, date
 from cal_setup import get_calendar_service
+from TextToSpeech import TextToSpeech
 
 
 class Calendar:
@@ -18,13 +19,13 @@ class Calendar:
 
         today = datetime.today()
         # see if both are valid time
-
         # set end time as start time + 1hr if no value
         if(e_time == None):
             e_time = datetime.strptime(
                 s_time, "%Y-%m-%d %H:%M") + timedelta(hours=1)
             e_time = e_time.strftime("%Y-%m-%dT%H:%M")
         # see if s_time < e_time, if not then add one day to e_time
+            
         else:
             t1 = datetime.strptime(s_time, "%Y-%m-%d %H:%M")
             t2 = datetime.strptime(e_time, "%Y-%m-%d %H:%M")
@@ -75,6 +76,9 @@ class Calendar:
             sendUpdates=sendUpdate,
             body=event_request_body
         ).execute()
+        if(response):
+            text_to_speech('行事歷添加成功')
+            print('success')
 
     def add_calendar_day(self, s_time, e_time, event):
         self.s_time = s_time
@@ -141,6 +145,9 @@ class Calendar:
             sendUpdates=sendUpdate,
             body=event_request_body
         ).execute()
+        if(response):
+            text_to_speech('行事歷添加成功')
+            print('success')
 
     def add_calendar_week(self, day, s_time, e_time, event):
         self.day = day
@@ -209,6 +216,9 @@ class Calendar:
             sendUpdates=sendUpdate,
             body=event_request_body
         ).execute()
+        if(response):
+            text_to_speech('行事歷添加成功')
+            print('success')
 
     def read_calendar(self, day,):
         self.day = day
@@ -216,24 +226,27 @@ class Calendar:
         service = get_calendar_service()
         # Call the Calendar API
         today = date.today()
-        pprint(today.year)
-        if(day == None):
-            day = str(today)
+        if(self.day == None):
+            self.day = str(today)
         else:
-            day = str(today.year)+'-'+day
+            self.day = str(today.year)+'-'+self.day
         print('Get event on'+' '+day)
         events_result = service.events().list(
             calendarId='primary',
-            timeMin=day+'T00:00:00+08:00',
-            timeMax=day+'T23:59:59+08:00',
-            maxResults=1, singleEvents=True,
+            timeMin=self.day+'T00:00:00+08:00',
+            timeMax=self.day+'T23:59:59+08:00',
+            singleEvents=True,
             orderBy='startTime').execute()
         events = events_result.get('items', [])
 
         if not events:
+            text_to_speech('您沒有預定行程')
             print('No upcoming events found.')
         for event in events:
-            start = event['start'].get('dateTime', event['start'].get('date'))
+            start = event['start'].get('dateTime')
+            end = event['end'].get('dateTime')
+            start = start[11:16]+ ' 到 ' + end[11:16]
+            text_to_speech((start, event['summary'])
             print(start, event['summary'])
 
     def read_calendar_next(self):
@@ -248,7 +261,11 @@ class Calendar:
         events = events_result.get('items', [])
 
         if not events:
+            text_to_speech('您沒有預定行程')
             print('No upcoming events found.')
         for event in events:
-            start = event['start'].get('dateTime', event['start'].get('date'))
+            start = event['start'].get('dateTime')
+            end = event['end'].get('dateTime')
+            start = start[11:16]+ ' 到 ' + end[11:16]
+            text_to_speech((start, event['summary'])
             print(start, event['summary'])
