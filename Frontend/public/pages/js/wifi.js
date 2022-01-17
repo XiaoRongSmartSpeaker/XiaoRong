@@ -326,8 +326,7 @@ function input_password(wifi_name, pw, wifi_encry)
         method: 'PUT',
         body: JSON.stringify({
           SSID: wifi_name,
-          password: pw,
-         
+          password: pw
         }),
         headers: {'Content-Type': 'application/json'}
       })

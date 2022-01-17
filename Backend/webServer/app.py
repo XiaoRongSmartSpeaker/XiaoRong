@@ -45,6 +45,7 @@ def hello():
 @app.route("/wifis")
 def wifis():
     result = wifi_scan.WiFi().scan()
+    # result = json.dumps(scan.scan_wifi())
     print(result)
     return result
     # return render_template('wifi.html')
@@ -52,7 +53,8 @@ def wifis():
 @app.route('/setting_wifi', methods=['PUT'])
 def setting_wifi():
     if request.method == 'PUT':
-        wifi = json.loads(request.json())
+        print(request.json)
+        wifi = request.json
         isConnected = wifi_connect.CreateWifiConfig(wifi["SSID"], wifi["password"])
         # print(json.loads(request.json))
         response = {'isConnected':isConnected}
