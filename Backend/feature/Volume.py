@@ -34,7 +34,7 @@ class Volume:
 			bluetooth = self.threadHandler.get_instance("Bluetooth")
 			music = self.threadHandler.get_instance("MusicStreaming")
 			last_status = self.isPlaying
-			if bluetooth.isPlaying != True or bluetooth.isPlaying != True:
+			if bluetooth.isPlaying != True or music.isPlaying != True:
 				self.isPlaying = False
 			else:
 				self.isPlaying = True
