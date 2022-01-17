@@ -51,9 +51,8 @@ class FactoryReset:
         self._config_path = CONFIG_PATH                     # get current config file path
         self._device_id = "0777"
         self._server_url = "http://140.122.185.210/devicedata/" + self._device_id
-        if main_instance:
-            self._main_instance = main_instance
-    
+        self._main_instance = main_instance
+        
     def _call_server_delete_speaker_data(self):
         try:
             # for test only
@@ -167,7 +166,7 @@ class FactoryReset:
 
         self._restore_config()
 
-        # self._terminate_other_process()
+        self._terminate_other_process()
 
         for i in range(3):
             logger.info("Rebooting in " + str(3 - i))
@@ -213,7 +212,7 @@ class FactoryReset:
             self.state = 2
         elif self.state == 2:
             LC.light(2)
-            TextToSpeech.text_to_voice("十五秒，蟲治開始")
+            TextToSpeech.text_to_voice("蟲治開始")
             self.state = 3
             #reset here
             for i in range(3):
@@ -223,5 +222,4 @@ class FactoryReset:
 # testing only
 if __name__ == "__main__":
     ff = FactoryReset()
-    # ff.factory_reset_notification()
     ff.factory_reset()
