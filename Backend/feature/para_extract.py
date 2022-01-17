@@ -120,6 +120,11 @@ def target_time(input_str, mode):  # return the target time and the place to loo
             time_str = shift_time(3, 0, 0)
         elif (target_str == '今天'):
             time_str = shift_time(0, 0, 0)
+        elif ('天後' in target_str):
+            d = _trans(target_str[0:-2])
+            time_str = shift_time(d, 0, 0)
+            # time_str = 
+            
         input_str = input_str[target_obj.end():]
         if(time.search(input_str)):
             ntarget_obj = time.search(input_str)
@@ -245,8 +250,8 @@ def target_time(input_str, mode):  # return the target time and the place to loo
 
 def target_countdown(full_input_str):
     input_str = cn2an.transform(zh2cnnum(full_input_str), "cn2an")
-    hour, minute, second = 0, 0, 0
-    time = re.compile(r"(計時(\d+(小時))?(\d+(分鐘))?(\d+秒)?)")
+    hour, minute, second = None, None, None
+    time = re.compile(r"(計時-?(\d+(小時))?-?(\d+(分鐘))?-?(\d+秒)?)")
     if(time.search(input_str)):
         input_str = time.search(input_str).group()[2:]
         if('小時' in input_str):
@@ -258,12 +263,12 @@ def target_countdown(full_input_str):
         if('秒' in input_str):
             second = int(input_str[:input_str.index('秒')])
             input_str = input_str[input_str.index('秒') + 1:]
-        if(hour == 0 and minute == 0 and second == 0):
-            return [None, None, None]
+        if(hour == None and minute == None and second == None):
+            return [-1, -1, -1]
         else:
             return [hour, minute, second]
     else:
-        return [None, None, None]
+        return [-1, -1, -1]
 # enter a full input str to get final result
 
 
@@ -299,7 +304,7 @@ def target_alarm(input_str):
         input_str = input_str[later_obj.end():]
     input_str = input_str.replace('兩', '2')
     input_str = cn2an.transform(input_str, "cn2an")
-    time = re.compile(r'((\d+)(點|時)(\d+)分)的鬧鐘')
+    time = re.compile(r'((\d+)(點|時)(\d+)分)')
     time_obj = time.match(input_str)
     if(time_obj):
         hour = int(time_obj.group(2))
