@@ -15,25 +15,9 @@ frontend_path = "../../Frontend/public/pages"
 app = Flask(__name__, static_url_path='', static_folder=frontend_path ,template_folder=frontend_path)
 #CORS(app, support_credentials=True)
 
-
-user = {
-    "device":str
-}
-device = {
-    "dev_id":str,
-    "dev_name":str,
-    "language":str,
-    "system_volume":50,
-    "media_volume":50,
-    "region":str,
-    "time_zone":str,
-    "user_account":str
-}
-
-
 @app.route("/")
 def hello():
-    return redirect("index.html")
+    return redirect("wifi.html")
 
 @app.route("/wifis")
 def wifis():
@@ -50,31 +34,6 @@ def setting_wifi():
         # print(json.loads(request.data))
         response = {'isConnected':isConnected}
     return json.dumps(response)
-
-@app.route('/user_info', methods=['POST'])
-def signin():
-    print('hello')
-    if request.method == 'POST':
-        sign.signin(request.data)
-        response = {'Success': True}
-    elif request.method == 'GET':
-        response = {'Success': False}
-    return json.dumps(response)
-
-@app.route('/speaker_info', methods=['POST'])
-def setting():
-    device['dev_name'] = request.data['speaker_name']
-    device['time_zone'] = request.data['time']
-    device['region'] = request.data['location']
-    setup.setup(request.data)
-
-    response = {'Success': True}
-    return json.dumps(response)
-
-@app.route('/<path:path>')
-def serve_page(path):
-    print(path)
-    return render_template(path)
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")
