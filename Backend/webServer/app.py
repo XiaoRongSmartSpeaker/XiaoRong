@@ -12,35 +12,40 @@ import json
 #from flask_cors import CORS, cross_origin
 
 frontend_path = "../../Frontend/public/pages"
-app = Flask(__name__, static_url_path='', static_folder=frontend_path ,template_folder=frontend_path)
+app = Flask(
+    __name__,
+    static_url_path='',
+    static_folder=frontend_path,
+    template_folder=frontend_path)
 #CORS(app, support_credentials=True)
 
 
 user = {
     "user_name": str,
     "user_email": str,
-    "access_token":str,
-    "client_secret":str,
-    "language":str
+    "access_token": str,
+    "client_secret": str,
+    "language": str
 }
 device = {
-    "device_id":str,
-    "device_name":str,
-    "language":str,
-    "system_volume":50,
-    "media_volume":50, 
-    "region":str,
-    "time_zone":str,
-    "isPlaying":False,
-    "isPause":False,
-    "isStop":True,
-    "user_email":str
+    "device_id": str,
+    "device_name": str,
+    "language": str,
+    "system_volume": 50,
+    "media_volume": 50,
+    "region": str,
+    "time_zone": str,
+    "isPlaying": False,
+    "isPause": False,
+    "isStop": True,
+    "user_email": str
 }
 
 
 @app.route("/")
 def hello():
     return redirect("index.html")
+
 
 @app.route("/wifis")
 def wifis():
@@ -50,15 +55,18 @@ def wifis():
     return result
     # return render_template('wifi.html')
 
+
 @app.route('/setting_wifi', methods=['PUT'])
 def setting_wifi():
     if request.method == 'PUT':
         print(request.json)
         wifi = request.json
-        isConnected = wifi_connect.CreateWifiConfig(wifi["SSID"], wifi["password"])
+        isConnected = wifi_connect.CreateWifiConfig(
+            wifi["SSID"], wifi["password"])
         # print(json.loads(request.json))
-        response = {'isConnected':isConnected}
+        response = {'isConnected': isConnected}
     return json.dumps(response)
+
 
 @app.route('/user_info', methods=['POST'])
 def signin():
@@ -84,20 +92,21 @@ def signin():
         response = {'Success': False}
     return json.dumps(response)
 
+
 @app.route('/speaker_info', methods=['POST'])
 def setting():
     global device
     global user
     cpuserial = "0000000000000000"
     try:
-        f = open('/proc/cpuinfo','r')
+        f = open('/proc/cpuinfo', 'r')
         for line in f:
-            if line[0:6]=='Serial':
+            if line[0:6] == 'Serial':
                 cpuserial = line[10:26]
         f.close()
-    except:
+    except BaseException:
         cpuserial = "ERROR000000000"
-    
+
     device["device_id"] = cpuserial
     device["device_name"] = request.json['speaker_name']
     device["region"] = request.json['time']
@@ -111,6 +120,7 @@ def setting():
     response = {'Success': True}
     return json.dumps(response)
 
+
 @app.route('/done', methods=['GET'])
 def done():
     shutdown_func = request.environ.get('werkzeug.server.shutdown')
@@ -118,6 +128,7 @@ def done():
         raise RuntimeError('Not running werkzeug')
     shutdown_func()
     return "Shutting down..."
+
 
 @app.route('/<path:path>')
 def serve_page(path):

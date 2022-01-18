@@ -29,7 +29,8 @@ class Main():
             'voice_to_text'
         ]
         self.WHITE_LIST = [                         # define white list to
-            'voice_to_text', 'volume_switch', 'start_alarm', "start_countdown"                       # skip voice to text
+            # skip voice to text
+            'voice_to_text', 'volume_switch', 'start_alarm', "start_countdown"
         ]
         self.STREAMING_LIST = [                     # define streaming white list
             'Bluetooth',
@@ -39,7 +40,7 @@ class Main():
     def add_thread(self, func_info) -> None:
         if 'args' in func_info and not isinstance(func_info['args'], tuple):
             func_info['args'] = (func_info['args'],)
-        
+
         self.__pending_threads.put(func_info)
 
     def open_thread(self) -> None:
@@ -143,7 +144,7 @@ if __name__ == "__main__":
     main = Main()
 
     factory_reset = FactoryReset.FactoryReset(main)
-    
+
     print("Open signal listener")
     signal.signal(10, main.close)
 
@@ -163,7 +164,7 @@ if __name__ == "__main__":
             main.instance_thread_correspond[feature_obj['name']] = []
         except BaseException:
             print('import class instance failed')
-            
+
     main.add_thread({
         'class': 'SpeechToText',
         'func': 'voice_to_text',
@@ -186,25 +187,29 @@ if __name__ == "__main__":
         'func': 'start_alarm',
     })
     main.open_thread()
-    
+
     main.add_thread({
         'class': 'monitering',
         'func': 'monitering',
     })
     main.open_thread()
-    
+
     volume_instance = None
     for dec_class in main.declare_class:
         if dec_class['name'] == 'Volume':
             volume_instance = dec_class['instance']
-    
-    main.add_thread({
-        'class': 'ButtonController',
-        'func': 'start',
-        'args': {13:{'BUTTON':[factory_reset,'reset',[]]},14:{'BUTTON':[volume_instance,'louder_volume',[]]},15:{'BUTTON':[volume_instance,'quieter_volume',[]]}},
-    })
+
+    main.add_thread(
+        {
+            'class': 'ButtonController', 'func': 'start', 'args': {
+                13: {
+                    'BUTTON': [
+                        factory_reset, 'reset', []]}, 14: {
+                    'BUTTON': [
+                        volume_instance, 'louder_volume', []]}, 15: {
+                    'BUTTON': [
+                        volume_instance, 'quieter_volume', []]}}, })
     main.open_thread()
-    
 
     while True:
         # check every second
@@ -216,12 +221,12 @@ if __name__ == "__main__":
                 MS = dec_class['instance']
             if dec_class['name'] == 'ButtonController':
                 BC = dec_class['instance']
-                    
-        if MS != None and BC != None and MS.isPlaying == True:
-            BC.modify_button_function(0, [MS,'pause_music',[]])
-        elif BC != None:
-            BC.modify_button_function(0, [factory_reset,'reset',[]])
-            
+
+        if MS is not None and BC is not None and MS.isPlaying:
+            BC.modify_button_function(0, [MS, 'pause_music', []])
+        elif BC is not None:
+            BC.modify_button_function(0, [factory_reset, 'reset', []])
+
         # clear that completed threading
         # because newer threads are at the back of list
         threading_running = False

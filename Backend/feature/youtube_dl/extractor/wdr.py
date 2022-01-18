@@ -105,12 +105,15 @@ class WDRIE(InfoExtractor):
                 })
 
         return {
-            'id': tracker_data.get('trackerClipId', video_id),
+            'id': tracker_data.get(
+                'trackerClipId',
+                video_id),
             'title': self._live_title(title) if is_live else title,
             'alt_title': tracker_data.get('trackerClipSubcategory'),
             'formats': formats,
             'subtitles': subtitles,
-            'upload_date': unified_strdate(tracker_data.get('trackerClipAirTime')),
+            'upload_date': unified_strdate(
+                tracker_data.get('trackerClipAirTime')),
             'is_live': is_live,
         }
 
@@ -118,7 +121,8 @@ class WDRIE(InfoExtractor):
 class WDRPageIE(InfoExtractor):
     _CURRENT_MAUS_URL = r'https?://(?:www\.)wdrmaus.de/(?:[^/]+/){1,2}[^/?#]+\.php5'
     _PAGE_REGEX = r'/(?:mediathek/)?(?:[^/]+/)*(?P<display_id>[^/]+)\.html'
-    _VALID_URL = r'https?://(?:www\d?\.)?(?:(?:kinder\.)?wdr\d?|sportschau)\.de' + _PAGE_REGEX + '|' + _CURRENT_MAUS_URL
+    _VALID_URL = r'https?://(?:www\d?\.)?(?:(?:kinder\.)?wdr\d?|sportschau)\.de' + \
+        _PAGE_REGEX + '|' + _CURRENT_MAUS_URL
 
     _TESTS = [
         {
@@ -262,16 +266,19 @@ class WDRPageIE(InfoExtractor):
             if jsonp_url:
                 entries.append(self.url_result(jsonp_url, ie=WDRIE.ie_key()))
 
-        # Playlist (e.g. https://www1.wdr.de/mediathek/video/sendungen/aktuelle-stunde/aktuelle-stunde-120.html)
+        # Playlist (e.g.
+        # https://www1.wdr.de/mediathek/video/sendungen/aktuelle-stunde/aktuelle-stunde-120.html)
         if not entries:
             entries = [
                 self.url_result(
-                    compat_urlparse.urljoin(url, mobj.group('href')),
-                    ie=WDRPageIE.ie_key())
-                for mobj in re.finditer(
+                    compat_urlparse.urljoin(
+                        url,
+                        mobj.group('href')),
+                    ie=WDRPageIE.ie_key()) for mobj in re.finditer(
                     r'<a[^>]+\bhref=(["\'])(?P<href>(?:(?!\1).)+)\1[^>]+\bdata-extension=',
-                    webpage) if re.match(self._PAGE_REGEX, mobj.group('href'))
-            ]
+                    webpage) if re.match(
+                    self._PAGE_REGEX,
+                    mobj.group('href'))]
 
         return self.playlist_result(entries, playlist_id=display_id)
 
@@ -296,7 +303,8 @@ class WDRElefantIE(InfoExtractor):
         display_id = self._match_id(url)
 
         # Table of Contents seems to always be at this address, so fetch it directly.
-        # The website fetches configurationJS.php5, which links to tableOfContentsJS.php5.
+        # The website fetches configurationJS.php5, which links to
+        # tableOfContentsJS.php5.
         table_of_contents = self._download_json(
             'https://www.wdrmaus.de/elefantenseite/data/tableOfContentsJS.php5',
             display_id)
@@ -331,8 +339,7 @@ class WDRMobileIE(InfoExtractor):
             'ext': 'mp4',
             'age_limit': 0,
         },
-        'skip': 'Problems with loading data.'
-    }
+        'skip': 'Problems with loading data.'}
 
     def _real_extract(self, url):
         mobj = re.match(self._VALID_URL, url)

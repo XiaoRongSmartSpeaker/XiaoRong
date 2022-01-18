@@ -185,20 +185,30 @@ class NiconicoIE(InfoExtractor):
             login_ok = False
         else:
             parts = compat_urllib_parse_urlparse(urlh.geturl())
-            if compat_parse_qs(parts.query).get('message', [None])[0] == 'cant_login':
+            if compat_parse_qs(
+                    parts.query).get(
+                    'message',
+                    [None])[0] == 'cant_login':
                 login_ok = False
         if not login_ok:
-            self._downloader.report_warning('unable to log in: bad username or password')
+            self._downloader.report_warning(
+                'unable to log in: bad username or password')
         return login_ok
 
-    def _extract_format_for_quality(self, api_data, video_id, audio_quality, video_quality):
+    def _extract_format_for_quality(
+            self,
+            api_data,
+            video_id,
+            audio_quality,
+            video_quality):
         def yesno(boolean):
             return 'yes' if boolean else 'no'
 
         session_api_data = api_data['video']['dmcInfo']['session_api']
         session_api_endpoint = session_api_data['urls'][0]
 
-        format_id = '-'.join(map(lambda s: remove_start(s['id'], 'archive_'), [video_quality, audio_quality]))
+        format_id = '-'.join(map(lambda s: remove_start(
+            s['id'], 'archive_'), [video_quality, audio_quality]))
 
         session_response = self._download_json(
             session_api_endpoint['url'], video_id,
@@ -301,8 +311,8 @@ class NiconicoIE(InfoExtractor):
                     raise ExtractorError('The video has been deleted.',
                                          expected=True)
                 elif 'closed' in flv_info:
-                    raise ExtractorError('Niconico videos now require logging in',
-                                         expected=True)
+                    raise ExtractorError(
+                        'Niconico videos now require logging in', expected=True)
                 elif 'error' in flv_info:
                     raise ExtractorError('%s reports error: %s' % (
                         self.IE_NAME, flv_info['error'][0]), expected=True)
@@ -368,7 +378,9 @@ class NiconicoIE(InfoExtractor):
         watch_api_data_string = self._html_search_regex(
             r'<div[^>]+id="watchAPIDataContainer"[^>]+>([^<]+)</div>',
             webpage, 'watch api data', default=None)
-        watch_api_data = self._parse_json(watch_api_data_string, video_id) if watch_api_data_string else {}
+        watch_api_data = self._parse_json(
+            watch_api_data_string,
+            video_id) if watch_api_data_string else {}
         video_detail = watch_api_data.get('videoDetail', {})
 
         thumbnail = (
@@ -381,7 +393,8 @@ class NiconicoIE(InfoExtractor):
         timestamp = (parse_iso8601(get_video_info('first_retrieve'))
                      or unified_timestamp(get_video_info('postedDateTime')))
         if not timestamp:
-            match = self._html_search_meta('datePublished', webpage, 'date published', default=None)
+            match = self._html_search_meta(
+                'datePublished', webpage, 'date published', default=None)
             if match:
                 timestamp = parse_iso8601(match.replace('+', ':00+'))
         if not timestamp and video_detail.get('postedAt'):
@@ -421,7 +434,8 @@ class NiconicoIE(InfoExtractor):
         # in the JSON, which will cause None to be returned instead of {}.
         owner = try_get(api_data, lambda x: x.get('owner'), dict) or {}
         uploader_id = get_video_info(['ch_id', 'user_id']) or owner.get('id')
-        uploader = get_video_info(['ch_name', 'user_nickname']) or owner.get('nickname')
+        uploader = get_video_info(
+            ['ch_name', 'user_nickname']) or owner.get('nickname')
 
         return {
             'id': video_id,
@@ -485,7 +499,7 @@ class NiconicoPlaylistIE(InfoExtractor):
             if not video_id:
                 continue
             count = video.get('count') or {}
-            get_count = lambda x: int_or_none(count.get(x))
+            def get_count(x): return int_or_none(count.get(x))
             info = {
                 '_type': 'url',
                 'id': video_id,

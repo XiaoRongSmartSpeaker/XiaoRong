@@ -67,7 +67,8 @@ class IGNIE(IGNBaseIE):
         video = self._call_api(display_id)
         video_id = video['videoId']
         metadata = video['metadata']
-        title = metadata.get('longTitle') or metadata.get('title') or metadata['name']
+        title = metadata.get('longTitle') or metadata.get(
+            'title') or metadata['name']
 
         formats = []
         refs = video.get('refs') or {}
@@ -245,13 +246,20 @@ class IGNArticleIE(IGNBaseIE):
         article = self._call_api(display_id)
 
         def entries():
-            media_url = try_get(article, lambda x: x['mediaRelations'][0]['media']['metadata']['url'])
+            media_url = try_get(
+                article, lambda x: x['mediaRelations'][0]['media']['metadata']['url'])
             if media_url:
                 yield self.url_result(media_url, IGNIE.ie_key())
             for content in (article.get('content') or []):
-                for video_url in re.findall(r'(?:\[(?:ignvideo\s+url|youtube\s+clip_id)|<iframe[^>]+src)="([^"]+)"', content):
+                for video_url in re.findall(
+                    r'(?:\[(?:ignvideo\s+url|youtube\s+clip_id)|<iframe[^>]+src)="([^"]+)"',
+                        content):
                     yield self.url_result(video_url)
 
         return self.playlist_result(
-            entries(), article.get('articleId'),
-            strip_or_none(try_get(article, lambda x: x['metadata']['headline'])))
+            entries(),
+            article.get('articleId'),
+            strip_or_none(
+                try_get(
+                    article,
+                    lambda x: x['metadata']['headline'])))

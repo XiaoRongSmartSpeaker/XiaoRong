@@ -87,7 +87,7 @@ class Channel(object):
     def uploads(self):
         if not self._uploads:
             self._fetch_basic()
-        if type(self._uploads) != Playlist:
+        if not isinstance(self._uploads, Playlist):
             self._uploads = Playlist.from_url(self._uploads, self._basic,
                                               self._gdata, self._size,
                                               self._callback)
@@ -198,8 +198,8 @@ class Channel(object):
 
     def _fetch_basic(self):
         query = None
-        chanR = re.compile('.+channel\/([^\/]+)$')
-        userR = re.compile('.+user\/([^\/]+)$')
+        chanR = re.compile(r'.+channel\/([^\/]+)$')
+        userR = re.compile(r'.+user\/([^\/]+)$')
         channel_id = None
         channel_url = self._channel_url
         if chanR.match(channel_url):

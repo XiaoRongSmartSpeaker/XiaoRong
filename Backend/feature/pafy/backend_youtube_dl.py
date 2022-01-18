@@ -51,8 +51,8 @@ class YtdlPafy(BasePafy):
         self._rating = self._ydl_info['average_rating']
         self._length = self._ydl_info['duration']
         self._viewcount = self._ydl_info['view_count']
-        self._likes = self._ydl_info.get('like_count',0)
-        self._dislikes = self._ydl_info.get('dislike_count',0)
+        self._likes = self._ydl_info.get('like_count', 0)
+        self._dislikes = self._ydl_info.get('dislike_count', 0)
 #        self._likes = self._ydl_info['like_count']
 #        self._dislikes = self._ydl_info['dislike_count']
         self._username = self._ydl_info['uploader_id']
@@ -135,8 +135,8 @@ class YtdlStream(BaseStream):
     def download(self, filepath="", quiet=False, progress="Bytes",
                  callback=None, meta=False, remux_audio=False):
 
-        downloader = youtube_dl.downloader.http.HttpFD(ydl(),
-            {'http_chunk_size': 10485760})
+        downloader = youtube_dl.downloader.http.HttpFD(
+            ydl(), {'http_chunk_size': 10485760})
 
         progress_available = ["KB", "MB", "GB"]
         if progress not in progress_available:
@@ -158,7 +158,7 @@ class YtdlStream(BaseStream):
                     eta = s['eta']
 
                 progress_stats = (get_size_done(bytesdone, progress),
-                                  bytesdone*1.0/total, rate, eta)
+                                  bytesdone * 1.0 / total, rate, eta)
                 if not quiet:
                     status = status_string.format(*progress_stats)
                     sys.stdout.write("\r" + status + ' ' * 4 + "\r")
@@ -177,7 +177,8 @@ class YtdlStream(BaseStream):
             pass
 
         else:
-            filepath = self.generate_filename(meta=meta, max_length=256 - len('.temp'))
+            filepath = self.generate_filename(
+                meta=meta, max_length=256 - len('.temp'))
 
         infodict = {'url': self.url}
 

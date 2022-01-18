@@ -16,7 +16,10 @@ def _get_api_key(api_path):
         api_path = api_path[:-1]
 
     api_key = 'fb5f58a820353bd7095de526253c14fd'
-    a = '{0:}{1:}{2:}'.format(api_key, api_path, int(round(time.time() / 24 / 3600)))
+    a = '{0:}{1:}{2:}'.format(
+        api_key, api_path, int(
+            round(
+                time.time() / 24 / 3600)))
     return hashlib.md5(a.encode('ascii')).hexdigest()
 
 

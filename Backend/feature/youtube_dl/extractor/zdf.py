@@ -61,8 +61,11 @@ class ZDFBaseIE(InfoExtractor):
                 format_url, video_id, 'mp4', m3u8_id='hls',
                 entry_protocol='m3u8_native', fatal=False))
         elif mime_type == 'application/f4m+xml' or ext == 'f4m':
-            formats.extend(self._extract_f4m_formats(
-                update_url_query(format_url, {'hdcore': '3.7.0'}), video_id, f4m_id='hds', fatal=False))
+            formats.extend(
+                self._extract_f4m_formats(
+                    update_url_query(
+                        format_url, {
+                            'hdcore': '3.7.0'}), video_id, f4m_id='hds', fatal=False))
         else:
             f = parse_codecs(meta.get('mimeCodec'))
             format_id = ['http']
@@ -96,7 +99,8 @@ class ZDFBaseIE(InfoExtractor):
                 if not isinstance(f_qualities, list):
                     continue
                 for quality in f_qualities:
-                    tracks = try_get(quality, lambda x: x['audio']['tracks'], list)
+                    tracks = try_get(
+                        quality, lambda x: x['audio']['tracks'], list)
                     if not tracks:
                         continue
                     for track in tracks:
@@ -133,7 +137,8 @@ class ZDFBaseIE(InfoExtractor):
 class ZDFIE(ZDFBaseIE):
     _VALID_URL = r'https?://www\.zdf\.de/(?:[^/]+/)*(?P<id>[^/?#&]+)\.html'
     _TESTS = [{
-        # Same as https://www.phoenix.de/sendungen/ereignisse/corona-nachgehakt/wohin-fuehrt-der-protest-in-der-pandemie-a-2050630.html
+        # Same as
+        # https://www.phoenix.de/sendungen/ereignisse/corona-nachgehakt/wohin-fuehrt-der-protest-in-der-pandemie-a-2050630.html
         'url': 'https://www.zdf.de/politik/phoenix-sendungen/wohin-fuehrt-der-protest-in-der-pandemie-100.html',
         'md5': '34ec321e7eb34231fd88616c65c92db0',
         'info_dict': {
@@ -170,7 +175,8 @@ class ZDFIE(ZDFBaseIE):
             'upload_date': '20160604',
         },
     }, {
-        # Same as https://www.phoenix.de/sendungen/dokumentationen/gesten-der-maechtigen-i-a-89468.html?ref=suche
+        # Same as
+        # https://www.phoenix.de/sendungen/dokumentationen/gesten-der-maechtigen-i-a-89468.html?ref=suche
         'url': 'https://www.zdf.de/politik/phoenix-sendungen/die-gesten-der-maechtigen-100.html',
         'only_matching': True,
     }, {
@@ -178,7 +184,8 @@ class ZDFIE(ZDFBaseIE):
         'url': 'https://www.zdf.de/filme/filme-sonstige/der-hauptmann-112.html',
         'only_matching': True,
     }, {
-        # Same as https://www.3sat.de/wissen/nano/nano-21-mai-2019-102.html, equal media ids
+        # Same as https://www.3sat.de/wissen/nano/nano-21-mai-2019-102.html,
+        # equal media ids
         'url': 'https://www.zdf.de/wissen/nano/nano-21-mai-2019-102.html',
         'only_matching': True,
     }, {
@@ -238,12 +245,13 @@ class ZDFIE(ZDFBaseIE):
     def _extract_regular(self, url, player, video_id):
         content = self._call_api(
             player['content'], video_id, 'content', player['apiToken'], url)
-        return self._extract_entry(player['content'], player, content, video_id)
+        return self._extract_entry(
+            player['content'], player, content, video_id)
 
     def _extract_mobile(self, video_id):
         video = self._download_json(
-            'https://zdf-cdn.live.cellular.de/mediathekV2/document/%s' % video_id,
-            video_id)
+            'https://zdf-cdn.live.cellular.de/mediathekV2/document/%s' %
+            video_id, video_id)
 
         document = video['document']
 
@@ -274,9 +282,14 @@ class ZDFIE(ZDFBaseIE):
             'id': content_id,
             'title': title,
             'description': document.get('beschreibung'),
-            'duration': int_or_none(document.get('length')),
-            'timestamp': unified_timestamp(document.get('date')) or unified_timestamp(
-                try_get(video, lambda x: x['meta']['editorialDate'], compat_str)),
+            'duration': int_or_none(
+                document.get('length')),
+            'timestamp': unified_timestamp(
+                document.get('date')) or unified_timestamp(
+                try_get(
+                    video,
+                    lambda x: x['meta']['editorialDate'],
+                    compat_str)),
             'thumbnails': thumbnails,
             'subtitles': self._extract_subtitles(document),
             'formats': formats,
@@ -317,7 +330,8 @@ class ZDFChannelIE(ZDFBaseIE):
 
     @classmethod
     def suitable(cls, url):
-        return False if ZDFIE.suitable(url) else super(ZDFChannelIE, cls).suitable(url)
+        return False if ZDFIE.suitable(url) else super(
+            ZDFChannelIE, cls).suitable(url)
 
     def _real_extract(self, url):
         channel_id = self._match_id(url)

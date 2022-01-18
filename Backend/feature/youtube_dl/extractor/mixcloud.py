@@ -21,7 +21,13 @@ from ..utils import (
 
 
 class MixcloudBaseIE(InfoExtractor):
-    def _call_api(self, object_type, object_fields, display_id, username, slug=None):
+    def _call_api(
+            self,
+            object_type,
+            object_fields,
+            display_id,
+            username,
+            slug=None):
         lookup_key = object_type + 'Lookup'
         return self._download_json(
             'https://www.mixcloud.com/graphql', display_id, query={
@@ -37,38 +43,35 @@ class MixcloudIE(MixcloudBaseIE):
     _VALID_URL = r'https?://(?:(?:www|beta|m)\.)?mixcloud\.com/([^/]+)/(?!stream|uploads|favorites|listens|playlists)([^/]+)'
     IE_NAME = 'mixcloud'
 
-    _TESTS = [{
-        'url': 'http://www.mixcloud.com/dholbach/cryptkeeper/',
-        'info_dict': {
-            'id': 'dholbach_cryptkeeper',
-            'ext': 'm4a',
-            'title': 'Cryptkeeper',
-            'description': 'After quite a long silence from myself, finally another Drum\'n\'Bass mix with my favourite current dance floor bangers.',
-            'uploader': 'Daniel Holbach',
-            'uploader_id': 'dholbach',
-            'thumbnail': r're:https?://.*\.jpg',
-            'view_count': int,
-            'timestamp': 1321359578,
-            'upload_date': '20111115',
-        },
-    }, {
-        'url': 'http://www.mixcloud.com/gillespeterson/caribou-7-inch-vinyl-mix-chat/',
-        'info_dict': {
-            'id': 'gillespeterson_caribou-7-inch-vinyl-mix-chat',
-            'ext': 'mp3',
-            'title': 'Caribou 7 inch Vinyl Mix & Chat',
-            'description': 'md5:2b8aec6adce69f9d41724647c65875e8',
-            'uploader': 'Gilles Peterson Worldwide',
-            'uploader_id': 'gillespeterson',
-            'thumbnail': 're:https?://.*',
-            'view_count': int,
-            'timestamp': 1422987057,
-            'upload_date': '20150203',
-        },
-    }, {
-        'url': 'https://beta.mixcloud.com/RedLightRadio/nosedrip-15-red-light-radio-01-18-2016/',
-        'only_matching': True,
-    }]
+    _TESTS = [{'url': 'http://www.mixcloud.com/dholbach/cryptkeeper/',
+               'info_dict': {'id': 'dholbach_cryptkeeper',
+                             'ext': 'm4a',
+                             'title': 'Cryptkeeper',
+                             'description': 'After quite a long silence from myself, finally another Drum\'n\'Bass mix with my favourite current dance floor bangers.',
+                             'uploader': 'Daniel Holbach',
+                             'uploader_id': 'dholbach',
+                             'thumbnail': r're:https?://.*\.jpg',
+                             'view_count': int,
+                             'timestamp': 1321359578,
+                             'upload_date': '20111115',
+                             },
+               },
+              {'url': 'http://www.mixcloud.com/gillespeterson/caribou-7-inch-vinyl-mix-chat/',
+               'info_dict': {'id': 'gillespeterson_caribou-7-inch-vinyl-mix-chat',
+                             'ext': 'mp3',
+                             'title': 'Caribou 7 inch Vinyl Mix & Chat',
+                             'description': 'md5:2b8aec6adce69f9d41724647c65875e8',
+                             'uploader': 'Gilles Peterson Worldwide',
+                             'uploader_id': 'gillespeterson',
+                             'thumbnail': 're:https?://.*',
+                             'view_count': int,
+                             'timestamp': 1422987057,
+                             'upload_date': '20150203',
+                             },
+               },
+              {'url': 'https://beta.mixcloud.com/RedLightRadio/nosedrip-15-red-light-radio-01-18-2016/',
+               'only_matching': True,
+               }]
     _DECRYPTION_KEY = 'IFYOUWANTTHEARTISTSTOGETPAIDDONOTDOWNLOADFROMMIXCLOUD'
 
     @staticmethod
@@ -80,7 +83,8 @@ class MixcloudIE(MixcloudBaseIE):
 
     def _real_extract(self, url):
         username, slug = re.match(self._VALID_URL, url).groups()
-        username, slug = compat_urllib_parse_unquote(username), compat_urllib_parse_unquote(slug)
+        username, slug = compat_urllib_parse_unquote(
+            username), compat_urllib_parse_unquote(slug)
         track_id = '%s_%s' % (username, slug)
 
         cloudcast = self._call_api('cloudcast', '''audioLength
@@ -162,7 +166,10 @@ class MixcloudIE(MixcloudBaseIE):
         self._sort_formats(formats)
 
         comments = []
-        for edge in (try_get(cloudcast, lambda x: x['comments']['edges']) or []):
+        for edge in (
+            try_get(
+                cloudcast,
+                lambda x: x['comments']['edges']) or []):
             node = edge.get('node') or {}
             text = strip_or_none(node.get('comment'))
             if not text:
@@ -181,7 +188,8 @@ class MixcloudIE(MixcloudBaseIE):
             if not tag:
                 tags.append(tag)
 
-        get_count = lambda x: int_or_none(try_get(cloudcast, lambda y: y[x]['totalCount']))
+        def get_count(x): return int_or_none(
+            try_get(cloudcast, lambda y: y[x]['totalCount']))
 
         owner = cloudcast.get('owner') or {}
 
@@ -190,19 +198,26 @@ class MixcloudIE(MixcloudBaseIE):
             'title': title,
             'formats': formats,
             'description': cloudcast.get('description'),
-            'thumbnail': try_get(cloudcast, lambda x: x['picture']['url'], compat_str),
+            'thumbnail': try_get(
+                cloudcast,
+                lambda x: x['picture']['url'],
+                compat_str),
             'uploader': owner.get('displayName'),
-            'timestamp': parse_iso8601(cloudcast.get('publishDate')),
+            'timestamp': parse_iso8601(
+                cloudcast.get('publishDate')),
             'uploader_id': owner.get('username'),
             'uploader_url': owner.get('url'),
-            'duration': int_or_none(cloudcast.get('audioLength')),
-            'view_count': int_or_none(cloudcast.get('plays')),
+            'duration': int_or_none(
+                cloudcast.get('audioLength')),
+            'view_count': int_or_none(
+                cloudcast.get('plays')),
             'like_count': get_count('favorites'),
             'repost_count': get_count('reposts'),
             'comment_count': get_count('comments'),
             'comments': comments,
             'tags': tags,
-            'artist': ', '.join(cloudcast.get('featuringArtistList') or []) or None,
+            'artist': ', '.join(
+                cloudcast.get('featuringArtistList') or []) or None,
         }
 
 
@@ -252,8 +267,10 @@ class MixcloudPlaylistBaseIE(MixcloudBaseIE):
                 if not cloudcast_url:
                     continue
                 slug = try_get(cloudcast, lambda x: x['slug'], compat_str)
-                owner_username = try_get(cloudcast, lambda x: x['owner']['username'], compat_str)
-                video_id = '%s_%s' % (owner_username, slug) if slug and owner_username else None
+                owner_username = try_get(
+                    cloudcast, lambda x: x['owner']['username'], compat_str)
+                video_id = '%s_%s' % (owner_username,
+                                      slug) if slug and owner_username else None
                 entries.append(self.url_result(
                     cloudcast_url, MixcloudIE.ie_key(), video_id))
 

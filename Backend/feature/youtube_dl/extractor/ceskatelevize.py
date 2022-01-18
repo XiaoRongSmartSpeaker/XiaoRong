@@ -131,7 +131,8 @@ class CeskaTelevizeIE(InfoExtractor):
             req.add_header('Referer', url)
 
             playlist_title = self._og_search_title(webpage, default=None)
-            playlist_description = self._og_search_description(webpage, default=None)
+            playlist_description = self._og_search_description(
+                webpage, default=None)
 
             playlist = self._download_json(req, playlist_id, fatal=False)
             if not playlist:
@@ -146,7 +147,8 @@ class CeskaTelevizeIE(InfoExtractor):
             for num, item in enumerate(playlist):
                 is_live = item.get('type') == 'LIVE'
                 formats = []
-                for format_id, stream_url in item.get('streamUrls', {}).items():
+                for format_id, stream_url in item.get(
+                        'streamUrls', {}).items():
                     if 'drmOnly=true' in stream_url:
                         continue
                     if 'playerType=flash' in stream_url:
@@ -157,7 +159,8 @@ class CeskaTelevizeIE(InfoExtractor):
                         stream_formats = self._extract_mpd_formats(
                             stream_url, playlist_id,
                             mpd_id='dash-%s' % format_id, fatal=False)
-                    # See https://github.com/ytdl-org/youtube-dl/issues/12119#issuecomment-280037031
+                    # See
+                    # https://github.com/ytdl-org/youtube-dl/issues/12119#issuecomment-280037031
                     if format_id == 'audioDescription':
                         for f in stream_formats:
                             f['source_preference'] = -10
@@ -200,7 +203,11 @@ class CeskaTelevizeIE(InfoExtractor):
         for e in entries:
             self._sort_formats(e['formats'])
 
-        return self.playlist_result(entries, playlist_id, playlist_title, playlist_description)
+        return self.playlist_result(
+            entries,
+            playlist_id,
+            playlist_title,
+            playlist_description)
 
     def _get_subtitles(self, episode_id, subs):
         original_subtitles = self._download_webpage(
@@ -230,7 +237,8 @@ class CeskaTelevizeIE(InfoExtractor):
                 m = re.match(r'^\s*([0-9]+);\s*([0-9]+)\s+([0-9]+)\s*$', line)
                 if m:
                     yield m.group(1)
-                    start, stop = (_msectotimecode(int(t)) for t in m.groups()[1:])
+                    start, stop = (_msectotimecode(int(t))
+                                   for t in m.groups()[1:])
                     yield '{0} --> {1}'.format(start, stop)
                 else:
                     yield line
@@ -279,11 +287,16 @@ class CeskaTelevizePoradyIE(InfoExtractor):
 
         webpage = self._download_webpage(url, video_id)
 
-        data_url = update_url_query(unescapeHTML(self._search_regex(
-            (r'<span[^>]*\bdata-url=(["\'])(?P<url>(?:(?!\1).)+)\1',
-             r'<iframe[^>]+\bsrc=(["\'])(?P<url>(?:https?:)?//(?:www\.)?ceskatelevize\.cz/ivysilani/embed/iFramePlayer\.php.*?)\1'),
-            webpage, 'iframe player url', group='url')), query={
+        data_url = update_url_query(
+            unescapeHTML(
+                self._search_regex(
+                    (r'<span[^>]*\bdata-url=(["\'])(?P<url>(?:(?!\1).)+)\1',
+                     r'<iframe[^>]+\bsrc=(["\'])(?P<url>(?:https?:)?//(?:www\.)?ceskatelevize\.cz/ivysilani/embed/iFramePlayer\.php.*?)\1'),
+                    webpage,
+                    'iframe player url',
+                    group='url')),
+            query={
                 'autoStart': 'true',
-        })
+            })
 
         return self.url_result(data_url, ie=CeskaTelevizeIE.ie_key())

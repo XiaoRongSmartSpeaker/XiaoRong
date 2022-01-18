@@ -41,15 +41,19 @@ class NetEaseMusicBaseIE(InfoExtractor):
             details = info.get(song_format)
             if not details:
                 continue
-            song_file_path = '/%s/%s.%s' % (
-                self._encrypt(details['dfsId']), details['dfsId'], details['extension'])
+            song_file_path = '/%s/%s.%s' % (self._encrypt(
+                details['dfsId']), details['dfsId'], details['extension'])
 
             # 203.130.59.9, 124.40.233.182, 115.231.74.139, etc is a reverse proxy-like feature
             # from NetEase's CDN provider that can be used if m5.music.126.net does not
             # work, especially for users outside of Mainland China
-            # via: https://github.com/JixunMoe/unblock-163/issues/3#issuecomment-163115880
-            for host in ('http://m5.music.126.net', 'http://115.231.74.139/m1.music.126.net',
-                         'http://124.40.233.182/m1.music.126.net', 'http://203.130.59.9/m1.music.126.net'):
+            # via:
+            # https://github.com/JixunMoe/unblock-163/issues/3#issuecomment-163115880
+            for host in (
+                'http://m5.music.126.net',
+                'http://115.231.74.139/m1.music.126.net',
+                'http://124.40.233.182/m1.music.126.net',
+                    'http://203.130.59.9/m1.music.126.net'):
                 song_url = host + song_file_path
                 if self._is_valid_url(song_url, info['id'], 'song'):
                     formats.append({
@@ -141,8 +145,8 @@ class NetEaseMusicIE(NetEaseMusicBaseIE):
         lyrics_expr = r'(\[[0-9]{2}:[0-9]{2}\.[0-9]{2,}\])([^\n]+)'
         original_ts_texts = re.findall(lyrics_expr, original)
         translation_ts_dict = dict(
-            (time_stamp, text) for time_stamp, text in re.findall(lyrics_expr, translated)
-        )
+            (time_stamp, text) for time_stamp, text in re.findall(
+                lyrics_expr, translated))
         lyrics = '\n'.join([
             '%s%s / %s' % (time_stamp, text, translation_ts_dict.get(time_stamp, ''))
             for time_stamp, text in original_ts_texts
@@ -298,7 +302,8 @@ class NetEaseMusicListIE(NetEaseMusicBaseIE):
 
         if info.get('specialType') == 10:  # is a chart/toplist
             datestamp = datetime.fromtimestamp(
-                self.convert_milliseconds(info['updateTime'])).strftime('%Y-%m-%d')
+                self.convert_milliseconds(
+                    info['updateTime'])).strftime('%Y-%m-%d')
             name = '%s %s' % (name, datestamp)
 
         entries = [
@@ -408,8 +413,8 @@ class NetEaseMusicProgramIE(NetEaseMusicBaseIE):
         if not info['songs'] or self._downloader.params.get('noplaylist'):
             if info['songs']:
                 self.to_screen(
-                    'Downloading just the main audio %s because of --no-playlist'
-                    % info['mainSong']['id'])
+                    'Downloading just the main audio %s because of --no-playlist' %
+                    info['mainSong']['id'])
 
             formats = self.extract_formats(info['mainSong'])
             self._sort_formats(formats)
@@ -426,8 +431,8 @@ class NetEaseMusicProgramIE(NetEaseMusicBaseIE):
             }
 
         self.to_screen(
-            'Downloading playlist %s - add --no-playlist to just download the main audio %s'
-            % (program_id, info['mainSong']['id']))
+            'Downloading playlist %s - add --no-playlist to just download the main audio %s' %
+            (program_id, info['mainSong']['id']))
 
         song_ids = [info['mainSong']['id']]
         song_ids.extend([song['id'] for song in info['songs']])

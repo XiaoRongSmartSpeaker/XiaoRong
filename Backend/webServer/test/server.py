@@ -4,20 +4,25 @@ import json
 url = "http://www.xiaorongserver.tk"
 # url = "http://localhost:8000"
 
+
 def getDevice(device):
-    r = requests.get(url+'/devicedata/'+device)
+    r = requests.get(url + '/devicedata/' + device)
     return r.json()
+
 
 def addDevice(device):
-    r = requests.post(url+'/devicedata', data=device)
+    r = requests.post(url + '/devicedata', data=device)
     return r.status_code
 
+
 def getAllUser():
-    r = requests.get(url+'/userdata')
+    r = requests.get(url + '/userdata')
     print("status code:" + str(r.status_code))
     return r.json()
+
+
 def getUser(email=""):
-    r = requests.get(url+'/userdata/'+email)
+    r = requests.get(url + '/userdata/' + email)
     print("status code:" + str(r.status_code))
     if(r.status_code == 200):
         print("OK")
@@ -25,61 +30,68 @@ def getUser(email=""):
     else:
         return None
 
+
 def addUser(user):
-    r = requests.post(url+'/userdata', data=user)
+    r = requests.post(url + '/userdata', data=user)
     print("status code:" + str(r.status_code))
     return r.status_code
 
-def getToken(device_id:str):
-    r = requests.get(url+"/userdata/get_token/"+device_id)
+
+def getToken(device_id: str):
+    r = requests.get(url + "/userdata/get_token/" + device_id)
     print("status code:" + str(r.status_code))
     return r.json()
 
-def addLog(device_id:str, msg:str):
+
+def addLog(device_id: str, msg: str):
     data = json.dumps({
         "device_id": device_id,
         "message": msg
     })
-    
-    r = requests.post(url+'/log', data=data)
+
+    r = requests.post(url + '/log', data=data)
     print("status code:" + str(r.status_code))
     return r.status_code
 
-def getLog(device_id:str):
-    r = requests.get(url+"/log/"+device_id)
+
+def getLog(device_id: str):
+    r = requests.get(url + "/log/" + device_id)
     print("status code:" + str(r.status_code))
     return r.json()
 
-def isPlaying(device_id:str):
+
+def isPlaying(device_id: str):
     data = json.dumps({
-        "isPlaying":True,
-        "isPause":False,
-        "isStop":False,
-        "device_id":device_id
+        "isPlaying": True,
+        "isPause": False,
+        "isStop": False,
+        "device_id": device_id
     })
-    r = requests.put(url+"/devicedata/playing", data=data)
+    r = requests.put(url + "/devicedata/playing", data=data)
     print("status code:" + str(r.status_code))
     return r.status_code
 
-def isPause(device_id:str):
+
+def isPause(device_id: str):
     data = json.dumps({
-        "isPlaying":False,
-        "isPause":True,
-        "isStop":False,
-        "device_id":device_id
+        "isPlaying": False,
+        "isPause": True,
+        "isStop": False,
+        "device_id": device_id
     })
-    r = requests.put(url+"/devicedata/playing", data=data)
+    r = requests.put(url + "/devicedata/playing", data=data)
     print("status code:" + str(r.status_code))
     return r.status_code
 
-def isStop(device_id:str):
+
+def isStop(device_id: str):
     data = json.dumps({
-        "isPlaying":False,
-        "isPause":False,
-        "isStop":True,
-        "device_id":device_id
+        "isPlaying": False,
+        "isPause": False,
+        "isStop": True,
+        "device_id": device_id
     })
-    r = requests.put(url+"/devicedata/playing", data=data)
+    r = requests.put(url + "/devicedata/playing", data=data)
     print("status code:" + str(r.status_code))
     return r.status_code
 

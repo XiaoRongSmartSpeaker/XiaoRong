@@ -1,3 +1,7 @@
+from .util import xenc
+from .playlist import get_playlist2
+from .pafy import call_gdata
+from . import __version__, g
 import os
 import re
 import sys
@@ -20,10 +24,6 @@ else:
 
 early_py_version = sys.version_info[:2] < (2, 7)
 
-from . import __version__, g
-from .pafy import call_gdata
-from .playlist import get_playlist2
-from .util import xenc
 
 dbg = logging.debug
 
@@ -34,12 +34,16 @@ def extract_video_id(url):
     url = str(url).strip()
 
     if idregx.match(url):
-        return url # ID of video
+        return url  # ID of video
 
     if '://' not in url:
         url = '//' + url
     parsedurl = urlparse(url)
-    if parsedurl.netloc in ('youtube.com', 'www.youtube.com', 'm.youtube.com', 'gaming.youtube.com'):
+    if parsedurl.netloc in (
+        'youtube.com',
+        'www.youtube.com',
+        'm.youtube.com',
+            'gaming.youtube.com'):
         query = parse_qs(parsedurl.query)
         if 'v' in query and idregx.match(query['v'][0]):
             return query['v'][0]
@@ -105,16 +109,13 @@ class BasePafy(object):
                 # pylint: disable=W0104
                 s.get_filesize()
 
-
     def _fetch_basic(self):
         """ Fetch basic data and streams. """
         raise NotImplementedError
 
-
     def _fetch_gdata(self):
         """ Extract gdata values, fetch gdata if necessary. """
         raise NotImplementedError
-
 
     def _get_video_gdata(self, video_id):
         """ Return json string containing video metadata from gdata api. """
@@ -129,11 +130,9 @@ class BasePafy(object):
             self.callback("Fetched video gdata")
         return gdata
 
-
     def _process_streams(self):
         """ Create Stream object lists from internal stream maps. """
         raise NotImplementedError
-
 
     def __repr__(self):
         """ Print video metadata. Return utf8 string. """
@@ -434,7 +433,11 @@ class BasePafy(object):
         self._author = pl_data.get("author")
         self._length = int(pl_data.get("length_seconds", 0))
         self._rating = pl_data.get("rating", 0.0)
-        self._viewcount = "".join(re.findall(r"\d", "{0}".format(pl_data.get("views", "0"))))
+        self._viewcount = "".join(
+            re.findall(
+                r"\d", "{0}".format(
+                    pl_data.get(
+                        "views", "0"))))
         self._viewcount = int(self._viewcount)
         self._description = pl_data.get("description")
 
@@ -479,7 +482,7 @@ class BaseStream(object):
         if max_length:
             max_length = max_length + 1 + len(self.extension)
             if len(filename) > max_length:
-                filename = filename[:max_length-3] + '...'
+                filename = filename[:max_length - 3] + '...'
 
         filename += "." + self.extension
         return xenc(filename)
@@ -592,7 +595,7 @@ class BaseStream(object):
             return True
 
     def download(self, filepath="", quiet=False, progress="Bytes",
-                           callback=None, meta=False, remux_audio=False):
+                 callback=None, meta=False, remux_audio=False):
         """ Download.  Use quiet=True to supress output. Return filename.
 
         Use meta=True to append video id and itag to generated filename
@@ -604,13 +607,15 @@ class BaseStream(object):
         savedir = filename = ""
 
         if filepath and os.path.isdir(filepath):
-            savedir, filename = filepath, self.generate_filename(max_length=256-len('.temp'))
+            savedir, filename = filepath, self.generate_filename(
+                max_length=256 - len('.temp'))
 
         elif filepath:
             savedir, filename = os.path.split(filepath)
 
         else:
-            filename = self.generate_filename(meta=meta, max_length=256-len('.temp'))
+            filename = self.generate_filename(
+                meta=meta, max_length=256 - len('.temp'))
 
         filepath = os.path.join(savedir, filename)
         temp_filepath = filepath + ".temp"
@@ -717,12 +722,15 @@ def remux(infile, outfile, quiet=False, muxer="ffmpeg"):
 
 def get_size_done(bytesdone, progress):
     _progress_dict = {'KB': 1024.0, 'MB': 1048576.0, 'GB': 1073741824.0}
-    return round(bytesdone/_progress_dict.get(progress, 1.0), 2)
+    return round(bytesdone / _progress_dict.get(progress, 1.0), 2)
 
 
 def get_status_string(progress):
-    status_string = ('  {:,} ' + progress + ' [{:.2%}] received. Rate: [{:4.0f} '
-                     'KB/s].  ETA: [{:.0f} secs]')
+    status_string = (
+        '  {:,} ' +
+        progress +
+        ' [{:.2%}] received. Rate: [{:4.0f} '
+        'KB/s].  ETA: [{:.0f} secs]')
 
     if early_py_version:
         status_string = ('  {0:} ' + progress + ' [{1:.2%}] received. Rate:'

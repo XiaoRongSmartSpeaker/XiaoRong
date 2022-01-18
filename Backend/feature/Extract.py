@@ -53,7 +53,7 @@ class Extract:
                 if(keyword == keyword_str):
                     keyword_str = keyword
                     classname = self.func_dict[func_name]["class"]
-                    return [classname, func_name, keyword]     
+                    return [classname, func_name, keyword]
         return [classname, func_name, 'None']
 
     def para_extract(self, input_str, func_key):

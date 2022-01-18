@@ -1,3 +1,7 @@
+from .jsinterp import JSInterpreter
+from .backend_shared import BasePafy, BaseStream
+from .pafy import fetch_decode, dbg, get_categoryname
+from . import g
 import os
 import hashlib
 import tempfile
@@ -21,11 +25,6 @@ else:
 
 early_py_version = sys.version_info[:2] < (2, 7)
 
-from . import g
-from .pafy import fetch_decode, dbg, get_categoryname
-from .backend_shared import BasePafy, BaseStream
-from .jsinterp import JSInterpreter
-
 
 funcmap = {}
 
@@ -41,7 +40,6 @@ class InternPafy(BasePafy):
         self._formats = None
         self.ciphertag = None  # used by Stream class in url property def
         super(InternPafy, self).__init__(*args, **kwargs)
-
 
     def _fetch_basic(self):
         """ Fetch basic data and streams. """
@@ -87,7 +85,9 @@ class InternPafy(BasePafy):
         dbg("Fetched watch page")
         if self.callback:
             self.callback("Fetched watch page")
-        self.age_ver = re.search(r'player-age-gate-content">', watchinfo) is not None
+        self.age_ver = re.search(
+            r'player-age-gate-content">',
+            watchinfo) is not None
 
         if self.ciphertag:
             dbg("Encrypted signature detected.")
@@ -100,8 +100,9 @@ class InternPafy(BasePafy):
                 dashsig = re.search(r"/s/([\w\.]+)", self._dashurl).group(1)
                 dbg("decrypting dash sig")
                 goodsig = _decodesig(dashsig, js_url, self.callback)
-                self._dashurl = re.sub(r"/s/[\w\.]+",
-                                       "/signature/%s" % goodsig, self._dashurl)
+                self._dashurl = re.sub(
+                    r"/s/[\w\.]+", "/signature/%s" %
+                    goodsig, self._dashurl)
 
             else:
                 s = re.search(r"/s/([\w\.]+)", self._dashurl).group(1)
@@ -114,7 +115,6 @@ class InternPafy(BasePafy):
         self._have_basic = 1
         self._process_streams()
         self.expiry = time.time() + g.lifespan
-
 
     def _fetch_gdata(self):
         """ Extract gdata values, fetch gdata if necessary. """
@@ -132,7 +132,6 @@ class InternPafy(BasePafy):
         self._likes = int(statistics["likeCount"])
         self._dislikes = int(statistics["dislikeCount"])
         self._have_gdata = 1
-
 
     def _process_streams(self):
         """ Create Stream object lists from internal stream maps. """
@@ -235,7 +234,7 @@ class InternStream(BaseStream):
 
             elif self.encrypted:
                 self._sig = _decodesig(self._sig, self._parent.js_url,
-                        self._parent.callback)
+                                       self._parent.callback)
 
             self._url = _make_url(self._rawurl, self._sig)
 
@@ -244,7 +243,7 @@ class InternStream(BaseStream):
 
 def parseqs(data):
     """ parse_qs, return unicode. """
-    if type(data) == uni:
+    if isinstance(data, uni):
         return parse_qs(data)
 
     elif pyver == 3:

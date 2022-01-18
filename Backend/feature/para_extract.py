@@ -88,7 +88,8 @@ def zh2cnnum(input_str):
     return input_str
 
 
-def target_time(input_str, mode):  # return the target time and the place to look later mode1 for time interval
+# return the target time and the place to look later mode1 for time interval
+def target_time(input_str, mode):
     date = re.compile(
         r'((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)月((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(日|號)')
     time = re.compile(
@@ -123,8 +124,8 @@ def target_time(input_str, mode):  # return the target time and the place to loo
         elif ('天後' in target_str):
             d = _trans(target_str[0:-2])
             time_str = shift_time(d, 0, 0)
-            # time_str = 
-            
+            # time_str =
+
         input_str = input_str[target_obj.end():]
         if(time.search(input_str)):
             ntarget_obj = time.search(input_str)
@@ -263,7 +264,7 @@ def target_countdown(full_input_str):
         if('秒' in input_str):
             second = int(input_str[:input_str.index('秒')])
             input_str = input_str[input_str.index('秒') + 1:]
-        if(hour == None and minute == None and second == None):
+        if(hour is None and minute is None and second is None):
             return [-1, -1, -1]
         else:
             return [hour, minute, second]
@@ -335,6 +336,7 @@ def target_volume(input_str):
     if(input_str[0] == '負' or input_str[0] == '-'):
         target_num *= -1
     return [target_num]
+
 
 def target_place(input_str):
     place = None

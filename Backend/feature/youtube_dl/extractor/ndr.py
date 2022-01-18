@@ -117,11 +117,15 @@ class NDRIE(NDRBaseIE):
             'embed URL', group='url')
         description = self._search_regex(
             r'<p[^>]+itemprop="description">([^<]+)</p>',
-            webpage, 'description', default=None) or self._og_search_description(webpage)
+            webpage,
+            'description',
+            default=None) or self._og_search_description(webpage)
         timestamp = parse_iso8601(
             self._search_regex(
                 r'<span[^>]+itemprop="(?:datePublished|uploadDate)"[^>]+content="([^"]+)"',
-                webpage, 'upload date', default=None))
+                webpage,
+                'upload date',
+                default=None))
         info = self._search_json_ld(webpage, display_id, default={})
         return merge_dicts({
             '_type': 'url_transparent',
@@ -242,7 +246,8 @@ class NDREmbedBaseIE(InfoExtractor):
 
         config = playlist['config']
 
-        live = playlist.get('config', {}).get('streamType') in ['httpVideoLive', 'httpAudioLive']
+        live = playlist.get('config', {}).get('streamType') in [
+            'httpVideoLive', 'httpAudioLive']
         title = config['title']
         if live:
             title = self._live_title(title)

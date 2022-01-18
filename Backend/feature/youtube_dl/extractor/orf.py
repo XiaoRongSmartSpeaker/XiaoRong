@@ -424,8 +424,8 @@ class ORFIPTVIE(InfoExtractor):
             r'data-video(?:id)?="(\d+)"', webpage, 'video id')
 
         data = self._download_json(
-            'http://bits.orf.at/filehandler/static-api/json/current/data.json?file=%s' % video_id,
-            video_id)[0]
+            'http://bits.orf.at/filehandler/static-api/json/current/data.json?file=%s' %
+            video_id, video_id)[0]
 
         duration = float_or_none(data['duration'], 1000)
 
@@ -524,8 +524,8 @@ class ORFFM4StoryIE(InfoExtractor):
         all_ids = orderedSet(re.findall(r'data-video(?:id)?="(\d+)"', webpage))
         for idx, video_id in enumerate(all_ids):
             data = self._download_json(
-                'http://bits.orf.at/filehandler/static-api/json/current/data.json?file=%s' % video_id,
-                video_id)[0]
+                'http://bits.orf.at/filehandler/static-api/json/current/data.json?file=%s' %
+                video_id, video_id)[0]
 
             duration = float_or_none(data['duration'], 1000)
 

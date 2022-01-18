@@ -70,8 +70,10 @@ class VikiBaseIE(InfoExtractor):
         if error:
             if error == 'invalid timestamp':
                 resp = self._download_json(
-                    self._prepare_call(path, int(resp['current_timestamp']), post_data),
-                    video_id, '%s (retry)' % note)
+                    self._prepare_call(
+                        path, int(
+                            resp['current_timestamp']), post_data), video_id, '%s (retry)' %
+                    note)
                 error = resp.get('error')
             if error:
                 self._raise_error(resp['error'])
@@ -113,7 +115,8 @@ class VikiBaseIE(InfoExtractor):
 
         self._token = login.get('token')
         if not self._token:
-            self.report_warning('Unable to get session token, login has probably failed')
+            self.report_warning(
+                'Unable to get session token, login has probably failed')
 
     @staticmethod
     def dict_selection(dict_obj, preferred_key, allow_fallback=True):
@@ -123,7 +126,10 @@ class VikiBaseIE(InfoExtractor):
         if not allow_fallback:
             return
 
-        filtered_dict = list(filter(None, [dict_obj.get(k) for k in dict_obj.keys()]))
+        filtered_dict = list(
+            filter(
+                None, [
+                    dict_obj.get(k) for k in dict_obj.keys()]))
         return filtered_dict[0] if filtered_dict else None
 
 
@@ -254,11 +260,18 @@ class VikiIE(VikiBaseIE):
 
         self._check_errors(video)
 
-        title = self.dict_selection(video.get('titles', {}), 'en', allow_fallback=False)
+        title = self.dict_selection(
+            video.get(
+                'titles',
+                {}),
+            'en',
+            allow_fallback=False)
         episode_number = int_or_none(video.get('number'))
         if not title:
-            title = 'Episode %d' % episode_number if video.get('type') == 'episode' else video.get('id') or video_id
-            container_titles = try_get(video, lambda x: x['container']['titles'], dict) or {}
+            title = 'Episode %d' % episode_number if video.get(
+                'type') == 'episode' else video.get('id') or video_id
+            container_titles = try_get(
+                video, lambda x: x['container']['titles'], dict) or {}
             container_title = self.dict_selection(container_titles, 'en')
             title = '%s - %s' % (container_title, title)
 
@@ -274,7 +287,8 @@ class VikiIE(VikiBaseIE):
             })
 
         subtitles = {}
-        for subtitle_lang, _ in (video.get('subtitle_completions') or {}).items():
+        for subtitle_lang, _ in (
+                video.get('subtitle_completions') or {}).items():
             subtitles[subtitle_lang] = [{
                 'ext': subtitles_format,
                 'url': self._prepare_call(
@@ -305,7 +319,8 @@ class VikiIE(VikiBaseIE):
             format_url = format_dict.get('url')
             if not format_url:
                 return
-            qs = compat_parse_qs(compat_urllib_parse_urlparse(format_url).query)
+            qs = compat_parse_qs(
+                compat_urllib_parse_urlparse(format_url).query)
             stream = qs.get('stream', [None])[0]
             if stream:
                 format_url = base64.b64decode(stream).decode()
@@ -420,9 +435,15 @@ class VikiChannelIE(VikiBaseIE):
         for video_type in ('episodes', 'clips', 'movies'):
             for page_num in itertools.count(1):
                 page = self._call_api(
-                    'containers/%s/%s.json?per_page=%d&sort=number&direction=asc&with_paging=true&page=%d'
-                    % (channel_id, video_type, self._PER_PAGE, page_num), channel_id,
-                    'Downloading %s JSON page #%d' % (video_type, page_num))
+                    'containers/%s/%s.json?per_page=%d&sort=number&direction=asc&with_paging=true&page=%d' %
+                    (channel_id,
+                     video_type,
+                     self._PER_PAGE,
+                     page_num),
+                    channel_id,
+                    'Downloading %s JSON page #%d' %
+                    (video_type,
+                     page_num))
                 for video in page['response']:
                     video_id = video['id']
                     entries.append(self.url_result(

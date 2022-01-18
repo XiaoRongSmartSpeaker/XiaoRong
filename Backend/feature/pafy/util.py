@@ -37,7 +37,7 @@ def call_gdata(api, qs):
             errdata = e.file.read().decode()
             error = json.loads(errdata)['error']['message']
             errmsg = 'Youtube Error %d: %s' % (e.getcode(), error)
-        except:
+        except BaseException:
             errmsg = str(e)
         raise GdataError(errmsg)
 

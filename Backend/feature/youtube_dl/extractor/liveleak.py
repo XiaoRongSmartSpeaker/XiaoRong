@@ -57,7 +57,8 @@ class LiveLeakIE(InfoExtractor):
             'thumbnail': r're:^https?://.*\.jpg$'
         }
     }, {
-        # Covers https://github.com/ytdl-org/youtube-dl/pull/10664#issuecomment-247439521
+        # Covers
+        # https://github.com/ytdl-org/youtube-dl/pull/10664#issuecomment-247439521
         'url': 'http://m.liveleak.com/view?i=763_1473349649',
         'add_ie': ['Youtube'],
         'info_dict': {
@@ -98,7 +99,8 @@ class LiveLeakIE(InfoExtractor):
         video_id = self._match_id(url)
         webpage = self._download_webpage(url, video_id)
 
-        video_title = self._og_search_title(webpage).replace('LiveLeak.com -', '').strip()
+        video_title = self._og_search_title(
+            webpage).replace('LiveLeak.com -', '').strip()
         video_description = self._og_search_description(webpage)
         video_uploader = self._html_search_regex(
             r'By:.*?(\w+)</a>', webpage, 'uploader', fatal=False)
@@ -138,7 +140,8 @@ class LiveLeakIE(InfoExtractor):
                 orig_url = re.sub(r'\.mp4\.[^.]+', '', a_format['url'])
                 if a_format['url'] != orig_url:
                     format_id = a_format.get('format_id')
-                    format_id = 'original' + ('-' + format_id if format_id else '')
+                    format_id = 'original' + \
+                        ('-' + format_id if format_id else '')
                     if self._is_valid_url(orig_url, video_id, format_id):
                         formats.append({
                             'format_id': format_id,
@@ -148,7 +151,8 @@ class LiveLeakIE(InfoExtractor):
             self._sort_formats(formats)
             info_dict['formats'] = formats
 
-            # Don't append entry ID for one-video pages to keep backward compatibility
+            # Don't append entry ID for one-video pages to keep backward
+            # compatibility
             if len(entries) > 1:
                 info_dict['id'] = '%s_%s' % (video_id, idx + 1)
             else:
@@ -183,9 +187,10 @@ class LiveLeakEmbedIE(InfoExtractor):
         if kind == 'f':
             webpage = self._download_webpage(url, video_id)
             liveleak_url = self._search_regex(
-                r'(?:logourl\s*:\s*|window\.open\()(?P<q1>[\'"])(?P<url>%s)(?P=q1)' % LiveLeakIE._VALID_URL,
-                webpage, 'LiveLeak URL', group='url')
+                r'(?:logourl\s*:\s*|window\.open\()(?P<q1>[\'"])(?P<url>%s)(?P=q1)' %
+                LiveLeakIE._VALID_URL, webpage, 'LiveLeak URL', group='url')
         else:
-            liveleak_url = 'http://www.liveleak.com/view?%s=%s' % (kind, video_id)
+            liveleak_url = 'http://www.liveleak.com/view?%s=%s' % (
+                kind, video_id)
 
         return self.url_result(liveleak_url, ie=LiveLeakIE.ie_key())
