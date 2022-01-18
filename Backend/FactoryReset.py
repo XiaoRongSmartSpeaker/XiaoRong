@@ -9,7 +9,7 @@ import shutil
 import threading
 import json
 
-# import feature.TextToSpeech as TextToSpeech
+import feature.TextToSpeech as TextToSpeech
 
 CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'config.ini')
 DEFAULT_CONFIG_PATH = os.path.join(os.path.dirname(__file__), 'feature', 'default', 'default_config.ini')
