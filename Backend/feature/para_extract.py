@@ -37,7 +37,7 @@ def _trans(s):
 
 
 def isPhoneNumber(str):
-    return re.match(r'\d(-\d)*', str)
+    return re.match(r'(\+|加)?\d(-\d)*', str)
 
 
 # ================================================================================================================
@@ -50,6 +50,7 @@ def target_call(input_str):
         return [0, None]
     else:
         if(isPhoneNumber(input_str)):
+            input_str = input_str.replace("加", "+")
             return [0, input_str]
         else:
             return [1, pinyin(input_str, heteronym=True)]
@@ -87,13 +88,13 @@ def zh2cnnum(input_str):
     return input_str
 
 
-def target_time(input_str, mode):  # return the target time and the place to look later
+def target_time(input_str, mode):  # return the target time and the place to look later mode1 for time interval
     date = re.compile(
         r'((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)月((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(日|號)')
     time = re.compile(
         r'((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|兩|三|四|五|六|七|八|九)?)(\.|點|時)(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?))?')
     later = re.compile(
-        r'((明|後|大後)天)|(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(週|天|個?小時|分鐘)後)|下週(一|二|三|四|五|六|日|天)?')
+        r'((今|明|後|大後)天)|(((\d+)|(二|三|四|五|六|七|八|九)?十?(一|二|三|四|五|六|七|八|九)?)(週|天|個?小時|分鐘)後)|下週(一|二|三|四|五|六|日|天)?')
     one_99 = re.compile(r'(\d+)|((二|三|四|五|六|七|八|九)?十?(一|二|兩|三|四|五|六|七|八|九)?)')
     target_obj = None
     # target_str = ''
@@ -117,6 +118,13 @@ def target_time(input_str, mode):  # return the target time and the place to loo
             time_str = shift_time(2, 0, 0)
         elif (target_str == '大後天'):
             time_str = shift_time(3, 0, 0)
+        elif (target_str == '今天'):
+            time_str = shift_time(0, 0, 0)
+        elif ('天後' in target_str):
+            d = _trans(target_str[0:-2])
+            time_str = shift_time(d, 0, 0)
+            # time_str = 
+            
         input_str = input_str[target_obj.end():]
         if(time.search(input_str)):
             ntarget_obj = time.search(input_str)
@@ -140,7 +148,7 @@ def target_time(input_str, mode):  # return the target time and the place to loo
                 result.append(time_str[0:11] + '00:00')
             else:
                 result.append(time_str[0:11] + '06:00')
-        if(input_str[0] == '到' and time.search(input_str) and mode == 0):
+        if(mode == 0 and input_str[0] == '到' and time.search(input_str)):
             if(time.search(input_str)):
                 ntarget_obj = time.search(input_str)
                 ntarget_str = ntarget_obj.group()
@@ -242,8 +250,8 @@ def target_time(input_str, mode):  # return the target time and the place to loo
 
 def target_countdown(full_input_str):
     input_str = cn2an.transform(zh2cnnum(full_input_str), "cn2an")
-    hour, minute, second = 0, 0, 0
-    time = re.compile(r"(計時(\d+(小時))?(\d+(分鐘))?(\d+秒)?)")
+    hour, minute, second = None, None, None
+    time = re.compile(r"(計時-?(\d+(小時))?-?(\d+(分鐘))?-?(\d+秒)?)")
     if(time.search(input_str)):
         input_str = time.search(input_str).group()[2:]
         if('小時' in input_str):
@@ -255,16 +263,16 @@ def target_countdown(full_input_str):
         if('秒' in input_str):
             second = int(input_str[:input_str.index('秒')])
             input_str = input_str[input_str.index('秒') + 1:]
-        if(hour == 0 and minute == 0 and second == 0):
-            return [None, None, None]
+        if(hour == None and minute == None and second == None):
+            return [-1, -1, -1]
         else:
             return [hour, minute, second]
     else:
-        return [None, None, None]
+        return [-1, -1, -1]
 # enter a full input str to get final result
 
 
-def target_alert(input_str):
+def target_alarm(input_str):
     day = None
     hour = None
     minute = None
@@ -328,19 +336,17 @@ def target_volume(input_str):
         target_num *= -1
     return [target_num]
 
-
-def target_place(full_input_str):
-    input_str = full_input_str
+def target_place(input_str):
     place = None
-    place_re = re.compile(r'(查詢(.*)時間|(.*)時區)')
-    place_obj = place_re.match(input_str)
+    place_re = re.compile(r'((.*)時間)|((.*)時區)')
+    place_obj = place_re.search(input_str)
     if(place_obj):
         if('時間' in input_str):
-            place = place_obj.group(2)
+            place = [place_obj.group(2)]
         elif('時區' in input_str):
-            place = place_obj.group(3)
+            place = [place_obj.group(4)]
     else:
-        return '台北'
+        return [input_str]
     return place
 
 
@@ -352,8 +358,8 @@ def target_language(inputSTR):
         toLanguage = inputSTR[inputSTR.index('翻') + 1:]
         toLanguage.lstrip()
         if(len(fromLanguage) == 0 or len(toLanguage) == 0 or (fromLanguage not in language_dict) or (toLanguage not in language_dict)):
-            return [None, None]
+            return []
         else:
             return (language_dict[fromLanguage], language_dict[toLanguage])
     else:
-        return [None, None]
+        return []

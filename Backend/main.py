@@ -1,10 +1,15 @@
 import time
 import sys
+import signal
 import inspect
 from queue import Queue
 
 from Threading import Job
 from logger import logger
+from dotenv import load_dotenv
+
+import FactoryReset
+import LogManager
 
 # log setting
 log = logger.setup_applevel_logger(file_name='./log/smartspeaker.log')
@@ -22,6 +27,13 @@ class Main():
         self.__pending_threads = Queue()            # pending thread info
         self.__DAEMON_THREAD = [                    # define daemon work
             'voice_to_text'
+        ]
+        self.WHITE_LIST = [                         # define white list to
+            'voice_to_text', 'volume_switch', 'start_alarm', "start_countdown"                       # skip voice to text
+        ]
+        self.STREAMING_LIST = [                     # define streaming white list
+            'Bluetooth',
+            'MusicStreaming'
         ]
 
     def add_thread(self, func_info) -> None:
@@ -101,6 +113,12 @@ class Main():
 
         print('Could not find the feature instance', func_info['class'])
 
+    def get_instance(self, class_name) -> object:
+        for dec_class in self.declare_class:
+            if dec_class['name'] == class_name:
+                return dec_class['instance']
+        return None
+
     def threading_empty(self) -> bool:
         return True if self.__pending_threads.empty() else False
 
@@ -111,14 +129,23 @@ class Main():
         self.__data_que.put(data)
 
     def close(self) -> None:
+        print("Receive kill signal")
         for thread in self.threads:
             if not thread.isDaemon():
                 thread.join()
 
 
 if __name__ == "__main__":
+    # load env
+    load_dotenv(override=True)
+
     # defination main process
     main = Main()
+
+    factory_reset = FactoryReset.FactoryReset(main)
+    
+    print("Open signal listener")
+    signal.signal(10, main.close)
 
     # import feature class
     import feature
@@ -136,23 +163,65 @@ if __name__ == "__main__":
             main.instance_thread_correspond[feature_obj['name']] = []
         except BaseException:
             print('import class instance failed')
-
-    # initial speaker feature
+            
     main.add_thread({
         'class': 'SpeechToText',
         'func': 'voice_to_text',
     })
     main.open_thread()
     main.add_thread({
+        'class': 'Volume',
+        'func': '__init__',
+    })
+    main.add_thread({
+        'class': 'Volume',
+        'func': 'volume_switch',
+    })
+    main.add_thread({
+        'class': 'Alarm',
+        'func': '__init__',
+    })
+    main.add_thread({
+        'class': 'Alarm',
+        'func': 'start_alarm',
+    })
+    main.open_thread()
+    
+    main.add_thread({
         'class': 'monitering',
         'func': 'monitering',
     })
     main.open_thread()
+    
+    volume_instance = None
+    for dec_class in main.declare_class:
+        if dec_class['name'] == 'Volume':
+            volume_instance = dec_class['instance']
+    
+    main.add_thread({
+        'class': 'ButtonController',
+        'func': 'start',
+        'args': {13:{'BUTTON':[factory_reset,'reset',[]]},14:{'BUTTON':[volume_instance,'louder_volume',[]]},15:{'BUTTON':[volume_instance,'quieter_volume',[]]}},
+    })
+    main.open_thread()
+    
 
     while True:
         # check every second
         time.sleep(1)
-
+        MS = None
+        BC = None
+        for dec_class in main.declare_class:
+            if dec_class['name'] == 'MusicStreaming':
+                MS = dec_class['instance']
+            if dec_class['name'] == 'ButtonController':
+                BC = dec_class['instance']
+                    
+        if MS != None and BC != None and MS.isPlaying == True:
+            BC.modify_button_function(0, [MS,'pause_music',[]])
+        elif BC != None:
+            BC.modify_button_function(0, [factory_reset,'reset',[]])
+            
         # clear that completed threading
         # because newer threads are at the back of list
         threading_running = False
@@ -160,8 +229,9 @@ if __name__ == "__main__":
         for thread in main.threads:
             if not thread.is_alive():
                 threading_running = True
-                # discard the last one thread on a feature instance
-                main.instance_thread_correspond[thread.name].pop()
+                if len(main.instance_thread_correspond[thread.name]) != 0:
+                    # discard the last one thread on a feature instance
+                    main.instance_thread_correspond[thread.name].pop()
 
                 # get the previous one thread on a feature instance
                 try:
@@ -182,9 +252,16 @@ if __name__ == "__main__":
                 # delete thread
                 print('delete thread', thread)
                 main.threads.remove(thread)
+            elif thread.func not in main.WHITE_LIST:
+                threading_running = True
 
         main.threads.reverse()
 
+        # if music pause, resume voive to text
+        for feat in main.STREAMING_LIST:
+            if len(main.instance_thread_correspond[feat]) > 0:
+                if main.instance_thread_correspond[feat][-1].is_pause():
+                    main.instance_thread_correspond["SpeechToText"][-1].resume()
         # if there is no thread alive, open voice to text feature
         if not threading_running:
             main.instance_thread_correspond["SpeechToText"][-1].resume()

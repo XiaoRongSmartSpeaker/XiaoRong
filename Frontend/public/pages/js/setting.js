@@ -53,7 +53,6 @@ function get_lan() {
 
   console.log(params.has('lan'));
 }
-
 //get_lan();
 function post_info(location, time, speaker_name) {
   fetch(flask_base_url + '/speaker_info', {
@@ -62,6 +61,7 @@ function post_info(location, time, speaker_name) {
       location: location,
       time: time,
       speaker_name: speaker_name,
+      language: lan
     }),
     headers: { 'Content-Type': 'application/json' },
   })
@@ -95,6 +95,7 @@ document.querySelector('button').addEventListener('click', () => {
   var location = document.querySelector('#location').value;
 
   var time = document.querySelector('#time').value;
+
 
   //post info to API
   post_info(location, time, speaker_name);

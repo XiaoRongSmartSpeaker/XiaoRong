@@ -4,10 +4,13 @@ import time
 import librosa
 import os
 
-
 class TextToSpeech:
-    def text_to_voice(sentence):
-        tts = gTTS(text=sentence, lang='zh-TW')
+    def __init__(self):
+        pass
+
+    @classmethod
+    def text_to_voice(cls, sentence, language='zh-TW'):
+        tts = gTTS(text=sentence, lang=language)
         tts.save(f'{os.path.dirname(__file__)}/Audio/temp.mp3')
         s = librosa.get_duration(filename=f'{os.path.dirname(__file__)}/Audio/temp.mp3')
         # print(s)

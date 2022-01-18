@@ -1,10 +1,12 @@
 #!/usr/bin/python
-from logging import Manager
 import sys
+from xmlrpc.client import SERVER_ERROR
 import dbus
 import dbus.service
 import dbus.mainloop.glib
 import threading
+import requests
+from util import get_device_id
 try:
     from gi.repository import GLib
 except ImportError:
@@ -22,6 +24,8 @@ except ModuleNotFoundError:
         '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
     logger.addHandler(ch)
+# Server Url setting
+SERVER_URI = "http://www.xiaorongserver.tk"
 
 # static name & path setting
 SERVICE_NAME = "org.bluez"
@@ -297,6 +301,7 @@ class Bluetooth():
                            object_path=AGENT_PATH,
                            mainloop=self.mainloop)
         self.mediaPlayer = None
+        self.isPlaying = None
 
         # Agent manager initialize
         self.manager = proxyobj(self.bus, "/org/bluez",
@@ -310,9 +315,44 @@ class Bluetooth():
         # Event Listener initialize
         self.__init_listener()
 
+        # Bluetooth device name initialize
+        device_id = get_device_id()
+        if device_id != "ERROR000000000":
+            device_name = None
+            try:
+                r = requests.session()
+                response = r.get(f"{SERVER_URI}/devicedata/{device_id}")
+                if response.status_code != 404:
+                    device_name = response.json()["device_name"]
+                else:
+                    device_name = None
+                    logger.error(f"Error msg from server \"{response.json()['detail']}\"")
+            except ConnectionError:
+                logger.error("Network failed to connect. Unable to fetch device_name from server.")
+            except BaseException as e:
+                logger.error(e)
+                
+            if device_name == None or device_name == "":
+                self.set_bluetooth_alias("小瀜音箱")
+                logger.debug("The device_name fetch from server is None or empty, therefore set bluetooth device name into 小瀜音箱")
+            else:
+                self.set_bluetooth_alias(device_name)
+        else:
+            logger.error("Failed to get the device_id from system")
+
         logger.info("Ready to start bluetooth daemon")
 
     def bluetooth_daemon_start(self) -> None:
+        if self.threadHandler:
+            self.threadHandler.pause()
+            self.threadHandler.add_thread({
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args': ('藍芽已開啟', )
+            })
+            logger.info("Bluetooth daemon opened")
+        else:
+            logger.error("threadHandler not exist. Failed to add thread.")
         self.mainloop.run()
 
     def open_bluetooth(self):
@@ -338,6 +378,15 @@ class Bluetooth():
         self.adapter.make_power_off()
         self.manager.UnregisterAgent(AGENT_PATH)
         self.mainloop.quit()
+        if self.threadHandler:
+            self.threadHandler.add_thread({
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args': ('藍芽已關閉', )
+            })
+        else:
+            logger.error("threadHandler not exist. Failed to add thread.")
+        logger.info("Bluetooth daemon closed")
 
     def get_bluetooth_status(self):
         connectedDevicesList = self.device.get_connected_devices_list()
@@ -348,6 +397,12 @@ class Bluetooth():
             return True, connectedDevicesList[0]["address"]
         else:
             return False, None
+
+    def get_bluetooth_playing_status(self) -> bool:
+        if self.isPlaying == True:
+            return True
+        else:
+            return False
 
     def pause_bluetooth_playing(self) -> bool:
         try:
@@ -376,9 +431,11 @@ class Bluetooth():
             return 0
 
     def volume_change(self, volume):
-        # TODO: link to system volume change
-        # add_thread(set_system_volume, volume)
-        pass
+        self.threadHandler.add_thread({
+            'class': 'Volume',
+            'func': 'set_music_volume',
+            'args': (volume, ),
+        })
 
     def set_bluetooth_alias(self, alias):
         self.adapter.change_alias(alias)
@@ -420,9 +477,40 @@ class Bluetooth():
                     logger.info("Other device already connected.")
                 else:
                     self.agent.connectedDevice = device_address
+
+                    obj = proxyobj(self.bus, path, PROPERTY_INTERFACE)
+                    deviceName = obj.Get(DEVICE_INTERFACE, "Name")
+                    logger.info(f"已連接{deviceName}")
+
+                    if self.threadHandler:
+                        self.threadHandler.add_thread({
+                            'class': 'TextToSpeech',
+                            'func': 'text_to_voice',
+                            'args': (f'已連接{deviceName}', )
+                        })
+                    else:
+                        logger.error("threadHandler not exist. Failed to add thread.")
             # Device disconnected
             elif iface == "Device1" and name == "Connected" and value == 0 and self.agent.connectedDevice == get_device_address_by_path(path):
                 self.agent.connectedDevice = None
+
+                obj = proxyobj(self.bus, path, PROPERTY_INTERFACE)
+                deviceName = obj.Get(DEVICE_INTERFACE, "Name")
+                logger.info(f"{deviceName}已斷開連接")
+                if self.threadHandler:
+                    self.threadHandler.add_thread({
+                        'class': 'TextToSpeech',
+                        'func': 'text_to_voice',
+                        'args': (f'{deviceName}已斷開連接', )
+                    })
+                else:
+                    logger.error("threadHandler not exist. Failed to add thread.")
+            elif iface == "MediaPlayer1" and name == "Status" and value == "paused":
+                self.threadHandler.pause()
+                self.isPlaying = False
+            elif iface == "MediaPlayer1" and name == "Status" and value == "playing":
+                self.threadHandler.resume()
+                self.isPlaying = True
 
     def interfaces_added(self, path, interfaces):
         for iface, props in interfaces.items():
