@@ -22,7 +22,7 @@ fi
 sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
 iptables-restore < /etc/iptables.ipv4.nat
 if [ -z "$(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network)" ]; then
-  runuser -l pi -c "python3.7 $WORK_DIR/Backend/webServer/app.py"
+  runuser -l pi -c "python3.7 $WORK_DIR/Backend/webServer/app.py" || true
   wait
 #  sudo $WORK_DIR/Backend/AP/AP_off.sh
 #elif [ -z "$(sudo iw wlan1 link | grep "Connected.")" ]; then
