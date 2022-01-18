@@ -24,6 +24,13 @@ var language = {
         'network': '可用的網路'
     },
 }
+const urlObj = new URL(document.URL)
+let flask_base_url= urlObj.protocol + "//" + urlObj.hostname;
+
+if(urlObj.port != undefined)
+{
+  flask_base_url = flask_base_url.concat(":" + urlObj.port);
+}
 window.onload = function(){
     get_lan();
 }
@@ -127,11 +134,11 @@ function fetch_show_wifi()
     Show_spinner();
     
     
-    fetch('http://localhost:3000/wifis')
+    fetch(flask_base_url + '/wifis')
     .then(response => response.json())
     .then(networks => {
         
-        //console.log(networks);
+        console.log(networks);
         //console.log(networks.length);
         // Get numbers of wifis
         var total_networks = networks.length;
@@ -140,15 +147,16 @@ function fetch_show_wifi()
         for(let i=0; i<total_networks; i++)
         {
             //wifi signal 
-            wifi_signal = Number(networks[i].Signal_level.split('/')[0]);
-            wifi_encry = networks[i].Encryption_key
+            wifi_signal = Number(networks[i].Signal.split('/')[0]);
+            wifi_encry = networks[i].Encryption
             //console.log(wifi_signal, wifi_encry);
 
             //wifi encryption == 'on
             if(wifi_encry == 'on')
             {
                 // different wifi_signals has different images
-                if(wifi_signal >= 75)
+                // if(wifi_signal >= 75)
+                if(wifi_signal >= -75)
                 {
                     
                     wifi = `<div id="wifi" class="flex items-center">
@@ -163,7 +171,8 @@ function fetch_show_wifi()
                             </div>`;
                 }
                 
-                else if(wifi_signal >= 50)
+                // else if(wifi_signal >= 50)
+                else if(wifi_signal >= -85)
                 {
                     wifi = `<div id="wifi" class="flex items-center">
                                 <div class="p-3">
@@ -178,7 +187,8 @@ function fetch_show_wifi()
                     
 
                 }
-                else if(wifi_signal >= 25)
+                // else if(wifi_signal >= 25)
+                else if(wifi_signal >= -100)
                 {
                     wifi = `<div id="wifi" class="flex items-center">
                                 <div class="p-3">
@@ -209,7 +219,8 @@ function fetch_show_wifi()
             }
             else //wifi_encry == 'off'
             {
-                if(wifi_signal >= 75)
+                // if(wifi_signal >= 75)
+                if(wifi_signal >= -75)
                 {
                     
                     wifi = `<div id="wifi" class="flex items-center">
@@ -225,7 +236,8 @@ function fetch_show_wifi()
                             </div>`;
                 }
                 
-                else if(wifi_signal >= 50)
+                // else if(wifi_signal >= 50)
+                else if(wifi_signal >= -85)
                 {
                     wifi = `<div id="wifi" class="flex items-center">
                                 <div class="p-3">
@@ -243,7 +255,8 @@ function fetch_show_wifi()
                     
 
                 }
-                else if(wifi_signal >= 25)
+                // else if(wifi_signal >= 25)
+                else if(wifi_signal >= -100)
                 {
                     wifi = `<div id="wifi" class="flex items-center">
                                 <div class="p-3">
@@ -280,7 +293,6 @@ function fetch_show_wifi()
             
             // add to wifi lists
             wifi_lists.innerHTML += wifi;
-            
         }
         Hide_spinner();
     })
@@ -310,12 +322,11 @@ function input_password(wifi_name, pw, wifi_encry)
     
 
     //Post pw to api
-    fetch('http://localhost:3000/setting_wifi', {
+    fetch(flask_base_url + '/setting_wifi', {
         method: 'PUT',
         body: JSON.stringify({
           SSID: wifi_name,
-          password: pw,
-         
+          password: pw
         }),
         headers: {'Content-Type': 'application/json'}
       })
@@ -421,3 +432,4 @@ document.querySelector('#connect_button').addEventListener('click', () => {
 
     
 });
+
