@@ -33,7 +33,11 @@ class PornHubBaseIE(InfoExtractor):
 
     def _download_webpage_handle(self, *args, **kwargs):
         def dl(*args, **kwargs):
-            return super(PornHubBaseIE, self)._download_webpage_handle(*args, **kwargs)
+            return super(
+                PornHubBaseIE,
+                self)._download_webpage_handle(
+                *args,
+                **kwargs)
 
         ret = dl(*args, **kwargs)
 
@@ -75,7 +79,8 @@ class PornHubBaseIE(InfoExtractor):
         if username is None:
             return
 
-        login_url = 'https://www.%s/%slogin' % (host, 'premium/' if 'premium' in host else '')
+        login_url = 'https://www.%s/%slogin' % (host,
+                                                'premium/' if 'premium' in host else '')
         login_page = self._download_webpage(
             login_url, None, 'Downloading %s login page' % site)
 
@@ -96,8 +101,11 @@ class PornHubBaseIE(InfoExtractor):
         })
 
         response = self._download_json(
-            'https://www.%s/front/authenticate' % host, None,
-            'Logging in to %s' % site,
+            'https://www.%s/front/authenticate' %
+            host,
+            None,
+            'Logging in to %s' %
+            site,
             data=urlencode_postdata(login_form),
             headers={
                 'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -291,7 +299,10 @@ class PornHubIE(PornHubBaseIE):
 
         flashvars = self._parse_json(
             self._search_regex(
-                r'var\s+flashvars_\d+\s*=\s*({.+?});', webpage, 'flashvars', default='{}'),
+                r'var\s+flashvars_\d+\s*=\s*({.+?});',
+                webpage,
+                'flashvars',
+                default='{}'),
             video_id)
         if flashvars:
             subtitle_url = url_or_none(flashvars.get('closedCaptionsFile'))
@@ -409,7 +420,9 @@ class PornHubIE(PornHubBaseIE):
                     m3u8_id='hls', fatal=False))
                 return
             tbr = None
-            mobj = re.search(r'(?P<height>\d+)[pP]?_(?P<tbr>\d+)[kK]', format_url)
+            mobj = re.search(
+                r'(?P<height>\d+)[pP]?_(?P<tbr>\d+)[kK]',
+                format_url)
             if mobj:
                 if not height:
                     height = int(mobj.group('height'))
@@ -448,9 +461,9 @@ class PornHubIE(PornHubBaseIE):
 
         def extract_vote_count(kind, name):
             return self._extract_count(
-                (r'<span[^>]+\bclass="votes%s"[^>]*>([\d,\.]+)</span>' % kind,
-                 r'<span[^>]+\bclass=["\']votes%s["\'][^>]*\bdata-rating=["\'](\d+)' % kind),
-                webpage, name)
+                (r'<span[^>]+\bclass="votes%s"[^>]*>([\d,\.]+)</span>' %
+                 kind, r'<span[^>]+\bclass=["\']votes%s["\'][^>]*\bdata-rating=["\'](\d+)' %
+                 kind), webpage, name)
 
         view_count = self._extract_count(
             r'<span class="count">([\d,\.]+)</span> [Vv]iews', webpage, 'view')
@@ -571,17 +584,21 @@ class PornHubPagedPlaylistBaseIE(PornHubPlaylistBaseIE):
         VIDEOS = '/videos'
 
         def download_page(base_url, num, fallback=False):
-            note = 'Downloading page %d%s' % (num, ' (switch to fallback)' if fallback else '')
+            note = 'Downloading page %d%s' % (
+                num, ' (switch to fallback)' if fallback else '')
             return self._download_webpage(
                 base_url, item_id, note, query={'page': num})
 
         def is_404(e):
-            return isinstance(e.cause, compat_HTTPError) and e.cause.code == 404
+            return isinstance(
+                e.cause, compat_HTTPError) and e.cause.code == 404
 
         base_url = url
         has_page = page is not None
         first_page = page if has_page else 1
-        for page_num in (first_page, ) if has_page else itertools.count(first_page):
+        for page_num in (
+            first_page,
+        ) if has_page else itertools.count(first_page):
             try:
                 try:
                     webpage = download_page(base_url, page_num)
@@ -589,9 +606,11 @@ class PornHubPagedPlaylistBaseIE(PornHubPlaylistBaseIE):
                     # Some sources may not be available via /videos page,
                     # trying to fallback to main page pagination (see [1])
                     # 1. https://github.com/ytdl-org/youtube-dl/issues/27853
-                    if is_404(e) and page_num == first_page and VIDEOS in base_url:
+                    if is_404(
+                            e) and page_num == first_page and VIDEOS in base_url:
                         base_url = base_url.replace(VIDEOS, '')
-                        webpage = download_page(base_url, page_num, fallback=True)
+                        webpage = download_page(
+                            base_url, page_num, fallback=True)
                     else:
                         raise
             except ExtractorError as e:
@@ -726,9 +745,8 @@ class PornHubPagedVideoListIE(PornHubPagedPlaylistBaseIE):
 
     @classmethod
     def suitable(cls, url):
-        return (False
-                if PornHubIE.suitable(url) or PornHubUserIE.suitable(url) or PornHubUserVideosUploadIE.suitable(url)
-                else super(PornHubPagedVideoListIE, cls).suitable(url))
+        return (False if PornHubIE.suitable(url) or PornHubUserIE.suitable(
+            url) or PornHubUserVideosUploadIE.suitable(url) else super(PornHubPagedVideoListIE, cls).suitable(url))
 
 
 class PornHubUserVideosUploadIE(PornHubPagedPlaylistBaseIE):

@@ -19,16 +19,19 @@ except ModuleNotFoundError as e:
     logger.setLevel(logging.INFO)
     ch = logging.StreamHandler(sys.stdout)
     ch.setLevel(logging.INFO)
-    formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+    formatter = logging.Formatter(
+        '%(asctime)s - %(name)s - %(levelname)s - %(message)s')
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
 server_url = 'http://140.122.185.210/log/'
 
+
 def clear_log():
     # send_log_to_server()
     open('log/smartspeaker.log', 'w').close()
     logger.debug("Log file cleared")
+
 
 def send_log_to_server():
     try:
@@ -50,9 +53,11 @@ def send_log_to_server():
     except requests.exceptions.RequestException as err:
         logger.error(err)
 
+
 def log_operation():
     send_log_to_server()
     clear_log()
+
 
 def run_continuously(interval=1):
     cease_continuous_run = threading.Event()
@@ -70,9 +75,12 @@ def run_continuously(interval=1):
     return cease_continuous_run
 
 # Stop the background thread
+
+
 def stop_log_manager():
     stop_run_continuously.set()
     logger.debug("Log manager has been stopped")
+
 
 # Start the background thread (upon importing this module)
 stop_run_continuously = run_continuously()

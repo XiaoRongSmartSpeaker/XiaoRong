@@ -28,7 +28,8 @@ class DashSegmentsFD(FragmentFD):
         self._prepare_and_start_frag_download(ctx)
 
         fragment_retries = self.params.get('fragment_retries', 0)
-        skip_unavailable_fragments = self.params.get('skip_unavailable_fragments', True)
+        skip_unavailable_fragments = self.params.get(
+            'skip_unavailable_fragments', True)
 
         frag_index = 0
         for i, fragment in enumerate(fragments):
@@ -44,8 +45,10 @@ class DashSegmentsFD(FragmentFD):
                     fragment_url = fragment.get('url')
                     if not fragment_url:
                         assert fragment_base_url
-                        fragment_url = urljoin(fragment_base_url, fragment['path'])
-                    success, frag_content = self._download_fragment(ctx, fragment_url, info_dict)
+                        fragment_url = urljoin(
+                            fragment_base_url, fragment['path'])
+                    success, frag_content = self._download_fragment(
+                        ctx, fragment_url, info_dict)
                     if not success:
                         return False
                     self._append_fragment(ctx, frag_content)
@@ -59,7 +62,8 @@ class DashSegmentsFD(FragmentFD):
                     # HTTP error.
                     count += 1
                     if count <= fragment_retries:
-                        self.report_retry_fragment(err, frag_index, count, fragment_retries)
+                        self.report_retry_fragment(
+                            err, frag_index, count, fragment_retries)
                 except DownloadError:
                     # Don't retry fragment if error occurred during HTTP downloading
                     # itself since it has own retry settings
@@ -72,7 +76,9 @@ class DashSegmentsFD(FragmentFD):
                 if not fatal:
                     self.report_skip_fragment(frag_index)
                     continue
-                self.report_error('giving up after %s fragment retries' % fragment_retries)
+                self.report_error(
+                    'giving up after %s fragment retries' %
+                    fragment_retries)
                 return False
 
         self._finish_frag_download(ctx)

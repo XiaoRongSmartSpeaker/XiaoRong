@@ -12,7 +12,13 @@ import traceback
 class ExtractorError(Exception):
     """Error during info extraction."""
 
-    def __init__(self, msg, tb=None, expected=False, cause=None, video_id=None):
+    def __init__(
+            self,
+            msg,
+            tb=None,
+            expected=False,
+            cause=None,
+            video_id=None):
         """ tb, if given, is the original traceback (so that it can be printed out).
         If expected is set, this is a normal error message and most likely not a bug in youtube-dl.
         """
@@ -147,8 +153,8 @@ class JSInterpreter(object):
             pass
 
         m = re.match(
-            r'(?P<var>%s)\.(?P<member>[^(]+)(?:\(+(?P<args>[^()]*)\))?$' % _NAME_RE,
-            expr)
+            r'(?P<var>%s)\.(?P<member>[^(]+)(?:\(+(?P<args>[^()]*)\))?$' %
+            _NAME_RE, expr)
         if m:
             variable = m.group('var')
             member = m.group('member')
@@ -239,7 +245,8 @@ class JSInterpreter(object):
     def extract_object(self, objname):
         obj = {}
         obj_m = re.search(
-            (r'(?:var\s+)?%s\s*=\s*\{' % re.escape(objname)) +
+            (r'(?:var\s+)?%s\s*=\s*\{' %
+             re.escape(objname)) +
             r'\s*(?P<fields>([a-zA-Z$0-9]+\s*:\s*function\(.*?\)\s*\{.*?\}(?:,\s*)?)*)' +
             r'\}\s*;',
             self.code)
@@ -251,7 +258,8 @@ class JSInterpreter(object):
             fields)
         for f in fields_m:
             argnames = f.group('args').split(',')
-            obj[f.group('key')] = self.build_function(argnames, f.group('code'))
+            obj[f.group('key')] = self.build_function(
+                argnames, f.group('code'))
 
         return obj
 

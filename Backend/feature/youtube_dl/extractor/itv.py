@@ -57,7 +57,8 @@ class ITVIE(InfoExtractor):
         params = extract_attributes(self._search_regex(
             r'(?s)(<[^>]+id="video"[^>]*>)', webpage, 'params'))
 
-        ios_playlist_url = params.get('data-video-playlist') or params['data-video-id']
+        ios_playlist_url = params.get(
+            'data-video-playlist') or params['data-video-id']
         hmac = params['data-video-hmac']
         headers = self.geo_verification_headers()
         headers.update({

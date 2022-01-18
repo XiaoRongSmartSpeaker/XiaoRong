@@ -89,10 +89,10 @@ class Tele5IE(InfoExtractor):
 
             def extract_id(pattern, name, default=NO_DEFAULT):
                 return self._html_search_regex(
-                    (r'id\s*=\s*["\']video-player["\'][^>]+data-id\s*=\s*["\'](%s)' % pattern,
-                     r'\s+id\s*=\s*["\']player_(%s)' % pattern,
-                     r'\bdata-id\s*=\s*["\'](%s)' % pattern), webpage, name,
-                    default=default)
+                    (r'id\s*=\s*["\']video-player["\'][^>]+data-id\s*=\s*["\'](%s)' %
+                     pattern, r'\s+id\s*=\s*["\']player_(%s)' %
+                     pattern, r'\bdata-id\s*=\s*["\'](%s)' %
+                     pattern), webpage, name, default=default)
 
             nexx_id = extract_id(NEXX_ID_RE, 'nexx id', default=None)
             if nexx_id:

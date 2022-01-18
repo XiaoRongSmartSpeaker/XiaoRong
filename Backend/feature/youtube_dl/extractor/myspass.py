@@ -29,13 +29,16 @@ class MySpassIE(InfoExtractor):
         video_id = self._match_id(url)
 
         metadata = self._download_xml(
-            'http://www.myspass.de/myspass/includes/apps/video/getvideometadataxml.php?id=' + video_id,
+            'http://www.myspass.de/myspass/includes/apps/video/getvideometadataxml.php?id=' +
+            video_id,
             video_id)
 
         title = xpath_text(metadata, 'title', fatal=True)
         video_url = xpath_text(metadata, 'url_flv', 'download url', True)
         video_id_int = int(video_id)
-        for group in re.search(r'/myspass2009/\d+/(\d+)/(\d+)/(\d+)/', video_url).groups():
+        for group in re.search(
+            r'/myspass2009/\d+/(\d+)/(\d+)/(\d+)/',
+                video_url).groups():
             group_int = int(group)
             if group_int > video_id_int:
                 video_url = video_url.replace(

@@ -66,9 +66,11 @@ class VideaIE(InfoExtractor):
 
     @staticmethod
     def _extract_urls(webpage):
-        return [url for _, url in re.findall(
-            r'<iframe[^>]+src=(["\'])(?P<url>(?:https?:)?//videa\.hu/player\?.*?\bv=.+?)\1',
-            webpage)]
+        return [
+            url for _,
+            url in re.findall(
+                r'<iframe[^>]+src=(["\'])(?P<url>(?:https?:)?//videa\.hu/player\?.*?\bv=.+?)\1',
+                webpage)]
 
     @staticmethod
     def rc4(cipher_text, key):
@@ -107,7 +109,10 @@ class VideaIE(InfoExtractor):
         for i in range(0, 32):
             result += s[i - (self._STATIC_SECRET.index(l[i]) - 31)]
 
-        random_seed = ''.join(random.choice(string.ascii_letters + string.digits) for _ in range(8))
+        random_seed = ''.join(
+            random.choice(
+                string.ascii_letters +
+                string.digits) for _ in range(8))
         query['_s'] = random_seed
         query['_t'] = result[:16]
 

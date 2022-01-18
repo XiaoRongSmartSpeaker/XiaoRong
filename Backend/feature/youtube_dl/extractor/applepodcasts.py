@@ -54,9 +54,13 @@ class ApplePodcastsIE(InfoExtractor):
         return {
             'id': episode_id,
             'title': episode['name'],
-            'url': clean_podcast_url(episode['assetUrl']),
+            'url': clean_podcast_url(
+                episode['assetUrl']),
             'description': description.get('standard') or description.get('short'),
-            'timestamp': parse_iso8601(episode.get('releaseDateTime')),
-            'duration': int_or_none(episode.get('durationInMilliseconds'), 1000),
+            'timestamp': parse_iso8601(
+                episode.get('releaseDateTime')),
+            'duration': int_or_none(
+                episode.get('durationInMilliseconds'),
+                1000),
             'series': series,
         }

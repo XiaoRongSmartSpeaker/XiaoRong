@@ -63,8 +63,13 @@ class XFileShareIE(InfoExtractor):
     )
 
     IE_DESC = 'XFileShare based sites: %s' % ', '.join(list(zip(*_SITES))[1])
-    _VALID_URL = (r'https?://(?:www\.)?(?P<host>%s)/(?:embed-)?(?P<id>[0-9a-zA-Z]+)'
-                  % '|'.join(site for site in list(zip(*_SITES))[0]))
+    _VALID_URL = (
+        r'https?://(?:www\.)?(?P<host>%s)/(?:embed-)?(?P<id>[0-9a-zA-Z]+)' %
+        '|'.join(
+            site for site in list(
+                zip(
+                    *
+                    _SITES))[0]))
 
     _FILE_NOT_FOUND_REGEXES = (
         r'>(?:404 - )?File Not Found<',
@@ -100,18 +105,24 @@ class XFileShareIE(InfoExtractor):
     def _real_extract(self, url):
         host, video_id = re.match(self._VALID_URL, url).groups()
 
-        url = 'https://%s/' % host + ('embed-%s.html' % video_id if host in ('govid.me', 'vidlo.us') else video_id)
+        url = 'https://%s/' % host + \
+            ('embed-%s.html' % video_id if host in ('govid.me', 'vidlo.us') else video_id)
         webpage = self._download_webpage(url, video_id)
 
         if any(re.search(p, webpage) for p in self._FILE_NOT_FOUND_REGEXES):
-            raise ExtractorError('Video %s does not exist' % video_id, expected=True)
+            raise ExtractorError(
+                'Video %s does not exist' %
+                video_id, expected=True)
 
         fields = self._hidden_inputs(webpage)
 
         if fields.get('op') == 'download1':
-            countdown = int_or_none(self._search_regex(
-                r'<span id="countdown_str">(?:[Ww]ait)?\s*<span id="cxc">(\d+)</span>\s*(?:seconds?)?</span>',
-                webpage, 'countdown', default=None))
+            countdown = int_or_none(
+                self._search_regex(
+                    r'<span id="countdown_str">(?:[Ww]ait)?\s*<span id="cxc">(\d+)</span>\s*(?:seconds?)?</span>',
+                    webpage,
+                    'countdown',
+                    default=None))
             if countdown:
                 self._sleep(countdown, video_id)
 
@@ -128,7 +139,8 @@ class XFileShareIE(InfoExtractor):
              r'h4-fine[^>]*>([^<]+)<',
              r'>Watch (.+)[ <]',
              r'<h2 class="video-page-head">([^<]+)</h2>',
-             r'<h2 style="[^"]*color:#403f3d[^"]*"[^>]*>([^<]+)<',  # streamin.to
+             # streamin.to
+             r'<h2 style="[^"]*color:#403f3d[^"]*"[^>]*>([^<]+)<',
              r'title\s*:\s*"([^"]+)"'),  # govid.me
             webpage, 'title', default=None) or self._og_search_title(
             webpage, default=None) or video_id).strip()
@@ -136,7 +148,8 @@ class XFileShareIE(InfoExtractor):
         for regex, func in (
                 (r'(eval\(function\(p,a,c,k,e,d\){.+)', decode_packed_codes),
                 (r'(ﾟ.+)', aa_decode)):
-            obf_code = self._search_regex(regex, webpage, 'obfuscated code', default=None)
+            obf_code = self._search_regex(
+                regex, webpage, 'obfuscated code', default=None)
             if obf_code:
                 webpage = webpage.replace(obf_code, func(obf_code))
 
@@ -169,7 +182,10 @@ class XFileShareIE(InfoExtractor):
                         urls.append(video_url)
 
             sources = self._search_regex(
-                r'sources\s*:\s*(\[(?!{)[^\]]+\])', webpage, 'sources', default=None)
+                r'sources\s*:\s*(\[(?!{)[^\]]+\])',
+                webpage,
+                'sources',
+                default=None)
             if sources:
                 urls.extend(self._parse_json(sources, video_id))
 

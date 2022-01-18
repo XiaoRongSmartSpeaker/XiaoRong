@@ -52,7 +52,9 @@ class ImgurIE(InfoExtractor):
                 expected=True)
 
         formats = []
-        for m in re.finditer(r'<source\s+src="(?P<src>[^"]+)"\s+type="(?P<type>[^"]+)"', video_elements):
+        for m in re.finditer(
+            r'<source\s+src="(?P<src>[^"]+)"\s+type="(?P<type>[^"]+)"',
+                video_elements):
             formats.append({
                 'format_id': m.group('type').partition('/')[2],
                 'url': self._proto_relative_url(m.group('src')),
@@ -99,30 +101,26 @@ class ImgurGalleryIE(InfoExtractor):
     IE_NAME = 'imgur:gallery'
     _VALID_URL = r'https?://(?:i\.)?imgur\.com/(?:gallery|(?:t(?:opic)?|r)/[^/]+)/(?P<id>[a-zA-Z0-9]+)'
 
-    _TESTS = [{
-        'url': 'http://imgur.com/gallery/Q95ko',
-        'info_dict': {
-            'id': 'Q95ko',
-            'title': 'Adding faces make every GIF better',
-        },
-        'playlist_count': 25,
-    }, {
-        'url': 'http://imgur.com/topic/Aww/ll5Vk',
-        'only_matching': True,
-    }, {
-        'url': 'https://imgur.com/gallery/YcAQlkx',
-        'info_dict': {
-            'id': 'YcAQlkx',
-            'ext': 'mp4',
-            'title': 'Classic Steve Carell gif...cracks me up everytime....damn the repost downvotes....',
-        }
-    }, {
-        'url': 'http://imgur.com/topic/Funny/N8rOudd',
-        'only_matching': True,
-    }, {
-        'url': 'http://imgur.com/r/aww/VQcQPhM',
-        'only_matching': True,
-    }]
+    _TESTS = [{'url': 'http://imgur.com/gallery/Q95ko',
+               'info_dict': {'id': 'Q95ko',
+                             'title': 'Adding faces make every GIF better',
+                             },
+               'playlist_count': 25,
+               },
+              {'url': 'http://imgur.com/topic/Aww/ll5Vk',
+               'only_matching': True,
+               },
+              {'url': 'https://imgur.com/gallery/YcAQlkx',
+               'info_dict': {'id': 'YcAQlkx',
+                             'ext': 'mp4',
+                             'title': 'Classic Steve Carell gif...cracks me up everytime....damn the repost downvotes....',
+                             }},
+              {'url': 'http://imgur.com/topic/Funny/N8rOudd',
+               'only_matching': True,
+               },
+              {'url': 'http://imgur.com/r/aww/VQcQPhM',
+               'only_matching': True,
+               }]
 
     def _real_extract(self, url):
         gallery_id = self._match_id(url)
@@ -133,11 +131,20 @@ class ImgurGalleryIE(InfoExtractor):
 
         if data.get('is_album'):
             entries = [
-                self.url_result('http://imgur.com/%s' % image['hash'], ImgurIE.ie_key(), image['hash'])
-                for image in data['album_images']['images'] if image.get('hash')]
-            return self.playlist_result(entries, gallery_id, data.get('title'), data.get('description'))
+                self.url_result(
+                    'http://imgur.com/%s' %
+                    image['hash'],
+                    ImgurIE.ie_key(),
+                    image['hash']) for image in data['album_images']['images'] if image.get('hash')]
+            return self.playlist_result(
+                entries,
+                gallery_id,
+                data.get('title'),
+                data.get('description'))
 
-        return self.url_result('http://imgur.com/%s' % gallery_id, ImgurIE.ie_key(), gallery_id)
+        return self.url_result(
+            'http://imgur.com/%s' %
+            gallery_id, ImgurIE.ie_key(), gallery_id)
 
 
 class ImgurAlbumIE(ImgurGalleryIE):

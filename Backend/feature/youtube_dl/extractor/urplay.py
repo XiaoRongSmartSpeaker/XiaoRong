@@ -54,7 +54,8 @@ class URPlayIE(InfoExtractor):
         accessible_episodes = self._parse_json(self._html_search_regex(
             r'data-react-class="routes/Product/components/ProgramContainer/ProgramContainer"[^>]+data-react-props="({.+?})"',
             webpage, 'urplayer data'), video_id)['accessibleEpisodes']
-        urplayer_data = next(e for e in accessible_episodes if e.get('id') == vid)
+        urplayer_data = next(
+            e for e in accessible_episodes if e.get('id') == vid)
         episode = urplayer_data['title']
         raw_streaming_info = urplayer_data['streamingInfo']['raw']
         host = self._download_json(
@@ -88,7 +89,9 @@ class URPlayIE(InfoExtractor):
             thumbnails.append(t)
 
         series = urplayer_data.get('series') or {}
-        series_title = dict_get(series, ('seriesTitle', 'title')) or dict_get(urplayer_data, ('seriesTitle', 'mainTitle'))
+        series_title = dict_get(
+            series, ('seriesTitle', 'title')) or dict_get(
+            urplayer_data, ('seriesTitle', 'mainTitle'))
 
         return {
             'id': video_id,

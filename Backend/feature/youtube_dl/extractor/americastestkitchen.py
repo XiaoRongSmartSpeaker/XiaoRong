@@ -37,7 +37,8 @@ class AmericasTestKitchenIE(InfoExtractor):
             'skip_download': True,
         },
     }, {
-        # Metadata parsing behaves differently for newer episodes (705) as opposed to older episodes (582 above)
+        # Metadata parsing behaves differently for newer episodes (705) as
+        # opposed to older episodes (582 above)
         'url': 'https://www.americastestkitchen.com/episode/705-simple-chicken-dinner',
         'md5': '06451608c57651e985a498e69cec17e5',
         'info_dict': {
@@ -75,7 +76,8 @@ class AmericasTestKitchenIE(InfoExtractor):
             resource_type = 'episodes'
 
         resource = self._download_json(
-            'https://www.americastestkitchen.com/api/v6/%s/%s' % (resource_type, video_id), video_id)
+            'https://www.americastestkitchen.com/api/v6/%s/%s' %
+            (resource_type, video_id), video_id)
         video = resource['video'] if is_episode else resource
         episode = resource if is_episode else resource.get('episode') or {}
 
@@ -83,12 +85,19 @@ class AmericasTestKitchenIE(InfoExtractor):
             '_type': 'url_transparent',
             'url': 'https://player.zype.com/embed/%s.js?api_key=jZ9GUhRmxcPvX7M3SlfejB6Hle9jyHTdk2jVxG7wOHPLODgncEKVdPYBhuz9iWXQ' % video['zypeId'],
             'ie_key': 'Zype',
-            'description': clean_html(video.get('description')),
-            'timestamp': unified_timestamp(video.get('publishDate')),
-            'release_date': unified_strdate(video.get('publishDate')),
-            'episode_number': int_or_none(episode.get('number')),
-            'season_number': int_or_none(episode.get('season')),
-            'series': try_get(episode, lambda x: x['show']['title']),
+            'description': clean_html(
+                video.get('description')),
+            'timestamp': unified_timestamp(
+                video.get('publishDate')),
+            'release_date': unified_strdate(
+                video.get('publishDate')),
+            'episode_number': int_or_none(
+                episode.get('number')),
+            'season_number': int_or_none(
+                episode.get('season')),
+            'series': try_get(
+                episode,
+                lambda x: x['show']['title']),
             'episode': episode.get('title'),
         }
 

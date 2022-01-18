@@ -11,12 +11,18 @@ import json
 #from flask_cors import CORS, cross_origin
 
 frontend_path = "../../Frontend/public/pages"
-app = Flask(__name__, static_url_path='', static_folder=frontend_path ,template_folder=frontend_path)
+app = Flask(
+    __name__,
+    static_url_path='',
+    static_folder=frontend_path,
+    template_folder=frontend_path)
 #CORS(app, support_credentials=True)
+
 
 @app.route("/")
 def hello():
     return redirect("wifi.html")
+
 
 @app.route("/wifis")
 def wifis():
@@ -25,14 +31,17 @@ def wifis():
     return result
     # return render_template('wifi.html')
 
+
 @app.route('/setting_wifi', methods=['PUT'])
 def setting_wifi():
     if request.method == 'PUT':
         wifi = json.loads(request.data)
-        isConnected = wifi_connect.CreateWifiConfig(wifi["SSID"], wifi["password"])
+        isConnected = wifi_connect.CreateWifiConfig(
+            wifi["SSID"], wifi["password"])
         # print(json.loads(request.data))
-        response = {'isConnected':isConnected}
+        response = {'isConnected': isConnected}
     return json.dumps(response)
+
 
 if __name__ == '__main__':
     app.run(debug=True, host="0.0.0.0")

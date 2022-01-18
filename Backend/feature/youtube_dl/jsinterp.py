@@ -129,8 +129,8 @@ class JSInterpreter(object):
             return val[idx]
 
         m = re.match(
-            r'(?P<var>%s)(?:\.(?P<member>[^(]+)|\[(?P<member2>[^]]+)\])\s*(?:\(+(?P<args>[^()]*)\))?$' % _NAME_RE,
-            expr)
+            r'(?P<var>%s)(?:\.(?P<member>[^(]+)|\[(?P<member2>[^]]+)\])\s*(?:\(+(?P<args>[^()]*)\))?$' %
+            _NAME_RE, expr)
         if m:
             variable = m.group('var')
             member = remove_quotes(m.group('member') or m.group('member2'))
@@ -229,7 +229,8 @@ class JSInterpreter(object):
             fields)
         for f in fields_m:
             argnames = f.group('args').split(',')
-            obj[remove_quotes(f.group('key'))] = self.build_function(argnames, f.group('code'))
+            obj[remove_quotes(f.group('key'))] = self.build_function(
+                argnames, f.group('code'))
 
         return obj
 

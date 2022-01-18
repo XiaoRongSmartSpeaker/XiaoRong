@@ -1,7 +1,8 @@
 import sys
-import requests, urllib
+import requests
+import urllib
 from requests_html import HTML
-from requests_html  import HTMLSession
+from requests_html import HTMLSession
 
 LENGTHLIMIT = 60
 
@@ -19,8 +20,10 @@ except ModuleNotFoundError:
     ch.setFormatter(formatter)
     logger.addHandler(ch)
 
+
 class ConnectoinError():
     pass
+
 
 class QuestionAnswering():
     def __init__(self):
@@ -33,14 +36,14 @@ class QuestionAnswering():
 
     def get_source(self, url):
         """
-        Return the source code for the provided URL. 
-        Args: 
+        Return the source code for the provided URL.
+        Args:
             url (string): URL of the page to scrape.
         Returns:
-            response (object): HTTP response object from requests_html. 
+            response (object): HTTP response object from requests_html.
         """
         try:
-            #open session for url page
+            # open session for url page
             session = HTMLSession()
             response = session.get(url)
             return response
@@ -50,14 +53,13 @@ class QuestionAnswering():
             logger.error(e)
             return None
 
-
     def get_results(self):
         """
         Return html object from url and query
         """
         query = urllib.parse.quote_plus(self.query)
-        response = self.get_source(self.url+self.query)
-        
+        response = self.get_source(self.url + self.query)
+
         return response
 
     def parse_results(self, response):
@@ -66,9 +68,9 @@ class QuestionAnswering():
         Args:
             response(html response): html body of a scraped page
         Returns:
-            output(list): content parsed from html  
+            output(list): content parsed from html
         """
-        #css identifier to find result from Google result page
+        # css identifier to find result from Google result page
         css_identifier_result = ".tF2Cxc"
         css_identifier_title = "h3"
         css_identifier_link = ".yuRUbf a"
@@ -84,10 +86,10 @@ class QuestionAnswering():
         css_identifier_unit = ".card-section"
         css_identifier_location = ".rllt__details"
 
-        #store css find result
+        # store css find result
         output = []
 
-        #get content from html body by css identifier
+        # get content from html body by css identifier
         results = response.html.find(css_identifier_result)
         diet = response.html.find(css_identifier_diet, first=True)
         ecom = response.html.find(css_identifier_ecom, first=False)
@@ -101,104 +103,117 @@ class QuestionAnswering():
         location = response.html.find(css_identifier_location, first=False)
 
         if diet:
-            output.append({'diet':diet.text})
+            output.append({'diet': diet.text})
         else:
-            output.append({'diet':None})
+            output.append({'diet': None})
 
         if time:
-            output.append({'time':time.text})
+            output.append({'time': time.text})
         else:
-            output.append({'time':None})
+            output.append({'time': None})
 
         if ecom:
-            output.append({'ecom':""})
+            output.append({'ecom': ""})
             for it in ecom:
-                if 'jscontroller' in it.attrs and it.attrs['jscontroller']=='B82lxb':
-                    output[-1]['ecom']+=it.text+' '
-                if 'jsname' in it.attrs and it.attrs['jsname']=='qRSVye':
-                    output[-1]['ecom']+=it.text+' '
-                if 'class' in it.attrs and it.attrs['class'][0]=='jBBUv':
-                    output[-1]['ecom']+=it.attrs['aria-label']+' '
+                if 'jscontroller' in it.attrs and it.attrs['jscontroller'] == 'B82lxb':
+                    output[-1]['ecom'] += it.text + ' '
+                if 'jsname' in it.attrs and it.attrs['jsname'] == 'qRSVye':
+                    output[-1]['ecom'] += it.text + ' '
+                if 'class' in it.attrs and it.attrs['class'][0] == 'jBBUv':
+                    output[-1]['ecom'] += it.attrs['aria-label'] + ' '
 
             if output[-1]['ecom'] == '':
                 output[-1]['ecom'] = None
         else:
-            output.append({'ecom':None})
+            output.append({'ecom': None})
 
         if exchange:
-            output.append({'exchange':exchange.text.replace('\n',' ')})
+            output.append({'exchange': exchange.text.replace('\n', ' ')})
         else:
-            output.append({'exchange':None})
+            output.append({'exchange': None})
 
         if unit:
             if unit.text.startswith("目前顯示的是以下字詞的搜尋結果"):
-                output.append({'unit':None})
+                output.append({'unit': None})
             else:
-                output.append({'unit':unit.text.replace('\n',' ').replace("詳細內容",'')})
+                output.append({'unit': unit.text.replace(
+                    '\n', ' ').replace("詳細內容", '')})
         else:
-            output.append({'unit':None})
+            output.append({'unit': None})
 
         if location:
-            output.append({'location':""})
+            output.append({'location': ""})
             for it in location:
-                output[-1]['location'] += it.text.replace('\n',' ')+' '
+                output[-1]['location'] += it.text.replace('\n', ' ') + ' '
         else:
-            output.append({'location':None})
+            output.append({'location': None})
 
         if calculate:
-            output.append({'calculate':""})
+            output.append({'calculate': ""})
             for it in calculate:
-                output[-1]['calculate'] += it.text.replace('\n',' ')+' '
+                output[-1]['calculate'] += it.text.replace('\n', ' ') + ' '
         else:
-            output.append({'calculate':None})
+            output.append({'calculate': None})
 
         if weather:
-            output.append({'weather':""})
-            output[-1]['weather'] += weather[0].find(".VQF4g")[0].text.replace('\n', ' ') + ' '
-            output[-1]['weather'] += weather[0].find(".wtsRwe")[0].text.replace('\n', ' ')[:-5]
+            output.append({'weather': ""})
+            output[-1]['weather'] += weather[0].find(
+                ".VQF4g")[0].text.replace('\n', ' ') + ' '
+            output[-1]['weather'] += weather[0].find(
+                ".wtsRwe")[0].text.replace('\n', ' ')[:-5]
             for it in weather[0].find('span'):
                 if 'id' in it.attrs and it.attrs['id'] == 'wob_ttm':
-                    output[-1]['weather'] = f' {it.text}°F'+output[-1]['weather']
+                    output[-1]['weather'] = f' {it.text}°F' + \
+                        output[-1]['weather']
                 if 'id' in it.attrs and it.attrs['id'] == 'wob_tm':
-                    output[-1]['weather'] = f' {it.text}°C'+output[-1]['weather']
+                    output[-1]['weather'] = f' {it.text}°C' + \
+                        output[-1]['weather']
         else:
-            output.append({'weather':None})
+            output.append({'weather': None})
 
         if support:
-            output.append({'support':[]})
+            output.append({'support': []})
             for it in support:
                 tmp = it.find('a')
                 if tmp:
                     for iit in tmp:
-                        output[-1]['support'].append(f'[{it.text}]({str(iit.absolute_links.pop())})')                
+                        output[-1]['support'].append(
+                            f'[{it.text}]({str(iit.absolute_links.pop())})')
                 else:
                     output[-1]['support'].append(it.text)
 
         else:
-            output.append({'support':None})
+            output.append({'support': None})
 
         if idiet:
-            output.append({'internet_diet':idiet.text.replace("查看以下內容的搜尋結果:", "")})
+            output.append(
+                {'internet_diet': idiet.text.replace("查看以下內容的搜尋結果:", "")})
         else:
-            output.append({'internet_diet':None})
+            output.append({'internet_diet': None})
 
         for result in results:
 
-            if result.find(css_identifier_title, first=True) != None and result.find(css_identifier_link, first=True) != None and result.find(css_identifier_text, first=True)!= None:
+            if result.find(
+                css_identifier_title,
+                first=True) is not None and result.find(
+                css_identifier_link,
+                first=True) is not None and result.find(
+                css_identifier_text,
+                    first=True) is not None:
                 item = {
-                    'title': result.find(css_identifier_title, first=True).text,
-                    'link': result.find(css_identifier_link, first=True).attrs['href'],
-                    'text': result.find(css_identifier_text, first=True).text
-                }
+                    'title': result.find(
+                        css_identifier_title, first=True).text, 'link': result.find(
+                        css_identifier_link, first=True).attrs['href'], 'text': result.find(
+                        css_identifier_text, first=True).text}
             else:
                 item = {
-                    "title":None,
-                    "link":None,
-                    "text":None
+                    "title": None,
+                    "link": None,
+                    "text": None
                 }
-            
+
             output.append(item)
-            
+
         return output
 
     def get_answer(self, results):
@@ -212,16 +227,22 @@ class QuestionAnswering():
         flag = True
         ans = ''
         for result in results:
-            if list(result.keys())[0] != 'title' and list(result.items())[0][1] != None:
-                ans += (urllib.parse.unquote(str(list(result.items())[0][1])+'\n'))
+            if list(
+                    result.keys())[0] != 'title' and list(
+                    result.items())[0][1] is not None:
+                ans += (urllib.parse.unquote(str(list(result.items())
+                                                 [0][1]) + '\n'))
                 flag = False
                 break
-    
+
         if flag:
             for result in results[:14]:
-                if list(result.keys())[0] == 'title' and list(result.items())[0][1] != None:
-                    ans += ( urllib.parse.unquote(str(result['title'])+','+str(result['text'])+'\n'))
-        
+                if list(
+                        result.keys())[0] == 'title' and list(
+                        result.items())[0][1] is not None:
+                    ans += (urllib.parse.unquote(
+                        str(result['title']) + ',' + str(result['text']) + '\n'))
+
         ans = (ans.strip())
         if ans.startswith('找不到符合搜尋字詞') or ans.startswith("您是不是要查"):
             ans = ''
@@ -244,19 +265,20 @@ class QuestionAnswering():
         if response is None:
             ans = f"沒有查到「{search.query}」的相關資料"
         else:
-            results =  self.parse_results(response)
+            results = self.parse_results(response)
             ans = self.get_answer(results)
             if len(ans) > LENGTHLIMIT:
                 ans = ans[:LENGTHLIMIT] + "......其他查詢結果請點詳細網址連結"
         self.thread.add_thread({
-        "class": "TextToSpeech",
-        "func": "text_to_voice",
-        "args": str(ans),
+            "class": "TextToSpeech",
+            "func": "text_to_voice",
+            "args": str(ans),
         })
         return ans
 
-if __name__ == '__main__':  
+
+if __name__ == '__main__':
     search = QuestionAnswering()
     ans = search.google_search(str(input("請輸入問題:")))
-    
+
     print(ans)

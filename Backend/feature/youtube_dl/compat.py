@@ -64,7 +64,8 @@ if sys.version_info[0] == 2:
                 name = name.encode()
             if isinstance(value, compat_str):
                 value = value.encode()
-            compat_cookiejar.Cookie.__init__(self, version, name, value, *args, **kwargs)
+            compat_cookiejar.Cookie.__init__(
+                self, version, name, value, *args, **kwargs)
 else:
     compat_cookiejar_Cookie = compat_cookiejar.Cookie
 
@@ -2360,9 +2361,9 @@ except ImportError:  # Python <3.4
 
 try:
     from subprocess import DEVNULL
-    compat_subprocess_get_DEVNULL = lambda: DEVNULL
+    def compat_subprocess_get_DEVNULL(): return DEVNULL
 except ImportError:
-    compat_subprocess_get_DEVNULL = lambda: open(os.path.devnull, 'w')
+    def compat_subprocess_get_DEVNULL(): return open(os.path.devnull, 'w')
 
 try:
     import http.server as compat_http_server
@@ -2379,12 +2380,15 @@ try:
     from urllib.parse import unquote as compat_urllib_parse_unquote
     from urllib.parse import unquote_plus as compat_urllib_parse_unquote_plus
 except ImportError:  # Python 2
-    _asciire = (compat_urllib_parse._asciire if hasattr(compat_urllib_parse, '_asciire')
-                else re.compile(r'([\x00-\x7f]+)'))
+    _asciire = (
+        compat_urllib_parse._asciire if hasattr(
+            compat_urllib_parse,
+            '_asciire') else re.compile(r'([\x00-\x7f]+)'))
 
     # HACK: The following are the correct unquote_to_bytes, unquote and unquote_plus
     # implementations from cpython 3.4.3's stdlib. Python 2's version
-    # is apparently broken (see https://github.com/ytdl-org/youtube-dl/pull/6244)
+    # is apparently broken (see
+    # https://github.com/ytdl-org/youtube-dl/pull/6244)
 
     def compat_urllib_parse_unquote_to_bytes(string):
         """unquote_to_bytes('abc%20def') -> b'abc def'."""
@@ -2410,7 +2414,10 @@ except ImportError:  # Python 2
                 append(item)
         return b''.join(res)
 
-    def compat_urllib_parse_unquote(string, encoding='utf-8', errors='replace'):
+    def compat_urllib_parse_unquote(
+            string,
+            encoding='utf-8',
+            errors='replace'):
         """Replace %xx escapes by their single-character equivalent. The optional
         encoding and errors parameters specify how to decode percent-encoded
         sequences into Unicode characters, as accepted by the bytes.decode()
@@ -2431,11 +2438,15 @@ except ImportError:  # Python 2
         res = [bits[0]]
         append = res.append
         for i in range(1, len(bits), 2):
-            append(compat_urllib_parse_unquote_to_bytes(bits[i]).decode(encoding, errors))
+            append(
+                compat_urllib_parse_unquote_to_bytes(
+                    bits[i]).decode(
+                    encoding, errors))
             append(bits[i + 1])
         return ''.join(res)
 
-    def compat_urllib_parse_unquote_plus(string, encoding='utf-8', errors='replace'):
+    def compat_urllib_parse_unquote_plus(
+            string, encoding='utf-8', errors='replace'):
         """Like unquote(), but also replace plus signs by spaces, as required for
         unquoting HTML form values.
 
@@ -2490,7 +2501,8 @@ except ImportError:  # Python < 3.4
             scheme, data = url.split(':', 1)
             mediatype, data = data.split(',', 1)
 
-            # even base64 encoded data URLs might be quoted so unquote in any case:
+            # even base64 encoded data URLs might be quoted so unquote in any
+            # case:
             data = compat_urllib_parse_unquote_to_bytes(data)
             if mediatype.endswith(';base64'):
                 data = binascii.a2b_base64(data)
@@ -2500,9 +2512,11 @@ except ImportError:  # Python < 3.4
                 mediatype = 'text/plain;charset=US-ASCII'
 
             headers = email.message_from_string(
-                'Content-type: %s\nContent-length: %d\n' % (mediatype, len(data)))
+                'Content-type: %s\nContent-length: %d\n' %
+                (mediatype, len(data)))
 
-            return compat_urllib_response.addinfourl(io.BytesIO(data), headers, url)
+            return compat_urllib_response.addinfourl(
+                io.BytesIO(data), headers, url)
 
 try:
     compat_basestring = basestring  # Python 2
@@ -2531,7 +2545,8 @@ class _TreeBuilder(etree.TreeBuilder):
 try:
     # xml.etree.ElementTree.Element is a method in Python <=2.6 and
     # the following will crash with:
-    #  TypeError: isinstance() arg 2 must be a class, type, or tuple of classes and types
+    # TypeError: isinstance() arg 2 must be a class, type, or tuple of classes
+    # and types
     isinstance(None, xml.etree.ElementTree.Element)
     from xml.etree.ElementTree import Element as compat_etree_Element
 except TypeError:  # Python <=2.6
@@ -2568,7 +2583,10 @@ else:
         return el
 
     def compat_etree_fromstring(text):
-        doc = _XML(text, parser=etree.XMLParser(target=_TreeBuilder(element_factory=_element_factory)))
+        doc = _XML(
+            text, parser=etree.XMLParser(
+                target=_TreeBuilder(
+                    element_factory=_element_factory)))
         for el in _etree_iter(doc):
             if el.text is not None and isinstance(el.text, bytes):
                 el.text = el.text.decode('utf-8')
@@ -2600,7 +2618,7 @@ if sys.version_info < (2, 7):
             xpath = xpath.encode('ascii')
         return xpath
 else:
-    compat_xpath = lambda xpath: xpath
+    def compat_xpath(xpath): return xpath
 
 try:
     from urllib.parse import parse_qs as compat_parse_qs
@@ -2655,7 +2673,11 @@ compat_os_name = os._name if os.name == 'java' else os.name
 
 if compat_os_name == 'nt':
     def compat_shlex_quote(s):
-        return s if re.match(r'^[-_\w./]+$', s) else '"%s"' % s.replace('"', '\\"')
+        return s if re.match(
+            r'^[-_\w./]+$',
+            s) else '"%s"' % s.replace(
+            '"',
+            '\\"')
 else:
     try:
         from shlex import quote as compat_shlex_quote
@@ -2679,11 +2701,12 @@ except (AssertionError, UnicodeEncodeError):
     def compat_shlex_split(s, comments=False, posix=True):
         if isinstance(s, compat_str):
             s = s.encode('utf-8')
-        return list(map(lambda s: s.decode('utf-8'), shlex.split(s, comments, posix)))
+        return list(map(lambda s: s.decode('utf-8'),
+                        shlex.split(s, comments, posix)))
 
 
 def compat_ord(c):
-    if type(c) is int:
+    if isinstance(c, int):
         return c
     else:
         return ord(c)
@@ -2697,7 +2720,8 @@ if sys.version_info >= (3, 0):
         env[key] = value
 else:
     # Environment variables should be decoded with filesystem encoding.
-    # Otherwise it will fail if any non-ASCII characters present (see #3854 #3217 #2918)
+    # Otherwise it will fail if any non-ASCII characters present (see #3854
+    # #3217 #2918)
 
     def compat_getenv(key, default=None):
         from .utils import get_filesystem_encoding
@@ -2709,7 +2733,9 @@ else:
     def compat_setenv(key, value, env=os.environ):
         def encode(v):
             from .utils import get_filesystem_encoding
-            return v.encode(get_filesystem_encoding()) if isinstance(v, compat_str) else v
+            return v.encode(
+                get_filesystem_encoding()) if isinstance(
+                v, compat_str) else v
         env[encode(key)] = encode(value)
 
     # HACK: The default implementations of os.path.expanduser from cpython do not decode
@@ -2818,7 +2844,7 @@ except TypeError:
     def compat_kwargs(kwargs):
         return dict((bytes(k), v) for k, v in kwargs.items())
 else:
-    compat_kwargs = lambda kwargs: kwargs
+    def compat_kwargs(kwargs): return kwargs
 
 
 try:
@@ -2870,7 +2896,7 @@ def workaround_optparse_bug9161():
         real_add_option = optparse.OptionGroup.add_option
 
         def _compat_add_option(self, *args, **kwargs):
-            enc = lambda v: (
+            def enc(v): return (
                 v.encode('ascii', 'replace') if isinstance(v, compat_str)
                 else v)
             bargs = [enc(a) for a in args]
@@ -2883,7 +2909,8 @@ def workaround_optparse_bug9161():
 if hasattr(shutil, 'get_terminal_size'):  # Python >= 3.3
     compat_get_terminal_size = shutil.get_terminal_size
 else:
-    _terminal_size = collections.namedtuple('terminal_size', ['columns', 'lines'])
+    _terminal_size = collections.namedtuple(
+        'terminal_size', ['columns', 'lines'])
 
     def compat_get_terminal_size(fallback=(80, 24)):
         columns = compat_getenv('COLUMNS')

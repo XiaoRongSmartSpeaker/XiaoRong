@@ -1,3 +1,5 @@
+from TextToSpeech import TextToSpeech
+import time
 from feature import pafy
 import vlc
 from feature import youtube_dl
@@ -11,10 +13,6 @@ from dotenv import load_dotenv
 import logger
 logger = logger.get_logger(__name__)
 
-import time
-
-from TextToSpeech import TextToSpeech
-
 
 class MusicStreaming():
 
@@ -25,12 +23,12 @@ class MusicStreaming():
         self.isPlaying = None
         self.isPause = None
         self.isStop = None
-        
+
     def import_thread(self, thread):
         self.thread = thread
-        
+
     def pause_music(self):
-        if self.isPlaying == True:
+        if self.isPlaying:
             self.thread.pause()
             self.player.set_pause(True)
             self.isPlaying = False
@@ -41,7 +39,7 @@ class MusicStreaming():
             logger.info('Player cannot paused')
 
     def continue_music(self):
-        if self.isPause == True and self.player.get_state() == vlc.State.Paused:
+        if self.isPause and self.player.get_state() == vlc.State.Paused:
             self.thread.resume()
             self.player.set_pause(False)
             self.isPlaying = True
@@ -68,14 +66,17 @@ class MusicStreaming():
     # def repeat_playing(self):
     #     while(self.thread.is_run() == False):
     #         self.playing()
-        
 
     def return_playing_status(self):
         return [self.isPlaying, self.isPause, self.isStop]
-        
+
     def playing(self):
         self.player.play()
-        good_states = ["State.Playing", "State.NothingSpecial", "State.Opening", "State.Paused"]
+        good_states = [
+            "State.Playing",
+            "State.NothingSpecial",
+            "State.Opening",
+            "State.Paused"]
         start = time.time()
 
         self.isPlaying = True
@@ -84,7 +85,7 @@ class MusicStreaming():
 
         while str(self.player.get_state()) in good_states:
             end = time.time()
-            
+
             # print(self.thread.is_pause())
             # if self.thread.is_pause():
             #     self.player.set_pause(True)
@@ -99,10 +100,14 @@ class MusicStreaming():
             # if self.thread.is_run() == False:
             #     self.stop_music()
 
-            if ((end - start) % 10) == 0: 
-                logger.debug('Stream is working. Current state = {}'.format(self.player.get_state()))
+            if ((end - start) % 10) == 0:
+                logger.debug(
+                    'Stream is working. Current state = {}'.format(
+                        self.player.get_state()))
 
-        logger.debug('Stream is not working. Current state = {}'.format(self.player.get_state()))
+        logger.debug(
+            'Stream is not working. Current state = {}'.format(
+                self.player.get_state()))
         self.stop_music()
 
     def pafy_video(self, videoId):
@@ -116,21 +121,21 @@ class MusicStreaming():
         play_url = best.url
         Instance = vlc.Instance()
         self.player = Instance.media_player_new()
-        
+
         code = urllib.request.urlopen(url).getcode()
         if str(code).startswith('2') or str(code).startswith('3'):
             logger.info('Stream is working')
         else:
             logger.info('Stream is dead')
-        
+
         Media = Instance.media_new(play_url)
         Media.get_mrl()
         self.player.set_media(Media)
         events = self.player.event_manager()
-        
+
         self.thread.add_thread({
-        'class': 'MusicStreaming',
-        'func': 'playing',
+            'class': 'MusicStreaming',
+            'func': 'playing',
         })
 
     def play_music(self, target):
@@ -139,23 +144,23 @@ class MusicStreaming():
             message = "請重講一次並加上歌名"
 
             self.thread.add_thread({
-            'class': 'TextToSpeech',
-            'func': 'text_to_voice',
-            'args':(message,),
+                'class': 'TextToSpeech',
+                'func': 'text_to_voice',
+                'args': (message,),
             })
 
             return
 
         load_dotenv()
         API_Key = os.getenv("YOUTUBE_API_KEY")
-        
+
         youtube = build('youtube', 'v3', developerKey=API_Key)
 
         request = youtube.search().list(
-                part = 'id, snippet',
-                maxResults = 3,
-                q = target
-            )
+            part='id, snippet',
+            maxResults=3,
+            q=target
+        )
 
         response = request.execute()
 

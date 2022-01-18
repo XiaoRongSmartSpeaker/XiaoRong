@@ -79,8 +79,8 @@ class YouPornIE(InfoExtractor):
         display_id = mobj.group('display_id') or video_id
 
         definitions = self._download_json(
-            'https://www.youporn.com/api/video/media_definitions/%s/' % video_id,
-            display_id)
+            'https://www.youporn.com/api/video/media_definitions/%s/' %
+            video_id, display_id)
 
         formats = []
         for definition in definitions:
@@ -99,7 +99,9 @@ class YouPornIE(InfoExtractor):
             #  /201012/17/505835/vl_240p_240k_505835/YouPorn%20-%20Sex%20Ed%20Is%20It%20Safe%20To%20Masturbate%20Daily.mp4
             #  /videos/201703/11/109285532/1080P_4000K_109285532.mp4
             # We will benefit from it by extracting some metadata
-            mobj = re.search(r'(?P<height>\d{3,4})[pP]_(?P<bitrate>\d+)[kK]_\d+', video_url)
+            mobj = re.search(
+                r'(?P<height>\d{3,4})[pP]_(?P<bitrate>\d+)[kK]_\d+',
+                video_url)
             if mobj:
                 if not height:
                     height = int(mobj.group('height'))
@@ -149,7 +151,8 @@ class YouPornIE(InfoExtractor):
             r'(<div[^>]+\bclass=["\']js_videoInfoViews["\']>)', webpage,
             'views', default=None)
         if views:
-            view_count = str_to_int(extract_attributes(views).get('data-value'))
+            view_count = str_to_int(
+                extract_attributes(views).get('data-value'))
         comment_count = str_to_int(self._search_regex(
             r'>All [Cc]omments? \(([\d,.]+)\)',
             webpage, 'comment count', default=None))

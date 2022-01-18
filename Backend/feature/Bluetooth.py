@@ -326,15 +326,18 @@ class Bluetooth():
                     device_name = response.json()["device_name"]
                 else:
                     device_name = None
-                    logger.error(f"Error msg from server \"{response.json()['detail']}\"")
+                    logger.error(
+                        f"Error msg from server \"{response.json()['detail']}\"")
             except ConnectionError:
-                logger.error("Network failed to connect. Unable to fetch device_name from server.")
+                logger.error(
+                    "Network failed to connect. Unable to fetch device_name from server.")
             except BaseException as e:
                 logger.error(e)
-                
-            if device_name == None or device_name == "":
+
+            if device_name is None or device_name == "":
                 self.set_bluetooth_alias("小瀜音箱")
-                logger.debug("The device_name fetch from server is None or empty, therefore set bluetooth device name into 小瀜音箱")
+                logger.debug(
+                    "The device_name fetch from server is None or empty, therefore set bluetooth device name into 小瀜音箱")
             else:
                 self.set_bluetooth_alias(device_name)
         else:
@@ -399,7 +402,7 @@ class Bluetooth():
             return False, None
 
     def get_bluetooth_playing_status(self) -> bool:
-        if self.isPlaying == True:
+        if self.isPlaying:
             return True
         else:
             return False
@@ -489,7 +492,8 @@ class Bluetooth():
                             'args': (f'已連接{deviceName}', )
                         })
                     else:
-                        logger.error("threadHandler not exist. Failed to add thread.")
+                        logger.error(
+                            "threadHandler not exist. Failed to add thread.")
             # Device disconnected
             elif iface == "Device1" and name == "Connected" and value == 0 and self.agent.connectedDevice == get_device_address_by_path(path):
                 self.agent.connectedDevice = None
@@ -504,7 +508,8 @@ class Bluetooth():
                         'args': (f'{deviceName}已斷開連接', )
                     })
                 else:
-                    logger.error("threadHandler not exist. Failed to add thread.")
+                    logger.error(
+                        "threadHandler not exist. Failed to add thread.")
             elif iface == "MediaPlayer1" and name == "Status" and value == "paused":
                 self.threadHandler.pause()
                 self.isPlaying = False
