@@ -48,7 +48,7 @@ class Alarm():
 	def set_alarm(self, day: int, h: int, m: int):
 		if day == None or not 1 <= day <= 7:
 			t = time.localtime()
-			day = t.tm_wday
+			day = t.tm_wday + 1
 		if h == None or not 0 <= h < 24:
 			logger.debug('Error hour')
 			self.threadHandler.add_thread({
