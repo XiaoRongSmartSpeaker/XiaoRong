@@ -22,15 +22,15 @@ fi
 sh -c "echo 1 > /proc/sys/net/ipv4/ip_forward"
 iptables-restore < /etc/iptables.ipv4.nat
 if [ -z "$(cat /etc/wpa_supplicant/wpa_supplicant.conf | grep network)" ]; then
-  python3.7 $WORK_DIR/Backend/webServer/app.py
+  runuser -l pi -c "python3.7 $WORK_DIR/Backend/webServer/app.py"
   wait
-  $WORK_DIR/Backend/AP/AP_off.sh
-elif [ -n "$(sudo iw wlan1 link | grep "Not connected.")" ]; then
-  $WORK_DIR/Backend/AP/AP_on.sh
-  python3.7 $WORK_DIR/Backend/webServer/onlywifi.py
-  wait
-  $WORK_DIR/Backend/AP/AP_off.sh
+#  sudo $WORK_DIR/Backend/AP/AP_off.sh
+#elif [ -z "$(sudo iw wlan1 link | grep "Connected.")" ]; then
+#  sudo $WORK_DIR/Backend/AP/AP_on.sh
+#  runuser -l pi -c "python3.7 $WORK_DIR/Backend/webServer/onlywifi.py"
+#  wait
+#  sudo $WORK_DIR/Backend/AP/AP_off.sh
 fi
 sudo ntpdate time.stdtime.gov.tw
-python3.7 $WORK_DIR/Backend/main.py
+runuser -l pi -c "python3.7 $WORK_DIR/Backend/main.py"
 exit 0
